@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کراچی نماز ٹائم ٹیبل - M.FAREED MUSTAFAI</title>
+    <style>
+        :root {
+            --primary-color: #00695c;
+            --secondary-color: #ffa000;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; font-size: 24px; }
+        h2 { margin: 5px 0; font-size: 18px; color: #e0f2f1; }
+        .developer-name {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .selector-box {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: white;
+            font-family: inherit;
+        }
+
+        .current-day-card {
+            background: linear-gradient(135deg, #00695c, #004d40);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .time-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .time-label { font-size: 14px; display: block; margin-bottom: 5px; opacity: 0.9; }
+        .time-value { font-size: 20px; font-weight: bold; }
+
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 5px;
+        }
+
+        td {
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) { background: #f9f9f9; }
+        .highlight { background: #fff9c4 !important; font-weight: bold; }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+            padding-bottom: 20px;
+        }
+        .dev-footer {
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>نماز کے اوقات کا ٹائم ٹیبل</h1>
+        <h2>کراچی (دارالافتاء اہلسنت - حنفی)</h2>
+        <span class="developer-name">M.FAREED MUSTAFAI</span>
+    </header>
+
+    <div class="selector-box">
+        <select id="monthSelect" onchange="updateView()">
+            <option value="0">جنوری</option>
+            <option value="1">فروری</option>
+            <option value="2">مارچ</option>
+            <option value="3">اپریل</option>
+            <option value="4">مئی</option>
+            <option value="5">جون</option>
+            <option value="6">جولائی</option>
+            <option value="7">اگست</option>
+            <option value="8">ستمبر</option>
+            <option value="9">اکتوبر</option>
+            <option value="10">نومبر</option>
+            <option value="11">دسمبر</option>
+        </select>
+        <div style="padding-top: 10px; font-weight: bold;">مہینہ منتخب کریں</div>
+    </div>
+
+    <div class="current-day-card" id="todayCard">
+        <div id="todayDateLabel" style="font-size: 18px; margin-bottom: 10px;">آج کے اوقات</div>
+        <div class="time-grid" id="todayTimes">
+            <!-- JavaScript will fill this -->
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>تاریخ</th>
+                    <th>فجر</th>
+                    <th>ضحوۃ</th>
+                    <th>ظہر</th>
+                    <th>عصر</th>
+                    <th>مغرب</th>
+                    <th>عشاء</th>
+                </tr>
+            </thead>
+            <tbody id="timetableBody">
+                <!-- JavaScript will fill this -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        * تمام اوقات وقتِ شروع (احتیاطی منٹس کے بغیر) ہیں۔<br>
+        عصر کا وقت مثلِ ثانی (حنفی) کے مطابق ہے۔
+        <div class="dev-footer">Developed By: M.FAREED MUSTAFAI</div>
+    </div>
+</div>
+
+<script>
+    const baseData = {
+        0: { name: "جنوری", start: ["05:50", "11:09", "12:36", "04:18", "05:58", "07:18"], end: ["05:48", "11:18", "12:46", "04:39", "06:20", "07:37"] },
+        1: { name: "فروری", start: ["05:47", "11:18", "12:46", "04:40", "06:21", "07:38"], end: ["05:27", "11:18", "12:46", "04:56", "06:38", "07:54"] },
+        2: { name: "مارچ", start: ["05:26", "11:18", "12:46", "04:56", "06:38", "07:54"], end: ["04:55", "11:10", "12:38", "05:08", "06:53", "08:11"] },
+        3: { name: "اپریل", start: ["04:54", "11:10", "12:37", "05:08", "06:54", "08:11"], end: ["04:26", "11:03", "12:32", "05:16", "07:08", "08:31"] },
+        4: { name: "مئی", start: ["04:25", "11:03", "12:31", "05:16", "07:09", "08:32"], end: ["04:09", "11:03", "12:32", "05:26", "07:25", "08:56"] },
+        5: { name: "جون", start: ["04:09", "11:03", "12:32", "05:27", "07:25", "08:57"], end: ["04:13", "11:09", "12:38", "05:35", "07:33", "09:07"] },
+        6: { name: "جولائی", start: ["04:13", "11:09", "12:38", "05:35", "07:33", "09:07"], end: ["04:31", "11:14", "12:40", "05:34", "07:24", "08:53"] },
+        7: { name: "اگست", start: ["04:31", "11:14", "12:40", "05:33", "07:24", "08:52"], end: ["04:48", "11:10", "12:34", "05:15", "07:00", "08:21"] },
+        8: { name: "ستمبر", start: ["04:48", "11:10", "12:33", "05:14", "06:59", "08:20"], end: ["05:00", "11:00", "12:23", "04:47", "06:29", "07:47"] },
+        9: { name: "اکتوبر", start: ["05:01", "11:00", "12:23", "04:46", "06:28", "07:46"], end: ["05:15", "10:54", "12:17", "04:19", "06:05", "07:24"] },
+        10: { name: "نومبر", start: ["05:15", "10:54", "12:17", "04:18", "06:04", "07:24"], end: ["05:34", "11:00", "12:22", "04:07", "05:56", "07:17"] },
+        11: { name: "دسمبر", start: ["05:35", "11:01", "12:23", "04:07", "05:56", "07:18"], end: ["05:52", "11:15", "12:37", "04:18", "06:09", "07:31"] }
+    };
+
+    function timeToMinutes(timeStr) {
+        const [h, m] = timeStr.split(':').map(Number);
+        return h * 60 + m;
+    }
+
+    function minutesToTime(totalMin) {
+        const h = Math.floor(totalMin / 60);
+        const m = totalMin % 60;
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function getInterpolatedTime(month, day, dayCount) {
+        const start = baseData[month].start;
+        const end = baseData[month].end;
+        const result = [];
+        
+        for (let i = 0; i < 6; i++) {
+            const startMin = timeToMinutes(start[i]);
+            const endMin = timeToMinutes(end[i]);
+            const diff = endMin - startMin;
+            const currentMin = startMin + Math.round((diff / (dayCount - 1)) * (day - 1));
+            result.push(minutesToTime(currentMin));
+        }
+        return result;
+    }
+
+    function updateView() {
+        const month = parseInt(document.getElementById('monthSelect').value);
+        const tbody = document.getElementById('timetableBody');
+        const now = new Date();
+        const curMonth = now.getMonth();
+        const curDay = now.getDate();
+        
+        const daysInMonth = new Date(2024, month + 1, 0).getDate();
+        tbody.innerHTML = '';
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const times = getInterpolatedTime(month, d, daysInMonth);
+            const row = document.createElement('tr');
+            if (month === curMonth && d === curDay) row.className = 'highlight';
+            
+            row.innerHTML = `
+                <td>${d}</td>
+                <td>${times[0]}</td>
+                <td>${times[1]}</td>
+                <td>${times[2]}</td>
+                <td>${times[3]}</td>
+                <td>${times[4]}</td>
+                <td>${times[5]}</td>
+            `;
+            tbody.appendChild(row);
+
+            if (month === curMonth && d === curDay) {
+                renderTodayCard(times, d, baseData[month].name);
+            }
+        }
+    }
+
+    function renderTodayCard(times, day, monthName) {
+        const labels = ["فجر", "ضحوۃ الکبریٰ", "ظہر", "عصر", "مغرب", "عشاء"];
+        const grid = document.getElementById('todayTimes');
+        document.getElementById('todayDateLabel').innerText = `آج کے اوقات: ${day} ${monthName}`;
+        grid.innerHTML = '';
+        times.forEach((t, i) => {
+            grid.innerHTML += `
+                <div class="time-item">
+                    <span class="time-label">${labels[i]}</span>
+                    <span class="time-value">${t}</span>
+                </div>
+            `;
+        });
+    }
+
+    const currentMonth = new Date().getMonth();
+    document.getElementById('monthSelect').value = currentMonth;
+    updateView();
+
+</script>
+
+</body>
+</html>
