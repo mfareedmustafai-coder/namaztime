@@ -92,7 +92,7 @@
 
         .time-label { font-size: 13px; display: block; margin-bottom: 5px; opacity: 0.9; }
         .time-value { font-size: 18px; font-weight: bold; }
-        .j-label { font-size: 11px; color: var(--secondary-color); font-weight: bold; display: block; margin-top: 2px; }
+        .jamat-info { font-size: 11px; color: var(--secondary-color); font-weight: bold; display: block; margin-top: 2px; }
 
         .table-container {
             background: var(--card-bg);
@@ -105,7 +105,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
-            min-width: 650px;
+            min-width: 680px;
         }
 
         th {
@@ -120,7 +120,7 @@
             border-bottom: 1px solid #eee;
         }
 
-        .j-cell-time {
+        .jamat-cell {
             display: block;
             font-size: 11px;
             color: #00796b;
@@ -130,7 +130,7 @@
 
         .danger-text { color: var(--danger-color); font-weight: bold; }
         tr:nth-child(even) { background: #f9f9f9; }
-        .highlight { background: #fff9c4 !important; font-weight: bold; }
+        .highlight { background: #fff9c4 !important; font-weight: bold; color: #333; }
 
         .footer {
             margin-top: 20px;
@@ -163,7 +163,7 @@
             <option value="6">جولائی</option><option value="7">اگست</option><option value="8">ستمبر</option>
             <option value="9">اکتوبر</option><option value="10">نومبر</option><option value="11">دسمبر</option>
         </select>
-        <div style="padding-top: 10px; font-weight: bold;">مہینہ منتخب کریں</div>
+        <div style="padding-top: 10px; font-weight: bold; margin-right: 10px;">مہینہ منتخب کریں</div>
     </div>
 
     <div class="current-day-card" id="todayCard">
@@ -183,9 +183,9 @@
     </div>
 
     <div class="footer">
-        <b>اہم نوٹ:</b><br>
-        1. <b>ضحوۃ الکبریٰ:</b> روزے کی نیت کا آخری وقت ہے۔ 2. <b>ممنوع وقت:</b> اس دوران ہر قسم کی نماز منع ہے۔<br>
-        3. <b>ج:</b> کا مطلب جماعت کا وقت ہے جو مسجد کی طرز پر 15 منٹ کے فرق سے راؤنڈ کیا گیا ہے۔
+        <b>اہم معلومات:</b><br>
+        1. یہ اوقات وقتِ شروع ہونے کے ہیں۔ 2. <b>ضحوۃ الکبریٰ:</b> روزے کی نیت کا آخری وقت ہے۔ 3. <b>ممنوع وقت:</b> اس دوران ہر قسم کی نماز منع ہے۔<br>
+        4. <b>ج:</b> کا مطلب جماعت کا وقت ہے جو مساجد کے مطابق 15 منٹ کے بلاک پر راؤنڈ کیا گیا ہے۔
         <div class="dev-footer">Developed By: M.FAREED MUSTAFAI</div>
     </div>
 </div>
@@ -209,13 +209,13 @@
     function tToM(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
     function mToT(m) { const h = Math.floor(m / 60); const min = m % 60; return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`; }
 
-    // Logic: Jump to next 15-minute block
-    function mosqueRound(startTimeMin, offset) {
+    // Special logic to round jamat to next 15-minute mark (00, 15, 30, 45)
+    function roundToNext15(startTimeMin, offset) {
         let target = startTimeMin + offset;
         return Math.ceil(target / 15) * 15;
     }
 
-    function getTimes(m, d, dayCount) {
+    function getInterpolatedTimes(m, d, dayCount) {
         const s = baseData[m].start; const e = baseData[m].end;
         let res = [];
         for (let i = 0; i < 6; i++) {
@@ -231,20 +231,20 @@
         const tbody = document.getElementById('timetableBody');
         const now = new Date();
         const curM = now.getMonth(); const curD = now.getDate();
-        const days = new Date(2024, m + 1, 0).getDate();
+        const daysInMonth = new Date(2024, m + 1, 0).getDate();
         tbody.innerHTML = '';
 
-        for (let d = 1; d <= days; d++) {
-            const t = getTimes(m, d, days);
-            const zohrMin = tToM(t[2]);
-            const zawal = mToT(zohrMin - 20);
+        for (let d = 1; d <= daysInMonth; d++) {
+            const times = getInterpolatedTimes(m, d, daysInMonth);
+            const zohrMin = tToM(times[2]);
+            const zawalTime = mToT(zohrMin - 20);
 
-            // Jamat rounding to 15, 30, 45, 00
-            const jF = mToT(mosqueRound(tToM(t[0]), 25));
-            const jZ = "01:30"; 
-            const jA = mToT(mosqueRound(tToM(t[3]), 20));
-            const jM = mToT(tToM(t[4]) + 3); // Maghrib rounding is not standard 15-min
-            const jI = mToT(mosqueRound(tToM(t[5]), 30));
+            // Jamat Logic
+            const jFajr = mToT(roundToNext15(tToM(times[0]), 25));
+            const jZuhr = "01:30"; // Standard for Karachi
+            const jAsr = mToT(roundToNext15(tToM(times[3]), 20));
+            const jMaghrib = mToT(tToM(times[4]) + 3); // Immediate
+            const jIsha = mToT(roundToNext15(tToM(times[5]), 30));
 
             const isToday = (m === curM && d === curD);
             const row = document.createElement('tr');
@@ -252,17 +252,17 @@
             
             row.innerHTML = `
                 <td>${d}</td>
-                <td>${t[0]}<span class="j-cell-time">ج: ${jF}</span></td>
-                <td>${t[1]}</td>
-                <td class="danger-text">${zawal}</td>
-                <td>${t[2]}<span class="j-cell-time">ج: ${jZ}</span></td>
-                <td>${t[3]}<span class="j-cell-time">ج: ${jA}</span></td>
-                <td>${t[4]}<span class="j-cell-time">ج: ${jM}</span></td>
-                <td>${t[5]}<span class="j-cell-time">ج: ${jI}</span></td>
+                <td>${times[0]}<span class="jamat-cell">ج: ${jFajr}</span></td>
+                <td>${times[1]}</td>
+                <td class="danger-text">${zawalTime}</td>
+                <td>${times[2]}<span class="jamat-cell">ج: ${jZuhr}</span></td>
+                <td>${times[3]}<span class="jamat-cell">ج: ${jAsr}</span></td>
+                <td>${times[4]}<span class="jamat-cell">ج: ${jMaghrib}</span></td>
+                <td>${times[5]}<span class="jamat-cell">ج: ${jIsha}</span></td>
             `;
             tbody.appendChild(row);
 
-            if (isToday) renderToday(t, zawal, jF, jZ, jA, jM, jI, d, baseData[m].name);
+            if (isToday) renderToday(times, zawalTime, jFajr, jZuhr, jAsr, jMaghrib, jIsha, d, baseData[m].name);
         }
     }
 
@@ -270,14 +270,26 @@
         const grid = document.getElementById('todayTimes');
         document.getElementById('todayDateLabel').innerText = `آج کے اوقات: ${d} ${mn}`;
         grid.innerHTML = '';
+        
         const data = [
-            {l: "فجر", v: t[0], j: jF}, {l: "ضحوۃ", v: t[1]},
-            {l: "ممنوع", v: zw, w: true}, {l: "ظہر", v: t[2], j: jZ},
-            {l: "عصر", v: t[3], j: jA}, {l: "مغرب", v: t[4], j: jM}, {l: "عشاء", v: t[5], j: jI}
+            {label: "فجر", val: t[0], jamat: jF},
+            {label: "ضحوۃ", val: t[1]},
+            {label: "ممنوع", val: zw, warn: true},
+            {label: "ظہر", val: t[2], jamat: jZ},
+            {label: "عصر", val: t[3], jamat: jA},
+            {label: "مغرب", val: t[4], jamat: jM},
+            {label: "عشاء", val: t[5], jamat: jI}
         ];
-        data.forEach(i => {
-            let jH = i.j ? `<span class="j-label">جماعت: ${i.j}</span>` : '';
-            grid.innerHTML += `<div class="time-item"><span class="time-label ${i.w?'warning-time':''}">${i.l}</span><span class="time-value">${i.v}</span>${jH}</div>`;
+
+        data.forEach(item => {
+            let jHTML = item.jamat ? `<span class="jamat-info">جماعت: ${item.jamat}</span>` : '';
+            grid.innerHTML += `
+                <div class="time-item">
+                    <span class="time-label ${item.warn ? 'warning-time' : ''}">${item.label}</span>
+                    <span class="time-value">${item.val}</span>
+                    ${jHTML}
+                </div>
+            `;
         });
     }
 
