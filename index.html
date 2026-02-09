@@ -11,6 +11,7 @@
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-color: #333;
+            --danger-color: #c62828;
         }
 
         body {
@@ -23,7 +24,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
         }
 
@@ -89,26 +90,29 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .time-label { font-size: 14px; display: block; margin-bottom: 5px; opacity: 0.9; }
-        .time-value { font-size: 20px; font-weight: bold; }
+        .time-label { font-size: 13px; display: block; margin-bottom: 5px; opacity: 0.9; }
+        .time-value { font-size: 18px; font-weight: bold; }
+        .warning-time { color: #ffecb3; }
 
         .table-container {
             background: var(--card-bg);
             border-radius: 15px;
-            overflow: hidden;
+            overflow-x: auto;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 13px;
+            min-width: 500px;
         }
 
         th {
             background: var(--primary-color);
             color: white;
             padding: 12px 5px;
+            white-space: nowrap;
         }
 
         td {
@@ -116,6 +120,7 @@
             border-bottom: 1px solid #eee;
         }
 
+        .danger-text { color: var(--danger-color); font-weight: bold; }
         tr:nth-child(even) { background: #f9f9f9; }
         .highlight { background: #fff9c4 !important; font-weight: bold; }
 
@@ -123,12 +128,14 @@
             margin-top: 20px;
             font-size: 12px;
             color: #666;
-            padding-bottom: 20px;
+            padding: 15px;
+            line-height: 1.6;
         }
         .dev-footer {
             margin-top: 10px;
             font-weight: bold;
             color: var(--primary-color);
+            font-size: 14px;
         }
     </style>
 </head>
@@ -162,7 +169,7 @@
     <div class="current-day-card" id="todayCard">
         <div id="todayDateLabel" style="font-size: 18px; margin-bottom: 10px;">آج کے اوقات</div>
         <div class="time-grid" id="todayTimes">
-            <!-- JavaScript will fill this -->
+            <!-- JS fills this -->
         </div>
     </div>
 
@@ -172,7 +179,8 @@
                 <tr>
                     <th>تاریخ</th>
                     <th>فجر</th>
-                    <th>ضحوۃ</th>
+                    <th>ضحوۃ(روزہ)</th>
+                    <th>ممنوع(نماز)</th>
                     <th>ظہر</th>
                     <th>عصر</th>
                     <th>مغرب</th>
@@ -180,14 +188,16 @@
                 </tr>
             </thead>
             <tbody id="timetableBody">
-                <!-- JavaScript will fill this -->
+                <!-- JS fills this -->
             </tbody>
         </table>
     </div>
 
     <div class="footer">
-        * تمام اوقات وقتِ شروع (احتیاطی منٹس کے بغیر) ہیں۔<br>
-        عصر کا وقت مثلِ ثانی (حنفی) کے مطابق ہے۔
+        <b>اہم نوٹ:</b><br>
+        1. <b>ضحوۃ الکبریٰ:</b> یہ روزے کی نیت کا آخری وقت ہے۔<br>
+        2. <b>ممنوع وقت:</b> اس وقت سے ظہر شروع ہونے تک ہر قسم کی نماز (نفل، قضا) منع ہے۔<br>
+        3. عصر کا وقت مثلِ ثانی (حنفی) کے مطابق ہے۔
         <div class="dev-footer">Developed By: M.FAREED MUSTAFAI</div>
     </div>
 </div>
@@ -246,6 +256,11 @@
 
         for (let d = 1; d <= daysInMonth; d++) {
             const times = getInterpolatedTime(month, d, daysInMonth);
+            // Calculate Zawal (Mamnuh) Time: Zohr - 20 minutes
+            const zohrMin = timeToMinutes(times[2]);
+            const zawalMin = zohrMin - 20;
+            const zawalTime = minutesToTime(zawalMin);
+
             const row = document.createElement('tr');
             if (month === curMonth && d === curDay) row.className = 'highlight';
             
@@ -253,6 +268,7 @@
                 <td>${d}</td>
                 <td>${times[0]}</td>
                 <td>${times[1]}</td>
+                <td class="danger-text">${zawalTime}</td>
                 <td>${times[2]}</td>
                 <td>${times[3]}</td>
                 <td>${times[4]}</td>
@@ -261,21 +277,33 @@
             tbody.appendChild(row);
 
             if (month === curMonth && d === curDay) {
-                renderTodayCard(times, d, baseData[month].name);
+                renderTodayCard(times, zawalTime, d, baseData[month].name);
             }
         }
     }
 
-    function renderTodayCard(times, day, monthName) {
-        const labels = ["فجر", "ضحوۃ الکبریٰ", "ظہر", "عصر", "مغرب", "عشاء"];
+    function renderTodayCard(times, zawal, day, monthName) {
+        const labels = ["فجر", "ضحوۃ(روزہ)", "ظہر", "عصر", "مغرب", "عشاء"];
         const grid = document.getElementById('todayTimes');
         document.getElementById('todayDateLabel').innerText = `آج کے اوقات: ${day} ${monthName}`;
         grid.innerHTML = '';
-        times.forEach((t, i) => {
+        
+        // Custom order for card to include Zawal
+        const displayData = [
+            {label: "فجر", val: times[0]},
+            {label: "ضحوۃ (روزہ نیت)", val: times[1]},
+            {label: "ممنوع وقت (نماز)", val: zawal, warn: true},
+            {label: "ظہر", val: times[2]},
+            {label: "عصر", val: times[3]},
+            {label: "مغرب", val: times[4]},
+            {label: "عشاء", val: times[5]}
+        ];
+
+        displayData.forEach(item => {
             grid.innerHTML += `
                 <div class="time-item">
-                    <span class="time-label">${labels[i]}</span>
-                    <span class="time-value">${t}</span>
+                    <span class="time-label ${item.warn ? 'warning-time' : ''}">${item.label}</span>
+                    <span class="time-value">${item.val}</span>
                 </div>
             `;
         });
@@ -284,7 +312,6 @@
     const currentMonth = new Date().getMonth();
     document.getElementById('monthSelect').value = currentMonth;
     updateView();
-
 </script>
 
 </body>
