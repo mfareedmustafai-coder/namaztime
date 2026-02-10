@@ -175,7 +175,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>تاریخ</th><th>فجر</th><th>ضحوۃ</th><th>ممنوع</th><th>ظہر</th><th>عصر</th><th>مغرب</th><th>عشاء</th>
+                    <th>تاریخ</th><th>فجر</th><th>طلوع</th><th>ضحوۃ</th><th>ممنوع</th><th>ظہر</th><th>عصر</th><th>مغرب</th><th>عشاء</th>
                 </tr>
             </thead>
             <tbody id="timetableBody"></tbody>
@@ -184,32 +184,32 @@
 
     <div class="footer">
         <b>اہم معلومات:</b><br>
-        1. یہ اوقات وقتِ شروع ہونے کے ہیں۔ 2. <b>ضحوۃ الکبریٰ:</b> روزے کی نیت کا آخری وقت ہے۔ 3. <b>ممنوع وقت:</b> اس دوران ہر قسم کی نماز منع ہے۔<br>
+        1. <b>طلوعِ آفتاب:</b> یہ وقتِ فجر ختم ہونے کا وقت ہے۔ 2. <b>ضحوۃ الکبریٰ:</b> روزے کی نیت کا آخری وقت ہے۔ 3. <b>ممنوع وقت:</b> اس دوران ہر قسم کی نماز منع ہے۔<br>
         4. <b>ج:</b> کا مطلب جماعت کا وقت ہے جو مساجد کے مطابق 15 منٹ کے بلاک پر راؤنڈ کیا گیا ہے۔
         <div class="dev-footer">Developed By: M.FAREED MUSTAFAI</div>
     </div>
 </div>
 
 <script>
+    // Karachi Perpetual Data with Sunrise added (Darul-Ifta Ahlesunnat Standard)
     const baseData = {
-        0: { name: "جنوری", start: ["05:50", "11:09", "12:36", "04:18", "05:58", "07:18"], end: ["05:48", "11:18", "12:46", "04:39", "06:20", "07:37"] },
-        1: { name: "فروری", start: ["05:47", "11:18", "12:46", "04:40", "06:21", "07:38"], end: ["05:27", "11:18", "12:46", "04:56", "06:38", "07:54"] },
-        2: { name: "مارچ", start: ["05:26", "11:18", "12:46", "04:56", "06:38", "07:54"], end: ["04:55", "11:10", "12:38", "05:08", "06:53", "08:11"] },
-        3: { name: "اپریل", start: ["04:54", "11:10", "12:37", "05:08", "06:54", "08:11"], end: ["04:26", "11:03", "12:32", "05:16", "07:08", "08:31"] },
-        4: { name: "مئی", start: ["04:25", "11:03", "12:31", "05:16", "07:09", "08:32"], end: ["04:09", "11:03", "12:32", "05:26", "07:25", "08:56"] },
-        5: { name: "جون", start: ["04:09", "11:03", "12:32", "05:27", "07:25", "08:57"], end: ["04:13", "11:09", "12:38", "05:35", "07:33", "09:07"] },
-        6: { name: "جولائی", start: ["04:13", "11:09", "12:38", "05:35", "07:33", "09:07"], end: ["04:31", "11:14", "12:40", "05:34", "07:24", "08:53"] },
-        7: { name: "اگست", start: ["04:31", "11:14", "12:40", "05:33", "07:24", "08:52"], end: ["04:48", "11:10", "12:34", "05:15", "07:00", "08:21"] },
-        8: { name: "ستمبر", start: ["04:48", "11:10", "12:33", "05:14", "06:59", "08:20"], end: ["05:00", "11:00", "12:23", "04:47", "06:29", "07:47"] },
-        9: { name: "اکتوبر", start: ["05:01", "11:00", "12:23", "04:46", "06:28", "07:46"], end: ["05:15", "10:54", "12:17", "04:19", "06:05", "07:24"] },
-        10: { name: "نومبر", start: ["05:15", "10:54", "12:17", "04:18", "06:04", "07:24"], end: ["05:34", "11:00", "12:22", "04:07", "05:56", "07:17"] },
-        11: { name: "دسمبر", start: ["05:35", "11:01", "12:23", "04:07", "05:56", "07:18"], end: ["05:52", "11:15", "12:37", "04:18", "06:09", "07:31"] }
+        0: { name: "جنوری", start: ["05:50", "07:18", "11:09", "12:36", "04:18", "05:58", "07:18"], end: ["05:48", "07:16", "11:18", "12:46", "04:39", "06:20", "07:37"] },
+        1: { name: "فروری", start: ["05:47", "07:16", "11:18", "12:46", "04:40", "06:21", "07:38"], end: ["05:27", "06:58", "11:18", "12:46", "04:56", "06:38", "07:54"] },
+        2: { name: "مارچ", start: ["05:26", "06:57", "11:18", "12:46", "04:56", "06:38", "07:54"], end: ["04:55", "06:24", "11:10", "12:38", "05:08", "06:53", "08:11"] },
+        3: { name: "اپریل", start: ["04:54", "06:23", "11:10", "12:37", "05:08", "06:54", "08:11"], end: ["04:26", "05:57", "11:03", "12:32", "05:16", "07:08", "08:31"] },
+        4: { name: "مئی", start: ["04:25", "05:56", "11:03", "12:31", "05:16", "07:09", "08:32"], end: ["04:09", "05:42", "11:03", "12:32", "05:26", "07:25", "08:56"] },
+        5: { name: "جون", start: ["04:09", "05:42", "11:03", "12:32", "05:27", "07:25", "08:57"], end: ["04:13", "05:45", "11:09", "12:38", "05:35", "07:33", "09:07"] },
+        6: { name: "جولائی", start: ["04:13", "05:45", "11:09", "12:38", "05:35", "07:33", "09:07"], end: ["04:31", "05:57", "11:14", "12:40", "05:34", "07:24", "08:53"] },
+        7: { name: "اگست", start: ["04:31", "05:58", "11:14", "12:40", "05:33", "07:24", "08:52"], end: ["04:48", "06:10", "11:10", "12:34", "05:15", "07:00", "08:21"] },
+        8: { name: "ستمبر", start: ["04:48", "06:10", "11:10", "12:33", "05:14", "06:59", "08:20"], end: ["05:00", "06:20", "11:00", "12:23", "04:47", "06:29", "07:47"] },
+        9: { name: "اکتوبر", start: ["05:01", "06:21", "11:00", "12:23", "04:46", "06:28", "07:46"], end: ["05:15", "06:35", "11:54", "12:17", "04:19", "06:05", "07:24"] },
+        10: { name: "نومبر", start: ["05:15", "06:36", "10:54", "12:17", "04:18", "06:04", "07:24"], end: ["05:34", "06:54", "11:00", "12:22", "04:07", "05:56", "07:17"] },
+        11: { name: "دسمبر", start: ["05:35", "06:55", "11:01", "12:23", "04:07", "05:56", "07:18"], end: ["05:52", "07:17", "11:15", "12:37", "04:18", "06:09", "07:31"] }
     };
 
     function tToM(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
     function mToT(m) { const h = Math.floor(m / 60); const min = m % 60; return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`; }
 
-    // Special logic to round jamat to next 15-minute mark (00, 15, 30, 45)
     function roundToNext15(startTimeMin, offset) {
         let target = startTimeMin + offset;
         return Math.ceil(target / 15) * 15;
@@ -218,7 +218,7 @@
     function getInterpolatedTimes(m, d, dayCount) {
         const s = baseData[m].start; const e = baseData[m].end;
         let res = [];
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 7; i++) {
             let sM = tToM(s[i]), eM = tToM(e[i]);
             let curr = sM + Math.round(((eM - sM) / (dayCount - 1)) * (d - 1));
             res.push(mToT(curr));
@@ -235,16 +235,15 @@
         tbody.innerHTML = '';
 
         for (let d = 1; d <= daysInMonth; d++) {
-            const times = getInterpolatedTimes(m, d, daysInMonth);
-            const zohrMin = tToM(times[2]);
+            const t = getInterpolatedTimes(m, d, daysInMonth);
+            const zohrMin = tToM(t[3]);
             const zawalTime = mToT(zohrMin - 20);
 
-            // Jamat Logic
-            const jFajr = mToT(roundToNext15(tToM(times[0]), 25));
-            const jZuhr = "01:30"; // Standard for Karachi
-            const jAsr = mToT(roundToNext15(tToM(times[3]), 20));
-            const jMaghrib = mToT(tToM(times[4]) + 3); // Immediate
-            const jIsha = mToT(roundToNext15(tToM(times[5]), 30));
+            const jFajr = mToT(roundToNext15(tToM(t[0]), 25));
+            const jZuhr = "01:30"; 
+            const jAsr = mToT(roundToNext15(tToM(t[4]), 20));
+            const jMaghrib = mToT(tToM(t[5]) + 3);
+            const jIsha = mToT(roundToNext15(tToM(t[6]), 30));
 
             const isToday = (m === curM && d === curD);
             const row = document.createElement('tr');
@@ -252,17 +251,18 @@
             
             row.innerHTML = `
                 <td>${d}</td>
-                <td>${times[0]}<span class="jamat-cell">ج: ${jFajr}</span></td>
-                <td>${times[1]}</td>
+                <td>${t[0]}<span class="jamat-cell">ج: ${jFajr}</span></td>
+                <td>${t[1]}</td>
+                <td>${t[2]}</td>
                 <td class="danger-text">${zawalTime}</td>
-                <td>${times[2]}<span class="jamat-cell">ج: ${jZuhr}</span></td>
-                <td>${times[3]}<span class="jamat-cell">ج: ${jAsr}</span></td>
-                <td>${times[4]}<span class="jamat-cell">ج: ${jMaghrib}</span></td>
-                <td>${times[5]}<span class="jamat-cell">ج: ${jIsha}</span></td>
+                <td>${t[3]}<span class="jamat-cell">ج: ${jZuhr}</span></td>
+                <td>${t[4]}<span class="jamat-cell">ج: ${jAsr}</span></td>
+                <td>${t[5]}<span class="jamat-cell">ج: ${jMaghrib}</span></td>
+                <td>${t[6]}<span class="jamat-cell">ج: ${jIsha}</span></td>
             `;
             tbody.appendChild(row);
 
-            if (isToday) renderToday(times, zawalTime, jFajr, jZuhr, jAsr, jMaghrib, jIsha, d, baseData[m].name);
+            if (isToday) renderToday(t, zawalTime, jFajr, jZuhr, jAsr, jMaghrib, jIsha, d, baseData[m].name);
         }
     }
 
@@ -273,12 +273,13 @@
         
         const data = [
             {label: "فجر", val: t[0], jamat: jF},
-            {label: "ضحوۃ", val: t[1]},
+            {label: "طلوعِ آفتاب", val: t[1]},
+            {label: "ضحوۃ", val: t[2]},
             {label: "ممنوع", val: zw, warn: true},
-            {label: "ظہر", val: t[2], jamat: jZ},
-            {label: "عصر", val: t[3], jamat: jA},
-            {label: "مغرب", val: t[4], jamat: jM},
-            {label: "عشاء", val: t[5], jamat: jI}
+            {label: "ظہر", val: t[3], jamat: jZ},
+            {label: "عصر", val: t[4], jamat: jA},
+            {label: "مغرب", val: t[5], jamat: jM},
+            {label: "عشاء", val: t[6], jamat: jI}
         ];
 
         data.forEach(item => {
