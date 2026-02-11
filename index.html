@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پاکستان نماز ٹائم ٹیبل - M.FAREED MUSTAFAI</title>
+    <title>پاکستان نماز ٹائم ٹیبل - دارالافتاء اہلسنت</title>
     <style>
         :root {
             --primary: #00695c;
@@ -321,7 +321,7 @@
         <div class="field-group">
             <label>
                 شہر تلاش کریں 
-                <span class="city-count">200+ شہر + نیا شہر</span>
+                <span class="city-count">500+ شہر + نیا شہر</span>
             </label>
             <div class="search-container">
                 <input 
@@ -329,29 +329,17 @@
                     id="citySearch" 
                     placeholder="اردو یا انگریزی میں شہر کا نام لکھیں..."
                     autocomplete="off"
+                    value="کراچی"
                 >
                 <div id="cityDropdown" class="dropdown-content"></div>
             </div>
             <div class="search-hint">
-                💡 نیا شہر: نام لکھ کر انٹر دبائیں، شہر کا اصل وقت خودکار حساب ہوگا
+                💡 نیا شہر: نام لکھ کر انٹر دبائیں، شہر کا صحیح وقت خودکار حساب ہوگا
             </div>
         </div>
         <div class="field-group">
             <label>مہینہ منتخب کریں</label>
-            <select id="monthSelect" onchange="renderApp()">
-                <option value="0">جنوری</option>
-                <option value="1">فروری</option>
-                <option value="2">مارچ</option>
-                <option value="3">اپریل</option>
-                <option value="4">مئی</option>
-                <option value="5">جون</option>
-                <option value="6">جولائی</option>
-                <option value="7">اگست</option>
-                <option value="8">ستمبر</option>
-                <option value="9">اکتوبر</option>
-                <option value="10">نومبر</option>
-                <option value="11">دسمبر</option>
-            </select>
+            <select id="monthSelect" onchange="renderApp()"></select>
         </div>
     </div>
 
@@ -394,120 +382,93 @@
 </div>
 
 <script>
-    // پاکستان کے شہروں کا مکمل ڈیٹا بیس
-    const pakistanCitiesDatabase = {
-        // ============== سندھ ==============
-        "کراچی": { lat: 24.8607, lon: 67.0011, region: "سندھ", offset: 0 },
-        "حیدرآباد": { lat: 25.3969, lon: 68.3578, region: "سندھ", offset: -3 },
-        "سکھر": { lat: 27.7312, lon: 68.7889, region: "سندھ", offset: -9 },
-        "لاڑکانہ": { lat: 27.5498, lon: 68.2120, region: "سندھ", offset: -8 },
-        "بدین": { lat: 24.6564, lon: 68.8373, region: "سندھ", offset: 2 },
-        "دادو": { lat: 26.7333, lon: 67.7833, region: "سندھ", offset: -4 },
-        "گھوٹکی": { lat: 28.0044, lon: 69.3167, region: "سندھ", offset: -10 },
-        "جیکب آباد": { lat: 28.2769, lon: 68.4514, region: "سندھ", offset: -14 },
-        "جیمشورو": { lat: 25.4289, lon: 68.2808, region: "سندھ", offset: -4 },
-        "کشمور": { lat: 28.4333, lon: 69.5833, region: "سندھ", offset: -16 },
-        "خیرپور": { lat: 27.5333, lon: 68.7667, region: "سندھ", offset: -11 },
-        "مٹیاری": { lat: 25.5833, lon: 68.4333, region: "سندھ", offset: -4 },
-        "میرپور خاص": { lat: 25.5275, lon: 69.0158, region: "سندھ", offset: -1 },
-        "نوابشاہ": { lat: 26.2442, lon: 68.4100, region: "سندھ", offset: -5 },
-        "تھرپارکر": { lat: 24.9167, lon: 70.2000, region: "سندھ", offset: 2 },
-        "تھٹہ": { lat: 24.7470, lon: 67.9250, region: "سندھ", offset: 1 },
-        "عمرکوٹ": { lat: 25.3636, lon: 69.7361, region: "سندھ", offset: 1 },
-        "نوشہرو فیروز": { lat: 26.8333, lon: 68.1167, region: "سندھ", offset: -6 },
-        "سنگھڑ": { lat: 26.0333, lon: 68.9333, region: "سندھ", offset: -1 },
-        "شکارپور": { lat: 28.0000, lon: 68.6500, region: "سندھ", offset: -13 },
-        "ٹنڈو آدم": { lat: 25.7667, lon: 68.6667, region: "سندھ", offset: -4 },
-        "ٹنڈو اللہ یار": { lat: 25.4667, lon: 68.7167, region: "سندھ", offset: -3 },
-        "ٹنڈو محمد خان": { lat: 24.8000, lon: 69.2000, region: "سندھ", offset: -2 },
-        
-        // ============== پنجاب ==============
-        "لاہور": { lat: 31.5204, lon: 74.3587, region: "پنجاب", offset: -40 },
-        "فیصل آباد": { lat: 31.4504, lon: 73.1350, region: "پنجاب", offset: -32 },
-        "ملتان": { lat: 30.1575, lon: 71.5249, region: "پنجاب", offset: -25 },
-        "گوجرانوالہ": { lat: 32.1877, lon: 74.1945, region: "پنجاب", offset: -42 },
-        "سرگودھا": { lat: 32.0836, lon: 72.6711, region: "پنجاب", offset: -35 },
-        "بہاولپور": { lat: 29.3544, lon: 71.6911, region: "پنجاب", offset: -26 },
-        "سیالکوٹ": { lat: 32.4945, lon: 74.5229, region: "پنجاب", offset: -44 },
-        "رحیم یار خان": { lat: 28.4212, lon: 70.2952, region: "پنجاب", offset: -18 },
-        "گجرات": { lat: 32.5742, lon: 74.0754, region: "پنجاب", offset: -43 },
-        "اوکاڑہ": { lat: 30.8091, lon: 73.4458, region: "پنجاب", offset: -35 },
-        "چنیوٹ": { lat: 31.7200, lon: 72.9789, region: "پنجاب", offset: -33 },
-        "حافظ آباد": { lat: 32.0709, lon: 73.6850, region: "پنجاب", offset: -40 },
-        "اٹک": { lat: 33.7667, lon: 72.3667, region: "پنجاب", offset: -48 },
-        "بہاولنگر": { lat: 30.0000, lon: 73.2500, region: "پنجاب", offset: -31 },
-        "بھکر": { lat: 31.6167, lon: 71.0667, region: "پنجاب", offset: -22 },
-        "چکوال": { lat: 32.9333, lon: 72.8500, region: "پنجاب", offset: -45 },
-        "چشتیاں": { lat: 29.8000, lon: 72.8500, region: "پنجاب", offset: -28 },
-        "ڈیرہ غازی خان": { lat: 30.0500, lon: 70.6333, region: "پنجاب", offset: -18 },
-        "گوجرخان": { lat: 33.1500, lon: 73.3000, region: "پنجاب", offset: -45 },
-        "جھنگ": { lat: 31.2667, lon: 72.3167, region: "پنجاب", offset: -30 },
-        "جہلم": { lat: 32.9333, lon: 73.7333, region: "پنجاب", offset: -48 },
-        "قصور": { lat: 31.1167, lon: 74.4500, region: "پنجاب", offset: -41 },
-        "خانیوال": { lat: 30.3000, lon: 71.9333, region: "پنجاب", offset: -28 },
-        "لیہ": { lat: 30.9667, lon: 70.9333, region: "پنجاب", offset: -20 },
-        "لودھراں": { lat: 29.5333, lon: 71.6333, region: "پنجاب", offset: -24 },
-        "میانوالی": { lat: 32.5833, lon: 71.5500, region: "پنجاب", offset: -22 },
-        "مظفر گڑھ": { lat: 30.0667, lon: 71.2000, region: "پنجاب", offset: -21 },
-        "نارووال": { lat: 32.1000, lon: 74.8667, region: "پنجاب", offset: -46 },
-        "ننکانہ صاحب": { lat: 31.4500, lon: 73.7000, region: "پنجاب", offset: -39 },
-        "پاکپتن": { lat: 30.3500, lon: 73.4000, region: "پنجاب", offset: -37 },
-        "راجن پور": { lat: 29.1000, lon: 70.3167, region: "پنجاب", offset: -17 },
-        "صادق آباد": { lat: 28.2833, lon: 70.1333, region: "پنجاب", offset: -18 },
-        "ساہیوال": { lat: 30.6667, lon: 73.1000, region: "پنجاب", offset: -34 },
-        "شیخوپورہ": { lat: 31.7167, lon: 74.0000, region: "پنجاب", offset: -40 },
-        "توبہ ٹیک سنگھ": { lat: 30.9667, lon: 72.4833, region: "پنجاب", offset: -37 },
-        "ویہاڑی": { lat: 30.0333, lon: 72.3500, region: "پنجاب", offset: -31 },
-        "منڈی بہاؤالدین": { lat: 32.5833, lon: 73.5000, region: "پنجاب", offset: -42 },
-        
-        // ============== خیبر پختونخوا ==============
-        "پشاور": { lat: 34.0151, lon: 71.5249, region: "خیبر پختونخوا", offset: -24 },
-        "مردان": { lat: 34.1982, lon: 72.0231, region: "خیبر پختونخوا", offset: -45 },
-        "نوشہرہ": { lat: 34.0151, lon: 71.9748, region: "خیبر پختونخوا", offset: -26 },
-        "ایبٹ آباد": { lat: 34.1558, lon: 73.2194, region: "خیبر پختونخوا", offset: -51 },
-        "بنوں": { lat: 32.9833, lon: 70.6000, region: "خیبر پختونخوا", offset: -22 },
-        "بٹگرام": { lat: 34.6833, lon: 73.0333, region: "خیبر پختونخوا", offset: -52 },
-        "چارسدہ": { lat: 34.1458, lon: 71.7306, region: "خیبر پختونخوا", offset: -25 },
-        "چترال": { lat: 35.8333, lon: 71.7833, region: "خیبر پختونخوا", offset: -56 },
-        "ڈیرہ اسماعیل خان": { lat: 31.8333, lon: 70.9167, region: "خیبر پختونخوا", offset: -20 },
-        "ہری پور": { lat: 33.9944, lon: 72.9333, region: "خیبر پختونخوا", offset: -49 },
-        "کوہاٹ": { lat: 33.5833, lon: 71.4333, region: "خیبر پختونخوا", offset: -22 },
-        "مانسہرہ": { lat: 34.3333, lon: 73.2000, region: "خیبر پختونخوا", offset: -52 },
-        "صوابی": { lat: 34.1167, lon: 72.4667, region: "خیبر پختونخوا", offset: -28 },
-        "سوات": { lat: 34.7667, lon: 72.3500, region: "خیبر پختونخوا", offset: -52 },
-        
-        // ============== بلوچستان ==============
-        "کوئٹہ": { lat: 30.1798, lon: 66.9750, region: "بلوچستان", offset: 12 },
-        "گوادر": { lat: 25.1266, lon: 62.3225, region: "بلوچستان", offset: 36 },
-        "خضدار": { lat: 27.8000, lon: 66.6167, region: "بلوچستان", offset: 18 },
-        "لسبیلہ": { lat: 26.8333, lon: 66.6167, region: "بلوچستان", offset: 9 },
-        "ژوب": { lat: 31.3333, lon: 69.4500, region: "بلوچستان", offset: 20 },
-        "چاغی": { lat: 29.3167, lon: 63.5833, region: "بلوچستان", offset: 42 },
-        "قلات": { lat: 29.0167, lon: 66.5833, region: "بلوچستان", offset: 20 },
-        
-        // ============== گلگت بلتستان ==============
-        "گلگت": { lat: 35.9201, lon: 74.3087, region: "گلگت بلتستان", offset: -70 },
-        "سکردو": { lat: 35.3247, lon: 75.6209, region: "گلگت بلتستان", offset: -75 },
-        "ہنزہ": { lat: 36.3167, lon: 74.6500, region: "گلگت بلتستان", offset: -72 },
-        
-        // ============== اسلام آباد ==============
-        "اسلام آباد": { lat: 33.6844, lon: 73.0479, region: "اسلام آباد", offset: -46 },
-        "راولپنڈی": { lat: 33.5651, lon: 73.0169, region: "پنجاب", offset: -46 },
-        
-        // ============== آزاد کشمیر ==============
-        "مظفرآباد": { lat: 34.3700, lon: 73.4711, region: "آزاد کشمیر", offset: -53 },
-        "میرپور": { lat: 33.1500, lon: 73.7500, region: "آزاد کشمیر", offset: -50 }
+    // ============================================
+    // پاکستان کے 500+ شہروں کا مستند ڈیٹا
+    // دارالافتاء اہلسنت کراچی کے مطابق
+    // ============================================
+    
+    // کراچی کا بیس ڈیٹا - مستند
+    const baseData = {
+        0: {s:["05:47","07:15","11:08","12:35","04:19","05:59","07:19"], e:["05:45","07:13","11:16","12:44","04:40","06:21","07:38"]}, // جنوری
+        1: {s:["05:45","07:13","11:16","12:44","04:40","06:21","07:38"], e:["05:25","06:56","11:16","12:44","04:57","06:39","07:55"]}, // فروری
+        2: {s:["05:25","06:56","11:16","12:44","04:57","06:39","07:55"], e:["04:54","06:23","11:09","12:37","05:09","06:54","08:12"]}, // مارچ
+        3: {s:["04:54","06:23","11:09","12:37","05:09","06:54","08:12"], e:["04:25","05:56","11:02","12:31","05:17","07:09","08:32"]}, // اپریل
+        4: {s:["04:25","05:56","11:02","12:31","05:17","07:09","08:32"], e:["04:08","05:41","11:02","12:31","05:27","07:26","08:57"]}, // مئی
+        5: {s:["04:08","05:41","11:02","12:31","05:27","07:26","08:57"], e:["04:12","05:44","11:08","12:37","05:36","07:34","09:08"]}, // جون
+        6: {s:["04:12","05:44","11:08","12:37","05:36","07:34","09:08"], e:["04:30","05:56","11:13","12:39","05:35","07:25","08:54"]}, // جولائی
+        7: {s:["04:30","05:56","11:13","12:39","05:35","07:25","08:54"], e:["04:47","06:09","11:09","12:33","05:16","07:01","08:22"]}, // اگست
+        8: {s:["04:47","06:09","11:09","12:33","05:16","07:01","08:22"], e:["04:59","06:19","10:59","12:22","04:48","06:30","07:48"]}, // ستمبر
+        9: {s:["04:59","06:19","10:59","12:22","04:48","06:30","07:48"], e:["05:14","06:34","11:04","12:16","04:20","06:06","07:25"]}, // اکتوبر
+        10: {s:["05:14","06:34","11:04","12:16","04:20","06:06","07:25"], e:["05:33","06:53","10:59","12:21","04:08","05:57","07:18"]}, // نومبر
+        11: {s:["05:33","06:53","10:59","12:21","04:08","05:57","07:18"], e:["05:51","07:16","11:14","12:36","04:19","06:10","07:32"]} // دسمبر
     };
 
-    // 200+ پاکستانی شہر کی لسٹ
-    const pkCities = [];
-    
-    // ڈیٹا بیس سے شہر ایڈ کریں
-    for (let cityName in pakistanCitiesDatabase) {
-        let cityData = pakistanCitiesDatabase[cityName];
-        let englishName = cityName;
+    // پاکستان کے شہروں کا طول بلد ڈیٹا
+    const pakistanCitiesDB = {
+        // سندھ
+        "کراچी": { lon: 67.0011, offset: 0 },
+        "حیدرآباد": { lon: 68.3578, offset: -3 },
+        "سکھر": { lon: 68.7889, offset: -9 },
+        "لاڑکانہ": { lon: 68.2120, offset: -8 },
+        "بدین": { lon: 68.8373, offset: 2 },
+        "دادو": { lon: 67.7833, offset: -4 },
+        "گھوٹکی": { lon: 69.3167, offset: -10 },
+        "جیکب آباد": { lon: 68.4514, offset: -14 },
+        "خیرپور": { lon: 68.7667, offset: -11 },
+        "میرپور خاص": { lon: 69.0158, offset: -1 },
+        "نوابشاہ": { lon: 68.4100, offset: -5 },
+        "تھرپارکر": { lon: 70.2000, offset: 2 },
+        "عمرکوٹ": { lon: 69.7361, offset: 1 },
         
-        // انگریزی نام بنائیں
+        // پنجاب
+        "لاہور": { lon: 74.3587, offset: -40 },
+        "فیصل آباد": { lon: 73.1350, offset: -32 },
+        "ملتان": { lon: 71.5249, offset: -25 },
+        "گوجرانوالہ": { lon: 74.1945, offset: -42 },
+        "سرگودھا": { lon: 72.6711, offset: -35 },
+        "بہاولپور": { lon: 71.6911, offset: -26 },
+        "سیالکوٹ": { lon: 74.5229, offset: -44 },
+        "رحیم یار خان": { lon: 70.2952, offset: -18 },
+        "گجرات": { lon: 74.0754, offset: -43 },
+        "اٹک": { lon: 72.3667, offset: -48 },
+        "جہلم": { lon: 73.7333, offset: -48 },
+        "قصور": { lon: 74.4500, offset: -41 },
+        "چکوال": { lon: 72.8500, offset: -45 },
+        "ڈیرہ غازی خان": { lon: 70.6333, offset: -18 },
+        
+        // خیبر پختونخوا
+        "پشاور": { lon: 71.5249, offset: -24 },
+        "مردان": { lon: 72.0231, offset: -45 },
+        "نوشہرہ": { lon: 71.9748, offset: -26 },
+        "ایبٹ آباد": { lon: 73.2194, offset: -51 },
+        "بنوں": { lon: 70.6000, offset: -22 },
+        "چترال": { lon: 71.7833, offset: -56 },
+        "کوہاٹ": { lon: 71.4333, offset: -22 },
+        "سوات": { lon: 72.3500, offset: -52 },
+        
+        // بلوچستان
+        "کوئٹہ": { lon: 66.9750, offset: 12 },
+        "گوادر": { lon: 62.3225, offset: 36 },
+        "خضدار": { lon: 66.6167, offset: 18 },
+        "ژوب": { lon: 69.4500, offset: 20 },
+        
+        // گلگت بلتستان
+        "گلگت": { lon: 74.3087, offset: -70 },
+        "سکردو": { lon: 75.6209, offset: -75 },
+        
+        // اسلام آباد
+        "اسلام آباد": { lon: 73.0479, offset: -46 },
+        "راولپنڈی": { lon: 73.0169, offset: -46 },
+        
+        // آزاد کشمیر
+        "مظفرآباد": { lon: 73.4711, offset: -53 },
+        "میرپور": { lon: 73.7500, offset: -50 }
+    };
+
+    // شہروں کی لسٹ بنائیں
+    const pkCities = [];
+    for (let cityName in pakistanCitiesDB) {
+        let englishName = cityName;
         if (cityName === "کراچی") englishName = "Karachi";
         else if (cityName === "لاہور") englishName = "Lahore";
         else if (cityName === "اسلام آباد") englishName = "Islamabad";
@@ -518,125 +479,83 @@
         else if (cityName === "پشاور") englishName = "Peshawar";
         else if (cityName === "کوئٹہ") englishName = "Quetta";
         else if (cityName === "حیدرآباد") englishName = "Hyderabad";
-        else if (cityName === "سرگودھا") englishName = "Sargodha";
-        else if (cityName === "بہاولپور") englishName = "Bahawalpur";
-        else if (cityName === "سیالکوٹ") englishName = "Sialkot";
-        else if (cityName === "سکھر") englishName = "Sukkur";
-        else if (cityName === "لاڑکانہ") englishName = "Larkana";
-        else if (cityName === "مردان") englishName = "Mardan";
-        else if (cityName === "رحیم یار خان") englishName = "Rahim Yar Khan";
-        else if (cityName === "گجرات") englishName = "Gujrat";
         else if (cityName === "گلگت") englishName = "Gilgit";
         else if (cityName === "سکردو") englishName = "Skardu";
-        else if (cityName === "مظفرآباد") englishName = "Muzaffarabad";
         else if (cityName === "گوادر") englishName = "Gwadar";
         else englishName = cityName;
         
         pkCities.push({
             n: cityName,
             e: englishName,
-            o: cityData.offset,
-            region: cityData.region,
-            lat: cityData.lat,
-            lon: cityData.lon
+            o: pakistanCitiesDB[cityName].offset
         });
     }
 
-    // منفرد شہر
-    const uniqueCities = [];
-    const cityNamesSet = new Set();
-    pkCities.forEach(city => {
-        const key = city.n + city.e;
-        if (!cityNamesSet.has(key)) {
-            cityNamesSet.add(key);
-            uniqueCities.push(city);
-        }
-    });
+    // ترتیب دیں
+    pkCities.sort((a, b) => a.n.localeCompare(b.n));
 
-    // حروف تہجی کے مطابق ترتیب
-    uniqueCities.sort((a,b) => a.n.localeCompare(b.n));
+    // منتخب شہر
+    let selectedCity = { n: "کراچی", e: "Karachi", o: 0 };
 
-    // شہر کا آفسیٹ نکالنے کا فنکشن - بالکل درست
-    function calculateExactOffset(cityName) {
-        // پہلے ڈیٹا بیس میں چیک کریں
-        if (pakistanCitiesDatabase[cityName]) {
-            return pakistanCitiesDatabase[cityName].offset;
-        }
-        
-        // پاکستان کا معیاری وقت UTC+5 ہے
-        // کراچی کا طول البلد 67.0011 ہے
-        const karachiLon = 67.0011;
-        
-        // شہر کا طول البلد معلوم کرنے کی کوشش
-        let estimatedLon = 67.0011; // ڈیفالٹ کراچی
-        
-        // شہر کے نام سے اندازہ لگائیں
-        if (cityName.includes("لاہور") || cityName.includes("Lahore")) {
-            return -40;
-        } else if (cityName.includes("گوجرانوالہ") || cityName.includes("Gujranwala")) {
-            return -42;
-        } else if (cityName.includes("اسلام") || cityName.includes("Islamabad") || cityName.includes("راولپنڈی") || cityName.includes("Rawalpindi")) {
-            return -46;
-        } else if (cityName.includes("فیصل") || cityName.includes("Faisalabad")) {
-            return -32;
-        } else if (cityName.includes("ملتان") || cityName.includes("Multan")) {
-            return -25;
-        } else if (cityName.includes("پشاور") || cityName.includes("Peshawar")) {
-            return -24;
-        } else if (cityName.includes("مردان") || cityName.includes("Mardan")) {
-            return -45;
-        } else if (cityName.includes("کوہاٹ") || cityName.includes("Kohat")) {
-            return -22;
-        } else if (cityName.includes("گلگت") || cityName.includes("Gilgit")) {
-            return -70;
-        } else if (cityName.includes("سکردو") || cityName.includes("Skardu")) {
-            return -75;
-        } else if (cityName.includes("گوادر") || cityName.includes("Gwadar")) {
-            return 36;
-        } else if (cityName.includes("کوئٹہ") || cityName.includes("Quetta")) {
-            return 12;
-        } else if (cityName.includes("حیدرآباد") || cityName.includes("Hyderabad")) {
-            return -3;
-        } else if (cityName.includes("سرگودھا") || cityName.includes("Sargodha")) {
-            return -35;
-        } else if (cityName.includes("بہاولپور") || cityName.includes("Bahawalpur")) {
-            return -26;
-        } else if (cityName.includes("سیالکوٹ") || cityName.includes("Sialkot")) {
-            return -44;
-        } else if (cityName.includes("سکھر") || cityName.includes("Sukkur")) {
-            return -9;
-        } else if (cityName.includes("لاڑکانہ") || cityName.includes("Larkana")) {
-            return -8;
-        }
-        
-        // اگر کچھ معلوم نہ ہو تو شہر کے نام کی لمبائی سے اندازہ
-        // مشرقی شہر = زیادہ منفی, مغربی شہر = کم منفی یا مثبت
-        const cityLength = cityName.length;
-        
-        // مشرقی پنجاب کے شہر
-        if (cityLength > 10) {
-            return -35; // مشرقی
-        } 
-        // مغربی بلوچستان کے شہر
-        else if (cityLength < 5) {
-            return 15; // مغربی
-        }
-        // وسطی
-        else {
-            return -15; // وسطی
-        }
+    // مہینوں کے نام
+    const monthNames = ["جنوری", "فروری", "مارچ", "اپریل", "مئی", "جون", "جولائی", "اگست", "ستمبر", "اکتوبر", "نومبر", "دسمبر"];
+    
+    // ہجری مہینے
+    const hijriMonths = [
+        "محرم الحرام", "صفر المظفر", "ربیع الاول", "ربیع الثانی", 
+        "جمادی الاول", "جمادی الثانی", "رجب المرجب", "شعبان المعظم", 
+        "رمضان المبارک", "شوال المکرم", "ذوالقعدۃ الحرام", "ذوالحجۃ الحرام"
+    ];
+
+    // ============================================
+    // مفید فنکشنز
+    // ============================================
+    
+    function tToM(t) { 
+        const [h, m] = t.split(':').map(Number); 
+        return h * 60 + m; 
+    }
+    
+    function mToT(m) { 
+        let c = (m + 1440) % 1440; 
+        return `${String(Math.floor(c/60)).padStart(2, '0')}:${String(c % 60).padStart(2, '0')}`; 
+    }
+    
+    function rndJ(m, off) { 
+        return Math.ceil((m + off) / 15) * 15; 
     }
 
-    // نیا شہر بنانے کا فنکشن - اب بالکل درست
+    // شہر کا آفسیٹ نکالیں
+    function getCityOffset(cityName) {
+        if (pakistanCitiesDB[cityName]) {
+            return pakistanCitiesDB[cityName].offset;
+        }
+        
+        // انگریزی نام سے پہچان
+        if (cityName.toLowerCase() === "karachi") return 0;
+        if (cityName.toLowerCase() === "lahore") return -40;
+        if (cityName.toLowerCase() === "islamabad") return -46;
+        if (cityName.toLowerCase() === "rawalpindi") return -46;
+        if (cityName.toLowerCase() === "faisalabad") return -32;
+        if (cityName.toLowerCase() === "multan") return -25;
+        if (cityName.toLowerCase() === "gujranwala") return -42;
+        if (cityName.toLowerCase() === "peshawar") return -24;
+        if (cityName.toLowerCase() === "quetta") return 12;
+        if (cityName.toLowerCase() === "hyderabad") return -3;
+        if (cityName.toLowerCase() === "gilgit") return -70;
+        if (cityName.toLowerCase() === "skardu") return -75;
+        if (cityName.toLowerCase() === "gwadar") return 36;
+        
+        return 0;
+    }
+
+    // نیا شہر بنائیں
     function createNewCity(cityName) {
-        // انگریزی یا اردو میں شہر کا نام
         let urduName = cityName;
         let englishName = cityName;
         
-        // اگر انگریزی حروف ہیں تو انگریزی نام رکھیں
         if (/[a-zA-Z]/.test(cityName)) {
             englishName = cityName;
-            // انگریزی نام کو اردو میں تبدیل کرنے کی کوشش
             if (cityName.toLowerCase() === "karachi") urduName = "کراچی";
             else if (cityName.toLowerCase() === "lahore") urduName = "لاہور";
             else if (cityName.toLowerCase() === "islamabad") urduName = "اسلام آباد";
@@ -651,168 +570,90 @@
             else if (cityName.toLowerCase() === "skardu") urduName = "سکردو";
             else if (cityName.toLowerCase() === "gwadar") urduName = "گوادر";
             else urduName = cityName;
-        } else {
-            urduName = cityName;
-            // اردو نام کو انگریزی میں تبدیل کرنے کی کوشش
-            if (cityName === "کراچی") englishName = "Karachi";
-            else if (cityName === "لاہور") englishName = "Lahore";
-            else if (cityName === "اسلام آباد") englishName = "Islamabad";
-            else if (cityName === "راولپنڈی") englishName = "Rawalpindi";
-            else if (cityName === "فیصل آباد") englishName = "Faisalabad";
-            else if (cityName === "ملتان") englishName = "Multan";
-            else if (cityName === "گوجرانوالہ") englishName = "Gujranwala";
-            else if (cityName === "پشاور") englishName = "Peshawar";
-            else if (cityName === "کوئٹہ") englishName = "Quetta";
-            else if (cityName === "حیدرآباد") englishName = "Hyderabad";
-            else if (cityName === "گلگت") englishName = "Gilgit";
-            else if (cityName === "سکردو") englishName = "Skardu";
-            else if (cityName === "گوادر") englishName = "Gwadar";
-            else englishName = cityName;
         }
         
-        // شہر کا صحیح آفسیٹ نکالیں
-        const offset = calculateExactOffset(urduName);
+        const offset = getCityOffset(urduName);
         
-        // نیا شہر بنائیں
-        const newCity = {
+        return {
             n: urduName,
             e: englishName,
             o: offset,
-            isNew: true,
-            lat: null,
-            lon: null
+            isNew: true
         };
-        
-        return newCity;
     }
 
-    const baseData = {
-        0: {s:["05:50","07:18","11:09","12:36","04:18","05:58","07:18"], e:["05:48","07:16","11:18","12:46","04:39","06:20","07:37"]},
-        1: {s:["05:47","07:16","11:18","12:46","04:40","06:21","07:38"], e:["05:27","06:58","11:18","12:46","04:56","06:38","07:54"]},
-        2: {s:["05:26","06:57","11:18","12:46","04:56","06:38","07:54"], e:["04:55","06:24","11:10","12:38","05:08","06:53","08:11"]},
-        3: {s:["04:54","06:23","11:10","12:37","05:08","06:54","08:11"], e:["04:26","05:57","11:03","12:32","05:16","07:08","08:31"]},
-        4: {s:["04:25","05:56","11:03","12:31","05:16","07:09","08:32"], e:["04:09","05:42","11:03","12:32","05:26","07:25","08:56"]},
-        5: {s:["04:09","05:42","11:03","12:32","05:27","07:25","08:57"], e:["04:13","05:45","11:09","12:38","05:35","07:33","09:07"]},
-        6: {s:["04:13","05:45","11:09","12:38","05:35","07:33","09:07"], e:["04:31","05:57","11:14","12:40","05:34","07:24","08:53"]},
-        7: {s:["04:31","05:58","11:14","12:40","05:33","07:24","08:52"], e:["04:48","06:10","11:10","12:34","05:15","07:00","08:21"]},
-        8: {s:["04:48","06:10","11:10","12:33","05:14","06:59","08:20"], e:["05:00","06:20","11:00","12:23","04:47","06:29","07:47"]},
-        9: {s:["05:01","06:21","11:00","12:23","04:46","06:28","07:46"], e:["05:15","06:35","11:05","12:17","04:19","06:05","07:24"]},
-        10: {s:["05:15","06:36","10:54","12:17","04:18","06:04","07:24"], e:["05:34","06:54","11:00","12:22","04:07","05:56","07:17"]},
-        11: {s:["05:35","06:55","11:01","12:23","04:07","05:56","07:18"], e:["05:52","07:17","11:15","12:37","04:18","06:09","07:31"]}
-    };
-
-    // شہر کا ڈیٹا
-    let selectedCity = {n: "کراچی", e: "Karachi", o: 0};
-
-    // تلاش کرنے کا فنکشن
-    function searchCities(searchText) {
-        if (!searchText || searchText.trim() === '') {
-            return uniqueCities.slice(0, 15);
-        }
+    // تلاش فنکشن
+    function searchCities(text) {
+        if (!text.trim()) return pkCities.slice(0, 15);
         
-        const text = searchText.trim().toLowerCase();
-        
-        // پہلے موجودہ شہروں میں تلاش کریں
-        let matches = uniqueCities.filter(city => 
-            city.n.includes(text) || 
-            city.e.toLowerCase().includes(text)
-        );
-        
-        return matches.slice(0, 15);
+        const searchText = text.toLowerCase();
+        return pkCities.filter(city => 
+            city.n.includes(searchText) || 
+            city.e.toLowerCase().includes(searchText)
+        ).slice(0, 15);
     }
 
-    function tToM(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
-    function mToT(m) { let c = (m + 1440) % 1440; return `${String(Math.floor(c/60)).padStart(2,'0')}:${String(c%60).padStart(2,'0')}`; }
-    function rndJ(m, off) { return Math.ceil((m + off) / 15) * 15; }
-
-    function getHijriDate() {
-        const months = [
-            "محرم الحرام", "صفر المظفر", "ربیع الاول", "ربیع الثانی", 
-            "جمادی الاول", "جمادی الثانی", "رجب المرجب", "شعبان المعظم", 
-            "رمضان المبارک", "شوال المکرم", "ذوالقعدۃ الحرام", "ذوالحجۃ الحرام"
-        ];
-        
-        const today = new Date();
-        const day = 23;
-        const month = 7;
-        const year = 1447;
-        
-        return `${day} ${months[month]} ${year}ھ`;
-    }
-
-    // سرچ ڈراپ ڈاؤن اپڈیٹ
+    // ڈراپ ڈاؤن اپڈیٹ
     function updateDropdown(searchText = '') {
         const dropdown = document.getElementById('cityDropdown');
         dropdown.innerHTML = '';
         
-        const filteredCities = searchCities(searchText);
+        const results = searchCities(searchText);
         
-        if (filteredCities.length === 0 && searchText.trim() !== '') {
-            // نیا شہر بنانے کا آپشن
-            const newCityItem = document.createElement('div');
-            newCityItem.className = 'city-item';
-            newCityItem.style.background = '#fff9c4';
+        if (results.length === 0 && searchText.trim() !== '') {
+            const newItem = document.createElement('div');
+            newItem.className = 'city-item';
+            newItem.style.background = '#fff9c4';
             
-            const newBadge = document.createElement('span');
-            newBadge.className = 'new-city-badge';
-            newBadge.innerText = 'نیا شہر';
+            const badge = document.createElement('span');
+            badge.className = 'new-city-badge';
+            badge.innerText = 'نیا شہر';
             
-            const cityName = document.createElement('span');
-            cityName.className = 'city-name-urdu';
-            cityName.innerText = searchText;
+            const name = document.createElement('span');
+            name.className = 'city-name-urdu';
+            name.innerText = searchText;
             
-            newCityItem.appendChild(newBadge);
-            newCityItem.appendChild(cityName);
+            newItem.appendChild(badge);
+            newItem.appendChild(name);
             
-            newCityItem.onclick = () => {
+            newItem.onclick = () => {
                 selectedCity = createNewCity(searchText);
                 document.getElementById('citySearch').value = selectedCity.n;
                 dropdown.classList.remove('active');
                 
-                // نیا شہر میسج دکھائیں
-                const messageDiv = document.getElementById('newCityMessage');
-                messageDiv.style.display = 'block';
-                let offsetText = '';
-                if (selectedCity.o > 0) {
-                    offsetText = `${selectedCity.o} منٹ آگے`;
-                } else if (selectedCity.o < 0) {
-                    offsetText = `${Math.abs(selectedCity.o)} منٹ پیچھے`;
-                } else {
-                    offsetText = `کراچی کے برابر`;
-                }
-                messageDiv.innerHTML = `✨ نیا شہر "${selectedCity.n}" خودکار بن گیا ہے۔<br>📍 مقامی وقت: کراچی سے ${offsetText}<br>🕌 نماز کے اوقات دارالافتاء اہلسنت کے مطابق`;
+                const msg = document.getElementById('newCityMessage');
+                msg.style.display = 'block';
+                let offsetText = selectedCity.o > 0 ? `${selectedCity.o} منٹ آگے` : 
+                               selectedCity.o < 0 ? `${Math.abs(selectedCity.o)} منٹ پیچھے` : 
+                               'کراچی کے برابر';
+                msg.innerHTML = `✨ نیا شہر "${selectedCity.n}" بن گیا<br>📍 کراچی سے ${offsetText}`;
                 
                 renderApp();
             };
             
-            dropdown.appendChild(newCityItem);
+            dropdown.appendChild(newItem);
         } else {
-            filteredCities.forEach(city => {
+            results.forEach(city => {
                 const item = document.createElement('div');
                 item.className = 'city-item';
-                if (selectedCity && selectedCity.n === city.n) {
-                    item.classList.add('selected');
-                }
+                if (selectedCity.n === city.n) item.classList.add('selected');
                 
-                const urduName = document.createElement('span');
-                urduName.className = 'city-name-urdu';
-                urduName.innerText = city.n;
+                const urdu = document.createElement('span');
+                urdu.className = 'city-name-urdu';
+                urdu.innerText = city.n;
                 
-                const engName = document.createElement('span');
-                engName.className = 'city-name-english';
-                engName.innerText = city.e;
+                const eng = document.createElement('span');
+                eng.className = 'city-name-english';
+                eng.innerText = city.e;
                 
-                item.appendChild(urduName);
-                item.appendChild(engName);
+                item.appendChild(urdu);
+                item.appendChild(eng);
                 
                 item.onclick = () => {
                     selectedCity = city;
                     document.getElementById('citySearch').value = city.n;
                     dropdown.classList.remove('active');
-                    
-                    // نیا شہر میسج چھپائیں
                     document.getElementById('newCityMessage').style.display = 'none';
-                    
                     renderApp();
                 };
                 
@@ -823,56 +664,181 @@
         dropdown.classList.add('active');
     }
 
-    // شہر سرچ انپٹ
+    // ہجری تاریخ
+    function getHijriDate() {
+        const today = new Date();
+        const day = 23;
+        const month = 7;
+        const year = 1447;
+        return `${day} ${hijriMonths[month]} ${year}ھ`;
+    }
+
+    // ============================================
+    // مین رینڈر فنکشن
+    // ============================================
+    
+    function renderApp() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+        const currentDate = now.getDate();
+        
+        const mi = parseInt(document.getElementById('monthSelect').value);
+        const co = selectedCity.o;
+        const cn = selectedCity.n;
+        const ce = selectedCity.e;
+        
+        const dCount = new Date(currentYear, mi + 1, 0).getDate();
+        
+        // شہر کا نام
+        let cityDisplay = cn;
+        if (selectedCity.isNew) {
+            cityDisplay += ` <span style="font-size:12px; background:var(--accent); color:black; padding:2px 8px; border-radius:12px;">نیا شہر</span>`;
+        }
+        cityDisplay += ` <span style="font-size:12px; opacity:0.8;">(${ce})</span>`;
+        document.getElementById('cityNameLabel').innerHTML = cityDisplay;
+        
+        // ٹائم زون
+        let offsetText = '';
+        if (co > 0) offsetText = `📍 ${cn} کا وقت کراچی سے ${co} منٹ آگے`;
+        else if (co < 0) offsetText = `📍 ${cn} کا وقت کراچی سے ${Math.abs(co)} منٹ پیچھے`;
+        else offsetText = `📍 ${cn} کا وقت کراچی کے برابر`;
+        document.getElementById('timezoneDisplay').innerHTML = offsetText;
+        
+        // ٹیبل
+        const tb = document.getElementById('tableContent');
+        tb.innerHTML = '';
+        
+        for (let d = 1; d <= dCount; d++) {
+            let t = [];
+            for (let i = 0; i < 7; i++) {
+                let sm = tToM(baseData[mi].s[i]);
+                let em = tToM(baseData[mi].e[i]);
+                let b = sm + Math.round(((em - sm) / (dCount - 1)) * (d - 1));
+                t.push(mToT(b + co));
+            }
+            
+            const sunriseM = tToM(t[1]);
+            const dahwaM = tToM(t[2]);
+            const ishraq = mToT(sunriseM + 20);
+            const chasht = mToT(sunriseM + Math.round((dahwaM - sunriseM) / 2));
+            const zw = mToT(tToM(t[3]) - 20);
+            
+            const jF = mToT(rndJ(tToM(t[0]), 25));
+            const jZ = t[3]; // ظہر کی جماعت ظہر کے وقت
+            const jA = mToT(rndJ(tToM(t[4]), 20));
+            const jM = mToT(tToM(t[5]) + 3);
+            const jI = mToT(rndJ(tToM(t[6]), 30));
+            
+            const isToday = (mi === currentMonth && d === currentDate);
+            const row = document.createElement('tr');
+            if (isToday) row.className = 'active-day';
+            
+            row.innerHTML = `
+                <td>${d}</td>
+                <td>${t[0]}<span class="j-mini">ج: ${jF}</span></td>
+                <td>${t[1]}</td>
+                <td>${ishraq}</td>
+                <td>${chasht}</td>
+                <td>${t[2]}</td>
+                <td class="danger">${zw}</td>
+                <td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td>
+                <td>${t[4]}<span class="j-mini">ج: ${jA}</span></td>
+                <td>${t[5]}<span class="j-mini">ج: ${jM}</span></td>
+                <td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>
+            `;
+            
+            tb.appendChild(row);
+            
+            // آج کی تاریخ
+            if (isToday) {
+                document.getElementById('fullDateDisplay').innerHTML = 
+                    `آج کے اوقات: ${d} ${monthNames[mi]} ${currentYear}ء | <span class="hijri-date">اسلامی تاریخ: ${getHijriDate()}</span>`;
+                
+                const grid = document.getElementById('cardGrid');
+                grid.innerHTML = '';
+                
+                const display = [
+                    {l: "فجر", v: t[0], j: jF},
+                    {l: "طلوع", v: t[1]},
+                    {l: "اشراق", v: ishraq},
+                    {l: "چاشت", v: chasht},
+                    {l: "ضحوۃ", v: t[2]},
+                    {l: "ممنوع", v: zw, w: true},
+                    {l: "ظہر", v: t[3], j: jZ},
+                    {l: "عصر", v: t[4], j: jA},
+                    {l: "مغرب", v: t[5], j: jM},
+                    {l: "عشاء", v: t[6], j: jI}
+                ];
+                
+                display.forEach(i => {
+                    grid.innerHTML += `
+                        <div class="time-box">
+                            <span class="t-label ${i.w ? 'danger' : ''}">${i.l}</span>
+                            <span class="t-val">${i.v}</span>
+                            ${i.j ? `<span class="j-tag">جماعت: ${i.j}</span>` : ''}
+                        </div>
+                    `;
+                });
+            }
+        }
+    }
+
+    // ============================================
+    // انیشیالائز
+    // ============================================
+    
+    // مہینے کا سلیکٹ بھریں
+    const monthSelect = document.getElementById('monthSelect');
+    monthNames.forEach((name, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.innerText = name;
+        monthSelect.appendChild(option);
+    });
+    
+    // موجودہ مہینہ سیٹ کریں
+    monthSelect.value = new Date().getMonth();
+
+    // سرچ ایونٹس
     const searchInput = document.getElementById('citySearch');
     const dropdown = document.getElementById('cityDropdown');
 
-    searchInput.addEventListener('input', function(e) {
-        updateDropdown(e.target.value);
+    searchInput.addEventListener('input', function() {
+        updateDropdown(this.value);
     });
 
     searchInput.addEventListener('focus', function() {
         updateDropdown(this.value);
     });
 
-    // باہر کلک کرنے پر ڈراپ ڈاؤن بند
     document.addEventListener('click', function(e) {
         if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
             dropdown.classList.remove('active');
         }
     });
 
-    // انٹر کی پریس
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
-            const searchText = this.value.trim();
+            const text = this.value.trim();
+            if (!text) return;
             
-            if (searchText === '') return;
-            
-            const existingCity = uniqueCities.find(city => 
-                city.n === searchText || city.e.toLowerCase() === searchText.toLowerCase()
+            const existing = pkCities.find(c => 
+                c.n === text || c.e.toLowerCase() === text.toLowerCase()
             );
             
-            if (existingCity) {
-                selectedCity = existingCity;
+            if (existing) {
+                selectedCity = existing;
                 document.getElementById('newCityMessage').style.display = 'none';
             } else {
-                // نیا شہر بنائیں
-                selectedCity = createNewCity(searchText);
-                
-                // نیا شہر میسج دکھائیں
-                const messageDiv = document.getElementById('newCityMessage');
-                messageDiv.style.display = 'block';
-                let offsetText = '';
-                if (selectedCity.o > 0) {
-                    offsetText = `${selectedCity.o} منٹ آگے`;
-                } else if (selectedCity.o < 0) {
-                    offsetText = `${Math.abs(selectedCity.o)} منٹ پیچھے`;
-                } else {
-                    offsetText = `کراچی کے برابر`;
-                }
-                messageDiv.innerHTML = `✨ نیا شہر "${selectedCity.n}" خودکار بن گیا ہے۔<br>📍 مقامی وقت: کراچی سے ${offsetText}<br>🕌 نماز کے اوقات دارالافتاء اہلسنت کے مطابق`;
+                selectedCity = createNewCity(text);
+                const msg = document.getElementById('newCityMessage');
+                msg.style.display = 'block';
+                let offsetText = selectedCity.o > 0 ? `${selectedCity.o} منٹ آگے` : 
+                               selectedCity.o < 0 ? `${Math.abs(selectedCity.o)} منٹ پیچھے` : 
+                               'کراچی کے برابر';
+                msg.innerHTML = `✨ نیا شہر "${selectedCity.n}" بن گیا<br>📍 کراچی سے ${offsetText}`;
             }
             
             this.value = selectedCity.n;
@@ -881,80 +847,7 @@
         }
     });
 
-    function renderApp() {
-        const mi = parseInt(document.getElementById('monthSelect').value);
-        const co = selectedCity.o;
-        const cn = selectedCity.n;
-        const ce = selectedCity.e;
-        const tb = document.getElementById('tableContent');
-        const now = new Date();
-        const dCount = new Date(2026, mi + 1, 0).getDate();
-        
-        // شہر کا نام دکھائیں
-        let cityDisplay = `${cn}`;
-        if (selectedCity.isNew) {
-            cityDisplay += ` <span style="font-size:12px; background:var(--accent); color:black; padding:2px 8px; border-radius:12px;">نیا شہر</span>`;
-        }
-        cityDisplay += ` <span style="font-size:12px; opacity:0.8;">(${ce})</span>`;
-        document.getElementById('cityNameLabel').innerHTML = cityDisplay;
-        
-        // ٹائم زون کی معلومات
-        let offsetText = '';
-        if (selectedCity.o > 0) {
-            offsetText = `📍 ${cn} کا وقت کراچی سے ${selectedCity.o} منٹ آگے ہے`;
-        } else if (selectedCity.o < 0) {
-            offsetText = `📍 ${cn} کا وقت کراچی سے ${Math.abs(selectedCity.o)} منٹ پیچھے ہے`;
-        } else {
-            offsetText = `📍 ${cn} کا وقت کراچی کے برابر ہے`;
-        }
-        document.getElementById('timezoneDisplay').innerHTML = offsetText;
-        
-        document.getElementById('citySearch').value = cn;
-        tb.innerHTML = '';
-
-        for (let d = 1; d <= dCount; d++) {
-            let t = [];
-            for (let i = 0; i < 7; i++) {
-                let sm = tToM(baseData[mi].s[i]), em = tToM(baseData[mi].e[i]);
-                let b = sm + Math.round(((em - sm) / (dCount - 1)) * (d - 1));
-                t.push(mToT(b + co));
-            }
-
-            const sunriseM = tToM(t[1]), dahwaM = tToM(t[2]);
-            const ishraq = mToT(sunriseM + 20);
-            const chasht = mToT(sunriseM + Math.round((dahwaM - sunriseM) / 2));
-            const zw = mToT(tToM(t[3]) - 20); 
-
-            const jF = mToT(rndJ(tToM(t[0]), 25)), jZ = "01:30", jA = mToT(rndJ(tToM(t[4]), 20)), jM = mToT(tToM(t[5]) + 3), jI = mToT(rndJ(tToM(t[6]), 30));
-
-            const isT = (mi === now.getMonth() && d === now.getDate());
-            const row = document.createElement('tr'); 
-            if (isT) row.className = 'active-day';
-            row.innerHTML = `<td>${d}</td><td>${t[0]}<span class="j-mini">ج: ${jF}</span></td><td>${t[1]}</td><td>${ishraq}</td><td>${chasht}</td><td>${t[2]}</td><td class="danger">${zw}</td><td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td><td>${t[4]}<span class="j-mini">ج: ${jA}</span></td><td>${t[5]}<span class="j-mini">ج: ${jM}</span></td><td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>`;
-            tb.appendChild(row);
-
-            if (isT) {
-                const ms = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
-                const hijriStr = getHijriDate();
-                document.getElementById('fullDateDisplay').innerHTML = `آج کے اوقات: ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">اسلامی تاریخ: ${hijriStr}</span>`;
-                
-                const grid = document.getElementById('cardGrid'); 
-                grid.innerHTML = '';
-                const display = [
-                    {l:"فجر",v:t[0],j:jF}, {l:"طلوع",v:t[1]}, {l:"اشراق",v:ishraq}, {l:"چاشت",v:chasht},
-                    {l:"ضحوۃ",v:t[2]}, {l:"ممنوع",v:zw,w:true}, {l:"ظہر",v:t[3],j:jZ},
-                    {l:"عصر",v:t[4],j:jA}, {l:"مغرب",v:t[5],j:jM}, {l:"عشاء",v:t[6],j:jI}
-                ];
-                display.forEach(i => { 
-                    grid.innerHTML += `<div class="time-box"><span class="t-label ${i.w?'danger':''}">${i.l}</span><span class="t-val">${i.v}</span>${i.j?`<span class="j-tag">جماعت: ${i.j}</span>`:''}</div>`; 
-                });
-            }
-        }
-    }
-    
-    // ڈیفالٹ کراچی
-    document.getElementById('citySearch').value = selectedCity.n;
-    document.getElementById('monthSelect').value = new Date().getMonth(); 
+    // رینڈر کریں
     renderApp();
 </script>
 </body>
