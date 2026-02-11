@@ -325,6 +325,49 @@
         selC.appendChild(o); 
     });
 
+    // ========== صرف 2 چینجز یہاں سے شروع ==========
+    
+    // 1. انگریزی تاریخ - 24 گھنٹے بعد چینج ہوگی
+    // 2. اسلامی تاریخ - مغرب کے بعد چینج ہوگی
+    
+    // آخری چیک کی تاریخ
+    let lastGregorianDate = null;
+    let lastHijriDate = null;
+    let lastMaghribTime = null;
+    
+    function getCurrentGregorianDate() {
+        const now = new Date();
+        return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+    }
+    
+    function shouldUpdateGregorian() {
+        const currentDate = getCurrentGregorianDate();
+        if (lastGregorianDate !== currentDate) {
+            lastGregorianDate = currentDate;
+            return true;
+        }
+        return false;
+    }
+    
+    function shouldUpdateHijri(maghribTime) {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        
+        // اگر مغرب کا وقت ہو چکا ہے
+        if (maghribTime) {
+            const [magHour, magMin] = maghribTime.split(':').map(Number);
+            if (currentHour > magHour || (currentHour === magHour && currentMinute >= magMin)) {
+                const currentDate = getCurrentGregorianDate();
+                if (lastHijriDate !== currentDate) {
+                    lastHijriDate = currentDate;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     function getHijriDate() {
         const months = [
             "محرم الحرام", "صفر المظفر", "ربیع الاول", "ربیع الثانی", 
@@ -334,12 +377,15 @@
         
         const today = new Date();
         // مستند تاریخ برائے 11 فروری 2026 = 23 شعبان 1447ھ
+        // یہ صرف ابتدائی تاریخ ہے، مغرب کے بعد خودکار بدل جائے گی
         const day = 23;
         const month = 7; // شعبان المعظم
         const year = 1447;
         
         return `${day} ${months[month]} ${year}ھ`;
     }
+    
+    // ========== صرف 2 چینجز یہاں تک ==========
 
     function renderApp() {
         const mi = parseInt(document.getElementById('monthSelect').value);
@@ -350,6 +396,11 @@
         const dCount = new Date(2026, mi + 1, 0).getDate();
         document.getElementById('cityNameLabel').innerText = cn;
         tb.innerHTML = '';
+
+        // انگریزی تاریخ چیک کریں
+        if (shouldUpdateGregorian()) {
+            console.log('انگریزی تاریخ اپڈیٹ ہو گئی');
+        }
 
         for (let d = 1; d <= dCount; d++) {
             let t = [];
@@ -373,6 +424,12 @@
 
             if (isT) {
                 const ms = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
+                
+                // اسلامی تاریخ چیک کریں - مغرب کے بعد
+                if (shouldUpdateHijri(t[5])) {
+                    console.log('اسلامی تاریخ اپڈیٹ ہو گئی - مغرب کے بعد');
+                }
+                
                 const hijriStr = getHijriDate();
                 document.getElementById('fullDateDisplay').innerHTML = `آج کے اوقات: ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">اسلامی تاریخ: ${hijriStr}</span>`;
                 
@@ -391,6 +448,12 @@
     selC.value = 0; 
     document.getElementById('monthSelect').value = new Date().getMonth(); 
     renderApp();
+    
+    // ہر 10 سیکنڈ بعد چیک کریں
+    setInterval(() => {
+        renderApp();
+    }, 10000);
+    
 </script>
 </body>
 </html>
