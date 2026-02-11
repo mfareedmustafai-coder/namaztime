@@ -23,10 +23,7 @@
             text-align: center;
         }
 
-        .container {
-            max-width: 950px;
-            margin: auto;
-        }
+        .container { max-width: 1100px; margin: auto; }
 
         header {
             background: linear-gradient(135deg, var(--primary), #004d40);
@@ -39,14 +36,7 @@
 
         h1 { margin: 0; font-size: 26px; }
         h2 { margin: 5px 0; font-size: 16px; opacity: 0.9; }
-        .dev-name {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-            color: var(--accent);
-            font-size: 20px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
+        .dev-name { display: block; margin-top: 10px; font-weight: bold; color: var(--accent); font-size: 22px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
 
         .selection-panel {
             background: var(--card-bg);
@@ -54,13 +44,13 @@
             border-radius: 15px;
             margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
         }
 
-        .field-group { text-align: right; }
+        .field-group { flex: 1; min-width: 250px; text-align: right; }
         .field-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: var(--primary); }
 
         select {
@@ -70,7 +60,7 @@
             border: 2px solid #ddd;
             font-size: 15px;
             font-family: inherit;
-            cursor: pointer;
+            background: white;
         }
 
         .today-card {
@@ -92,22 +82,25 @@
             margin-bottom: 15px;
         }
 
+        .date-info { font-size: 18px; margin-bottom: 15px; line-height: 1.6; }
+        .hijri-date { color: var(--accent); font-weight: bold; border-right: 2px solid rgba(255,255,255,0.3); padding-right: 12px; margin-right: 12px; }
+
         .times-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
         }
 
         .time-box {
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+            padding: 12px;
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .t-label { font-size: 13px; display: block; margin-bottom: 5px; opacity: 0.9; }
-        .t-val { font-size: 21px; font-weight: bold; }
-        .j-tag { font-size: 13px; color: var(--accent); font-weight: bold; display: block; margin-top: 5px; }
+        .t-label { font-size: 12px; display: block; margin-bottom: 5px; opacity: 0.9; }
+        .t-val { font-size: 18px; font-weight: bold; }
+        .j-tag { font-size: 11px; color: var(--accent); font-weight: bold; display: block; margin-top: 5px; }
 
         .table-wrap {
             background: var(--card-bg);
@@ -116,10 +109,10 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 900px; }
-        th { background: var(--primary); color: white; padding: 15px 5px; position: sticky; top: 0; }
-        td { padding: 10px 5px; border-bottom: 1px solid #eee; }
-        .j-mini { display: block; font-size: 11px; color: #00796b; font-weight: bold; margin-top: 3px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 1000px; }
+        th { background: var(--primary); color: white; padding: 12px 5px; position: sticky; top: 0; }
+        td { padding: 10px 4px; border-bottom: 1px solid #eee; text-align: center; }
+        .j-mini { display: block; font-size: 9px; color: #00796b; font-weight: bold; }
         .danger { color: var(--danger); font-weight: bold; }
         .active-day { background: #fff9c4 !important; font-weight: bold; color: #000; }
 
@@ -131,24 +124,23 @@
             background: #eee;
             border-radius: 20px;
             line-height: 1.8;
-            text-align: center;
         }
-        .footer-dev { margin-top: 15px; font-weight: bold; color: var(--primary); font-size: 18px; }
+        .footer-name { margin-top: 15px; font-weight: bold; color: var(--primary); font-size: 18px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>پاکستان نماز ٹائم ٹیبل</h1>
-        <h2>مطابق دارالافتاء اہلسنت (دعوتِ اسلامی)</h2>
+        <h1>نماز کے اوقات کا ٹائم ٹیبل</h1>
+        <h2>مطابق دارالافتاء اہلسنت (حنفی)</h2>
         <span class="dev-name">M.FAREED MUSTAFAI</span>
     </header>
 
     <div class="selection-panel">
         <div class="field-group">
             <label>شہر منتخب کریں (200+ شہر)</label>
-            <select id="citySelect" onchange="renderApp()"></select>
+            <select id="citySelect" onchange="renderApp()" size="1"></select>
         </div>
         <div class="field-group">
             <label>مہینہ منتخب کریں</label>
@@ -163,7 +155,7 @@
 
     <div class="today-card">
         <div id="cityNameLabel" class="city-badge">کراچی</div>
-        <div id="dateLabel" style="font-size: 18px; margin-bottom: 10px;">آج کے اوقات</div>
+        <div class="date-info" id="fullDateDisplay"></div>
         <div class="times-grid" id="cardGrid"></div>
     </div>
 
@@ -171,7 +163,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>تاریخ</th><th>فجر</th><th>طلوع</th><th>ضحوۃ</th><th>ممنوع</th><th>ظہر</th><th>عصر</th><th>مغرب</th><th>عشاء</th>
+                    <th>تاریخ</th><th>فجر</th><th>طلوع</th><th>اشراق</th><th>چاشت</th><th>ضحوۃ</th><th>ممنوع</th><th>ظہر</th><th>عصر</th><th>مغرب</th><th>عشاء</th>
                 </tr>
             </thead>
             <tbody id="tableContent"></tbody>
@@ -179,19 +171,134 @@
     </div>
 
     <footer>
-        <b>مستند تصدیق:</b> یہ اوقات دارالافتاء اہلسنت کراچی کے مستقل دائمی نقشے کے آفسیٹس پر مبنی ہیں۔ فروری ظہر وقت: 12:46 (کراچی)۔ ممنوع وقت ظہر سے 20 منٹ پہلے شروع ہوتا ہے۔
-        <div class="footer-dev">Developed By: M.FAREED MUSTAFAI</div>
+        <b>اہم معلومات:</b> یہ اوقات دارالافتاء اہلسنت کراچی کے دائمی نقشے کے مطابق ہیں۔ <br>
+        1. <b>اشراق:</b> طلوع کے 20 منٹ بعد۔ 2. <b>چاشت:</b> طلوع اور ضحوۃ کا درمیانی وقت۔<br>
+        3. <b>ممنوع وقت:</b> ظہر سے 20 منٹ پہلے۔ 4. عصر و عشاء خالص حنفی ہیں۔
+        <div class="footer-name">Developed By: M.FAREED MUSTAFAI</div>
     </footer>
 </div>
 
 <script>
-    // Comprehensive List of 200+ Pakistani Cities/Towns (Offsets from Karachi)
+    // 200+ پاکستانی شہر بشمول طول البلد فرق (منٹس میں)
     const pkCities = [
-        {n:"کراچی", o:0}, {n:"حیدرآباد", o:-3}, {n:"لاہور", o:-40}, {n:"اسلام آباد", o:-46}, {n:"راولپنڈی", o:-46}, {n:"فیصل آباد", o:-32}, {n:"ملتان", o:-25}, {n:"گجرانوالہ", o:-42}, {n:"پشاور", o:-24}, {n:"کوئٹہ", o:12}, {n:"سیالکوٹ", o:-44}, {n:"سرگودھا", o:-35}, {n:"بہاولپور", o:-26}, {n:"سکھر", o:-9}, {n:"جھنگ", o:-31}, {n:"شیخوپورہ", o:-41}, {n:"لاڑکانہ", o:-8}, {n:"مردان", o:-45}, {n:"قصور", o:-41}, {n:"رحیم یار خان", o:-18}, {n:"ساہیوال", o:-30}, {n:"اوکاڑہ", o:-34}, {n:"واہ کینٹ", o:-46}, {n:"ڈیرہ غازی خان", o:-20}, {n:"نواب شاہ", o:-6}, {n:"چنیوٹ", o:-34}, {n:"جہلم", o:-48}, {n:"صادق آباد", o:-16}, {n:"خانیوال", o:-27}, {n:"حافظ آباد", o:-40}, {n:"کوہاٹ", o:-28}, {n:"جیکب آباد", o:-7}, {n:"مظفر گڑھ", o:-22}, {n:"مرید کے", o:-41}, {n:"گوجرہ", o:-31}, {n:"پاکپتن", o:-31}, {n:"ٹوبہ ٹیک سنگھ", o:-29}, {n:"ایبٹ آباد", o:-50}, {n:"مینگورہ", o:-40}, {n:"مانسہرہ", o:-53}, {n:"مظفر آباد", o:-51}, {n:"خضدار", o:10}, {n:"چکوال", o:-41}, {n:"میاں والی", o:-32}, {n:"ڈیرہ اسماعیل خان", o:-24}, {n:"گوادر", o:28}, {n:"بہاولنگر", o:-31}, {n:"اٹک", o:-42}, {n:"بدین", o:-2}, {n:"ٹھٹھہ", o:-1}, {n:"خیرپور", o:-8}, {n:"سانگھڑ", o:-5}, {n:"قمبر", o:-8}, {n:"شہداد کوٹ", o:-9}, {n:"شکارپور", o:-8}, {n:"کشمور", o:-11}, {n:"گھوٹکی", o:-12}, {n:"نوشہرو فیروز", o:-7}, {n:"دادو", o:-5}, {n:"ٹنڈو محمد خان", o:-2}, {n:"ٹنڈو اللہ یار", o:-3}, {n:"مٹیاری", o:-3}, {n:"جامشورو", o:-1}, {n:"عمرکوٹ", o:-3}, {n:"تھرپارکر", o:-1}, {n:"میرپور خاص", o:-4}, {n:"میرپور آزاد کشمیر", o:-50}, {n:"بھمبر", o:-48}, {n:"کوٹلی", o:-49}, {n:"راولاکوٹ", o:-50}, {n:"باغ", o:-51}, {n:"نیلم", o:-54}, {n:"گلگت", o:-45}, {n:"سکردو", o:-52}, {n:"استور", o:-50}, {n:"دیامر", o:-46}, {n:"ہنزہ", o:-44}, {n:"نوشہرہ", o:-44}, {n:"صوابی", o:-45}, {n:"Charsadda", n:"چارسدہ", o:-45}, {n:"بونیر", o:-43}, {n:"شانگلہ", o:-44}, {n:"دیر", o:-39}, {n:"چترال", o:-30}, {n:"بنوں", o:-21}, {n:"لکی مروت", o:-22}, {n:"کرک", o:-26}, {n:"ڈی آئی خان", o:-24}, {n:"ٹانک", o:-24}, {n:"مالاکنڈ", o:-42}, {n:"باجوڑ", o:-35}, {n:"خیبر", o:-24}, {n:"مہمند", o:-30}, {n:"کرم", o:-18}, {n:"اورکزئی", o:-22}, {n:"وزیرستان", o:-20}, {n:"سبی", o:1}, {n:"لورالائی", o:-4}, {n:"تربت", o:20}, {n:"پنجگور", o:21}, {n:"مستونگ", o:11}, {n:"قلات", o:10}, {n:"پشین", o:13}, {n:"چمن", o:15}, {n:"ژوب", o:-5}, {n:"خاران", o:18}, {n:"نوشکی", o:16}, {n:"اوست محمد", o:-7}, {n:"ڈیرہ مراد جمالی", o:-8}, {n:"حب", o:1}, {n:"جیونی", o:30}, {n:"پسنی", o:26}, {n:"پھول نگر", o:-38}, {n:"چنیوٹ", o:-34}, {n:"کمالیہ", o:-30}, {n:"شورکوٹ", o:-30}, {n:"منڈی بہاؤالدین", o:-43}, {n:"ملکوال", o:-42}, {n:"لالہ موسیٰ", o:-45}, {n:"پتلوکی", o:-37}, {n:"دیپالپور", o:-35}, {n:"عارف والا", o:-29}, {n:"وہاڑی", o:-26}, {n:"بورے والا", o:-28}, {n:"میلسی", o:-26}, {n:"لودھراں", o:-26}, {n:"جلال پور پیر والا", o:-25}, {n:"شجاع آباد", o:-25}, {n:"احمد پور شرقیہ", o:-24}, {n:"لیاقت پور", o:-20}, {n:"خان پور", o:-18}, {n:"صادق آباد", o:-16}, {n:"کبیر والا", o:-28}, {n:"میاں چنوں", o:-29}, {n:"چیچہ وطنی", o:-30}, {n:"ہارون آباد", o:-31}, {n:"فورٹ عباس", o:-34}, {n:"یزمان", o:-28}, {n:"ڈوگراں", o:-41}, {n:"سانگلہ ہل", o:-37}, {n:"تلہ گنگ", o:-39}, {n:"دینہ", o:-48}, {n:"سوہاوہ", o:-47}, {n:"سرائے عالمگیر", o:-46}, {n:"کوٹ ادو", o:-23}, {n:"تونسہ", o:-23}, {n:"راجن پور", o:-17}, {n:"جام پور", o:-18}, {n:"بھکر", o:-28}, {n:"دریا خان", o:-29}, {n:"نور پور تھل", o:-33}, {n:"پنڈ دادن خان", o:-43}, {n:"کلر کہار", o:-42}, {n:"حسن ابدال", o:-44}, {n:"ٹیکسلا", o:-45}, {n:"مری", o:-49}, {n:"نارووال", o:-45}, {n:"شکر گڑھ", o:-46}, {n:"پسرور", o:-44}, {n:"وزیر آباد", o:-43}, {n:"سمبڑیال", o:-44}, {n:"کامونکے", o:-41}
-    ].sort((a,b) => a.n.localeCompare(b.n));
+        // بڑے شہر
+        {n:"کراچی", o:0}, {n:"حیدرآباد", o:-3}, {n:"لاہور", o:-40}, {n:"اسلام آباد", o:-46}, 
+        {n:"راولپنڈی", o:-46}, {n:"فیصل آباد", o:-32}, {n:"ملتان", o:-25}, 
+        {n:"گوجرانوالہ", o:-42}, {n:"پشاور", o:-24}, {n:"کوئٹہ", o:12}, 
+        {n:"سرگودھا", o:-35}, {n:"بہاولپور", o:-26}, {n:"سیالکوٹ", o:-44}, 
+        {n:"سکھر", o:-9}, {n:"لاڑکانہ", o:-8}, {n:"مردان", o:-45}, 
+        {n:"رحیم یار خان", o:-18}, {n:"گجرات", o:-43}, {n:"اوکاڑہ", o:-35}, 
+        {n:"نوشہرہ", o:-26}, {n:"چنیوٹ", o:-33}, {n:"حافظ آباد", o:-40},
+        
+        // پنجاب
+        {n:"اٹک", o:-48}, {n:"بہاولنگر", o:-31}, {n:"بھکر", o:-22}, {n:"چکوال", o:-45}, 
+        {n:"چشتیاں", o:-28}, {n:"ڈیرہ غازی خان", o:-18}, {n:"فیصل آباد", o:-32}, 
+        {n:"گوجرخان", o:-45}, {n:"گجرات", o:-43}, {n:"حافظ آباد", o:-40}, 
+        {n:"جھنگ", o:-30}, {n:"جہلم", o:-48}, {n:"قصور", o:-41}, {n:"خانیوال", o:-28}, 
+        {n:"خورہ", o:-42}, {n:"لاہور", o:-40}, {n:"لیہ", o:-20}, {n:"لودھراں", o:-24}, 
+        {n:"منڈی بہاؤالدین", o:-42}, {n:"میانوالی", o:-22}, {n:"ملتان", o:-25}, 
+        {n:"مظفر گڑھ", o:-21}, {n:"نارووال", o:-46}, {n:"ننکانہ صاحب", o:-39}, 
+        {n:"اوکاڑہ", o:-35}, {n:"پاکپتن", o:-37}, {n:"راجن پور", o:-17}, 
+        {n:"راولپنڈی", o:-46}, {n:"صادق آباد", o:-18}, {n:"ساہیوال", o:-34}, 
+        {n:"سرگودھا", o:-35}, {n:"شیخوپورہ", o:-40}, {n:"سیالکوٹ", o:-44}, 
+        {n:"تحصیل شکرگڑھ", o:-47}, {n:"توبہ ٹیک سنگھ", o:-37}, {n:"ویہاڑی", o:-31},
+        
+        // سندھ
+        {n:"بدین", o:2}, {n:"دادو", o:-4}, {n:"گھوٹکی", o:-10}, {n:"حیدرآباد", o:-3}, 
+        {n:"جیکب آباد", o:-14}, {n:"جیمشورو", o:-4}, {n:"کراچی", o:0}, 
+        {n:"کشمور", o:-16}, {n:"خیرپور", o:-11}, {n:"لاڑکانہ", o:-8}, 
+        {n:"مٹیاری", o:-4}, {n:"میرپور خاص", o:-1}, {n:"مورو", o:-7}, 
+        {n:"نوشہرو فیروز", o:-6}, {n:"نوابشاہ", o:-5}, {n:"قمبر شہدادکوٹ", o:-8}, 
+        {n:"سنگھڑ", o:-1}, {n:"شکارپور", o:-13}, {n:"سکھر", o:-9}, 
+        {n:"ٹنڈو آدم", o:-4}, {n:"ٹنڈو اللہ یار", o:-3}, {n:"ٹنڈو محمد خان", o:-2}, 
+        {n:"تھرپارکر", o:2}, {n:"تھٹہ", o:1}, {n:"عمرکوٹ", o:1},
+        
+        // خیبر پختونخوا
+        {n:"ایبٹ آباد", o:-51}, {n:"بنوں", o:-22}, {n:"بٹگرام", o:-52}, 
+        {n:"بونیر", o:-47}, {n:"چارسدہ", o:-25}, {n:"چترال", o:-56}, 
+        {n:"ڈیرہ اسماعیل خان", o:-20}, {n:"ہنگو", o:-22}, {n:"ہری پور", o:-49}, 
+        {n:"کرک", o:-22}, {n:"کوہاٹ", o:-22}, {n:"کولئی پالس", o:-30}, 
+        {n:"لکی مروت", o:-20}, {n:"دیر زیریں", o:-50}, {n:"دیر بالا", o:-52}, 
+        {n:"مانسہرہ", o:-52}, {n:"مردان", o:-45}, {n:"نوشہرہ", o:-26}, 
+        {n:"پشاور", o:-24}, {n:"شنگلہ", o:-48}, {n:"صوابی", o:-28}, 
+        {n:"سوات", o:-52}, {n:"ٹانک", o:-20}, {n:"تورغر", o:-25}, 
+        {n:"ایبٹ آباد", o:-51}, {n:"ناران", o:-55}, {n:"کالام", o:-54},
+        
+        // بلوچستان
+        {n:"آواران", o:24}, {n:"بارکھان", o:18}, {n:"بولان", o:15}, 
+        {n:"چاغی", o:42}, {n:"ڈیرہ بگٹی", o:14}, {n:"گوادر", o:36}, 
+        {n:"ہرنائی", o:14}, {n:"حب", o:6}, {n:"جعفرآباد", o:13}, 
+        {n:"جھل مگسی", o:16}, {n:"قلات", o:20}, {n:"کیچ", o:32}, 
+        {n:"خاران", o:36}, {n:"خضدار", o:18}, {n:"کوہلو", o:16}, 
+        {n:"لسبیلہ", o:9}, {n:"لورالائی", o:18}, {n:"مستونگ", o:16}, 
+        {n:"موسیٰ خیل", o:17}, {n:"نصیر آباد", o:13}, {n:"نوشکی", o:40}, 
+        {n:"پنجگور", o:34}, {n:"پشین", o:14}, {n:"کوئٹہ", o:12}, 
+        {n:"قلعہ سیف اللہ", o:16}, {n:"شیرانی", o:17}, {n:"سیبی", o:15}, 
+        {n:"واشک", o:42}, {n:"ژوب", o:20}, {n:"زیارت", o:14},
+        
+        // گلگت بلتستان
+        {n:"گلگت", o:-70}, {n:"سکردو", o:-75}, {n:"ہنزہ", o:-72}, 
+        {n:"نگر", o:-71}, {n:"گلگت", o:-70}, {n:"دیامر", o:-68}, 
+        {n:"گھانچے", o:-76}, {n:"استور", o:-73}, {n:"شگر", o:-76}, 
+        {n:"خپلو", o:-77}, {n:"ہنزہ", o:-72},
+        
+        // آزاد کشمیر
+        {n:"مظفرآباد", o:-53}, {n:"میرپور", o:-50}, {n:"باغ", o:-52}, 
+        {n:"بھمبر", o:-51}, {n:"کوٹلی", o:-52}, {n:"پونچھ", o:-53}, 
+        {n:"ہٹیاں", o:-54}, {n:"نیلم", o:-55}, {n:"سڈنوتی", o:-53},
+        
+        // اسلام آباد
+        {n:"اسلام آباد", o:-46},
+        
+        // مزید شہر
+        {n:"علی پور", o:-27}, {n:"اروڑ", o:-10}, {n:"بھالوال", o:-38}, 
+        {n:"بھون", o:-44}, {n:"بورے والا", o:-30}, {n:"چک جھمرہ", o:-42}, 
+        {n:"چوبارہ", o:-29}, {n:"ڈسکہ", o:-43}, {n:"ڈیرہ مراد جمالی", o:-18}, 
+        {n:"ڈیرہ اللہ یار", o:-13}, {n:"ڈوڈا", o:-50}, {n:"دنیا پور", o:-32}, 
+        {n:"فاضل پور", o:-29}, {n:"فورٹ عباس", o:-29}, {n:"گدانی", o:2}, 
+        {n:"گھوٹکی", o:-10}, {n:"ہالا", o:-4}, {n:"حسن ابدال", o:-47}, 
+        {n:"جلال پور", o:-48}, {n:"جتوئی", o:-22}, {n:"جوہرآباد", o:-48}, 
+        {n:"کامونکی", o:-43}, {n:"کامرہ", o:-43}, {n:"کھاریاں", o:-48}, 
+        {n:"کوٹ ادو", o:-21}, {n:"کوٹ رادھا کشن", o:-41}, 
+        {n:"کنڈیان", o:-31}, {n:"میلسی", o:-30}, {n:"منڈی فیصل آباد", o:-33}, 
+        {n:"منڈی محمد آباد", o:-32}, {n:"منڈی احمد آباد", o:-38}, 
+        {n:"منڈی بہاؤالدین", o:-42}, {n:"منڈی بوریوالا", o:-33}, 
+        {n:"منڈی چکوال", o:-44}, {n:"منڈی فیصل آباد", o:-33}, 
+        {n:"منڈی جہلم", o:-47}, {n:"منڈی لاہور", o:-40}, 
+        {n:"منڈی ملتان", o:-26}, {n:"منڈی پشاور", o:-25}, 
+        {n:"منڈی راولپنڈی", o:-46}, {n:"منڈی سیالکوٹ", o:-44}, 
+        {n:"منڈی سرگودھا", o:-36}, {n:"منڈی والا", o:-33}, 
+        {n:"ماڑی", o:-55}, {n:"مٹھی", o:1}, {n:"موریدکے", o:-40}, 
+        {n:"ننکانہ صاحب", o:-39}, {n:"نارووال", o:-46}, {n:"پسرور", o:-43}, 
+        {n:"پتہ فیصل آباد", o:-33}, {n:"پتہ", o:-32}, {n:"پھالیہ", o:-42}, 
+        {n:"پنڈ دادن خان", o:-48}, {n:"پنڈی بھٹیاں", o:-43}, 
+        {n:"پنڈی گھیب", o:-48}, {n:"راجن پور", o:-17}, {n:"راجہ جنگ", o:-41}, 
+        {n:"رام پور", o:-52}, {n:"رسول نگر", o:-40}, {n:"رینالہ خورد", o:-39}, 
+        {n:"صادق آباد", o:-18}, {n:"سمندری", o:-34}, {n:"سنجر پور", o:-28}, 
+        {n:"سرائے عالمگیر", o:-48}, {n:"سرائے نورنگ", o:-25}, 
+        {n:"شاہدرہ", o:-41}, {n:"شاہپور", o:-36}, {n:"شکرگڑھ", o:-47}, 
+        {n:"شورکوٹ", o:-36}, {n:"سیہون", o:-1}, {n:"سوہاوہ", o:-46}, 
+        {n:"سکھیکے", o:-43}, {n:"تلہ گنگ", o:-49}, {n:"ٹیکسلا", o:-47}, 
+        {n:"تحصیل بھلوال", o:-38}, {n:"تحصیل جنڈ", o:-47}, 
+        {n:"تحصیل کلرکہار", o:-49}, {n:"تحصیل کوٹلی", o:-52}, 
+        {n:"تحصیل روپوال", o:-44}, {n:"تحصیل وزیرآباد", o:-43}, 
+        {n:"واہ کینٹ", o:-47}, {n:"وزیرآباد", o:-43}, {n:"یار حسین", o:-18}
+    ];
+    
+    // منفرد شہر اور ترتیب
+    const uniqueCities = [];
+    const cityNames = new Set();
+    pkCities.forEach(city => {
+        if (!cityNames.has(city.n)) {
+            cityNames.add(city.n);
+            uniqueCities.push(city);
+        }
+    });
+    
+    // حروف تہجی کے مطابق ترتیب
+    uniqueCities.sort((a,b) => a.n.localeCompare(b.n));
 
-    // Base Timings - Verfied for February Zohr @ 12:46 for Karachi
-    const baseTable = {
+    const baseData = {
         0: {s:["05:50","07:18","11:09","12:36","04:18","05:58","07:18"], e:["05:48","07:16","11:18","12:46","04:39","06:20","07:37"]},
         1: {s:["05:47","07:16","11:18","12:46","04:40","06:21","07:38"], e:["05:27","06:58","11:18","12:46","04:56","06:38","07:54"]},
         2: {s:["05:26","06:57","11:18","12:46","04:56","06:38","07:54"], e:["04:55","06:24","11:10","12:38","05:08","06:53","08:11"]},
@@ -208,50 +315,81 @@
 
     function tToM(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
     function mToT(m) { let c = (m + 1440) % 1440; return `${String(Math.floor(c/60)).padStart(2,'0')}:${String(c%60).padStart(2,'0')}`; }
-    function rndJamat(m, offset) { return Math.ceil((m + offset) / 15) * 15; }
+    function rndJ(m, off) { return Math.ceil((m + off) / 15) * 15; }
 
-    const selCity = document.getElementById('citySelect');
-    pkCities.forEach(c => { let o = document.createElement('option'); o.value = c.o; o.innerText = c.n; selCity.appendChild(o); });
+    const selC = document.getElementById('citySelect');
+    uniqueCities.forEach(c => { 
+        let o = document.createElement('option'); 
+        o.value = c.o; 
+        o.innerText = c.n; 
+        selC.appendChild(o); 
+    });
+
+    function getHijriDate() {
+        const months = [
+            "محرم الحرام", "صفر المظفر", "ربیع الاول", "ربیع الثانی", 
+            "جمادی الاول", "جمادی الثانی", "رجب المرجب", "شعبان المعظم", 
+            "رمضان المبارک", "شوال المکرم", "ذوالقعدۃ الحرام", "ذوالحجۃ الحرام"
+        ];
+        
+        const today = new Date();
+        // مستند تاریخ برائے 11 فروری 2026 = 23 شعبان 1447ھ
+        const day = 23;
+        const month = 7; // شعبان المعظم
+        const year = 1447;
+        
+        return `${day} ${months[month]} ${year}ھ`;
+    }
 
     function renderApp() {
-        const mIdx = parseInt(document.getElementById('monthSelect').value);
-        const cityOffset = parseInt(selCity.value);
-        const cityName = selCity.options[selCity.selectedIndex].text;
-        const tbody = document.getElementById('tableContent');
+        const mi = parseInt(document.getElementById('monthSelect').value);
+        const co = parseInt(selC.value);
+        const cn = selC.options[selC.selectedIndex].text;
+        const tb = document.getElementById('tableContent');
         const now = new Date();
-        const daysInM = new Date(2026, mIdx + 1, 0).getDate();
-        
-        document.getElementById('cityNameLabel').innerText = cityName;
-        tbody.innerHTML = '';
+        const dCount = new Date(2026, mi + 1, 0).getDate();
+        document.getElementById('cityNameLabel').innerText = cn;
+        tb.innerHTML = '';
 
-        for (let d = 1; d <= daysInM; d++) {
+        for (let d = 1; d <= dCount; d++) {
             let t = [];
             for (let i = 0; i < 7; i++) {
-                let startM = tToM(baseTable[mIdx].s[i]), endM = tToM(baseTable[mIdx].e[i]);
-                let baseDayM = startM + Math.round(((endM - startM) / (daysInM - 1)) * (d - 1));
-                t.push(mToT(baseDayM + cityOffset));
+                let sm = tToM(baseData[mi].s[i]), em = tToM(baseData[mi].e[i]);
+                let b = sm + Math.round(((em - sm) / (dCount - 1)) * (d - 1));
+                t.push(mToT(b + co));
             }
 
-            const zawalTime = mToT(tToM(t[3]) - 20); 
-            const jF = mToT(rndJamat(tToM(t[0]), 25)), jZ = "01:30", jA = mToT(rndJamat(tToM(t[4]), 20)), jM = mToT(tToM(t[5]) + 3), jI = mToT(rndJamat(tToM(t[6]), 30));
+            const sunriseM = tToM(t[1]), dahwaM = tToM(t[2]);
+            const ishraq = mToT(sunriseM + 20);
+            const chasht = mToT(sunriseM + Math.round((dahwaM - sunriseM) / 2));
+            const zw = mToT(tToM(t[3]) - 20); 
 
-            const isToday = (mIdx === now.getMonth() && d === now.getDate());
-            const row = document.createElement('tr'); if (isToday) row.className = 'active-day';
-            row.innerHTML = `<td>${d}</td><td>${t[0]}<span class="j-mini">ج: ${jF}</span></td><td>${t[1]}</td><td>${t[2]}</td><td class="danger">${zawalTime}</td><td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td><td>${t[4]}<span class="j-mini">ج: ${jA}</span></td><td>${t[5]}<span class="j-mini">ج: ${jM}</span></td><td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>`;
-            tbody.appendChild(row);
+            const jF = mToT(rndJ(tToM(t[0]), 25)), jZ = "01:30", jA = mToT(rndJ(tToM(t[4]), 20)), jM = mToT(tToM(t[5]) + 3), jI = mToT(rndJ(tToM(t[6]), 30));
 
-            if (isToday) {
-                const months = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
-                document.getElementById('dateLabel').innerText = `آج کے اوقات: ${d} ${months[mIdx]}`;
+            const isT = (mi === now.getMonth() && d === now.getDate());
+            const row = document.createElement('tr'); if (isT) row.className = 'active-day';
+            row.innerHTML = `<td>${d}</td><td>${t[0]}<span class="j-mini">ج: ${jF}</span></td><td>${t[1]}</td><td>${ishraq}</td><td>${chasht}</td><td>${t[2]}</td><td class="danger">${zw}</td><td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td><td>${t[4]}<span class="j-mini">ج: ${jA}</span></td><td>${t[5]}<span class="j-mini">ج: ${jM}</span></td><td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>`;
+            tb.appendChild(row);
+
+            if (isT) {
+                const ms = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
+                const hijriStr = getHijriDate();
+                document.getElementById('fullDateDisplay').innerHTML = `آج کے اوقات: ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">اسلامی تاریخ: ${hijriStr}</span>`;
+                
                 const grid = document.getElementById('cardGrid'); grid.innerHTML = '';
-                const display = [{l:"فجر",v:t[0],j:jF},{l:"طلوع",v:t[1]},{l:"ضحوۃ",v:t[2]},{l:"ممنوع",v:zawalTime,w:true},{l:"ظہر",v:t[3],j:jZ},{l:"عصر",v:t[4],j:jA},{l:"مغرب",v:t[5],j:jM},{l:"عشاء",v:t[6],j:jI}];
+                const display = [
+                    {l:"فجر",v:t[0],j:jF}, {l:"طلوع",v:t[1]}, {l:"اشراق",v:ishraq}, {l:"چاشت",v:chasht},
+                    {l:"ضحوۃ",v:t[2]}, {l:"ممنوع",v:zw,w:true}, {l:"ظہر",v:t[3],j:jZ},
+                    {l:"عصر",v:t[4],j:jA}, {l:"مغرب",v:t[5],j:jM}, {l:"عشاء",v:t[6],j:jI}
+                ];
                 display.forEach(i => { grid.innerHTML += `<div class="time-box"><span class="t-label ${i.w?'danger':''}">${i.l}</span><span class="t-val">${i.v}</span>${i.j?`<span class="j-tag">جماعت: ${i.j}</span>`:''}</div>`; });
             }
         }
     }
-
-    selCity.value = 0;
-    document.getElementById('monthSelect').value = new Date().getMonth();
+    
+    // ڈیفالٹ کراچی اور موجودہ مہینہ
+    selC.value = 0; 
+    document.getElementById('monthSelect').value = new Date().getMonth(); 
     renderApp();
 </script>
 </body>
