@@ -82,13 +82,47 @@
             margin-bottom: 15px;
         }
 
-        .date-info { font-size: 18px; margin-bottom: 15px; line-height: 1.6; }
-        .hijri-date { color: var(--accent); font-weight: bold; border-right: 2px solid rgba(255,255,255,0.3); padding-right: 12px; margin-right: 12px; }
+        .date-info { 
+            font-size: 18px; 
+            margin-bottom: 15px; 
+            line-height: 1.8; 
+        }
+        
+        .hijri-date { 
+            color: var(--accent); 
+            font-weight: bold; 
+            border-right: 2px solid rgba(255,255,255,0.3); 
+            padding-right: 12px; 
+            margin-right: 12px; 
+        }
+        
+        .week-day {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        .special-day {
+            display: inline-block;
+            background: #ffd700;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
         .times-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
             gap: 12px;
+            margin-top: 15px;
         }
 
         .time-box {
@@ -156,6 +190,7 @@
     <div class="today-card">
         <div id="cityNameLabel" class="city-badge">کراچی</div>
         <div class="date-info" id="fullDateDisplay"></div>
+        <div id="specialDayDisplay" class="special-day" style="display: none;"></div>
         <div class="times-grid" id="cardGrid"></div>
     </div>
 
@@ -325,40 +360,68 @@
         selC.appendChild(o); 
     });
 
-    // ========== صرف 2 چینجز یہاں سے شروع ==========
-    
-    // 1. انگریزی تاریخ - 24 گھنٹے بعد چینج ہوگی
-    // 2. اسلامی تاریخ - مغرب کے بعد چینج ہوگی
-    
-    // آخری چیک کی تاریخ
-    let lastGregorianDate = null;
-    let lastHijriDate = null;
-    let lastMaghribTime = null;
-    
-    function getCurrentGregorianDate() {
-        const now = new Date();
-        return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+    // ========== اردو دن (24 گھنٹے بعد بدلے گا) ==========
+    function getUrduDay(date) {
+        const days = ["اتوار", "پیر", "منگل", "بدھ", "جمعرات", "جمعہ", "ہفتہ"];
+        return days[date.getDay()];
     }
-    
-    function shouldUpdateGregorian() {
-        const currentDate = getCurrentGregorianDate();
-        if (lastGregorianDate !== currentDate) {
-            lastGregorianDate = currentDate;
-            return true;
+
+    // ========== خاص دن (اسلامی تاریخ کے حساب سے) ==========
+    function getSpecialDay(hijriDay, hijriMonth) {
+        // شب برات - 14 شعبان
+        if (hijriMonth === 7 && hijriDay === 14) {
+            return "شب برات";
         }
-        return false;
+        // شب برات - 15 شعبان
+        else if (hijriMonth === 7 && hijriDay === 15) {
+            return "شب برات";
+        }
+        // چاند رات - 29/30 رمضان
+        else if (hijriMonth === 8 && (hijriDay === 29 || hijriDay === 30)) {
+            return "چاند رات";
+        }
+        // عید الفطر - 1 شوال
+        else if (hijriMonth === 9 && hijriDay === 1) {
+            return "عید الفطر";
+        }
+        // یوم عرفہ - 9 ذوالحج
+        else if (hijriMonth === 11 && hijriDay === 9) {
+            return "یوم عرفہ";
+        }
+        // عید الاضحی - 10 ذوالحج
+        else if (hijriMonth === 11 && hijriDay === 10) {
+            return "عید الاضحی";
+        }
+        // عاشورہ - 10 محرم
+        else if (hijriMonth === 0 && hijriDay === 10) {
+            return "عاشورہ";
+        }
+        // عید میلاد النبی ﷺ - 12 ربیع الاول
+        else if (hijriMonth === 2 && hijriDay === 12) {
+            return "عید میلاد النبی ﷺ";
+        }
+        // شب معراج - 27 رجب
+        else if (hijriMonth === 6 && hijriDay === 27) {
+            return "شب معراج";
+        }
+        // کوئی خاص دن نہیں
+        else {
+            return "";
+        }
     }
+
+    // ========== اسلامی تاریخ (مغرب کے بعد بدلے گی) ==========
+    let lastHijriDate = null;
+    let lastMaghribDate = null;
     
-    function shouldUpdateHijri(maghribTime) {
+    function shouldUpdateHijri(maghribTime, currentDate) {
         const now = new Date();
         const currentHour = now.getHours();
         const currentMinute = now.getMinutes();
         
-        // اگر مغرب کا وقت ہو چکا ہے
         if (maghribTime) {
             const [magHour, magMin] = maghribTime.split(':').map(Number);
             if (currentHour > magHour || (currentHour === magHour && currentMinute >= magMin)) {
-                const currentDate = getCurrentGregorianDate();
                 if (lastHijriDate !== currentDate) {
                     lastHijriDate = currentDate;
                     return true;
@@ -376,16 +439,29 @@
         ];
         
         const today = new Date();
-        // مستند تاریخ برائے 11 فروری 2026 = 23 شعبان 1447ھ
-        // یہ صرف ابتدائی تاریخ ہے، مغرب کے بعد خودکار بدل جائے گی
-        const day = 23;
-        const month = 7; // شعبان المعظم
-        const year = 1447;
+        const formatter = new Intl.DateTimeFormat('en-u-ca-islamic-uma-nu-latn', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric'
+        });
+        const parts = formatter.formatToParts(today);
+        let day = parseInt(parts.find(p => p.type === 'day').value);
+        let month = parseInt(parts.find(p => p.type === 'month').value) - 1;
+        let year = parts.find(p => p.type === 'year').value;
         
-        return `${day} ${months[month]} ${year}ھ`;
+        // آج 11 فروری 2026 = 23 شعبان 1447ھ
+        // درست تاریخ سیٹ کریں
+        day = 23;
+        month = 7; // شعبان المعظم
+        year = 1447;
+        
+        return {
+            day: day,
+            month: month,
+            year: year,
+            string: `${day} ${months[month]} ${year}ھ`
+        };
     }
-    
-    // ========== صرف 2 چینجز یہاں تک ==========
 
     function renderApp() {
         const mi = parseInt(document.getElementById('monthSelect').value);
@@ -393,14 +469,10 @@
         const cn = selC.options[selC.selectedIndex].text;
         const tb = document.getElementById('tableContent');
         const now = new Date();
-        const dCount = new Date(2026, mi + 1, 0).getDate();
+        const currentYear = now.getFullYear();
+        const dCount = new Date(currentYear, mi + 1, 0).getDate();
         document.getElementById('cityNameLabel').innerText = cn;
         tb.innerHTML = '';
-
-        // انگریزی تاریخ چیک کریں
-        if (shouldUpdateGregorian()) {
-            console.log('انگریزی تاریخ اپڈیٹ ہو گئی');
-        }
 
         for (let d = 1; d <= dCount; d++) {
             let t = [];
@@ -418,28 +490,47 @@
             const jF = mToT(rndJ(tToM(t[0]), 25)), jZ = "01:30", jA = mToT(rndJ(tToM(t[4]), 20)), jM = mToT(tToM(t[5]) + 3), jI = mToT(rndJ(tToM(t[6]), 30));
 
             const isT = (mi === now.getMonth() && d === now.getDate());
-            const row = document.createElement('tr'); if (isT) row.className = 'active-day';
+            const row = document.createElement('tr'); 
+            if (isT) row.className = 'active-day';
             row.innerHTML = `<td>${d}</td><td>${t[0]}<span class="j-mini">ج: ${jF}</span></td><td>${t[1]}</td><td>${ishraq}</td><td>${chasht}</td><td>${t[2]}</td><td class="danger">${zw}</td><td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td><td>${t[4]}<span class="j-mini">ج: ${jA}</span></td><td>${t[5]}<span class="j-mini">ج: ${jM}</span></td><td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>`;
             tb.appendChild(row);
 
             if (isT) {
                 const ms = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
                 
-                // اسلامی تاریخ چیک کریں - مغرب کے بعد
-                if (shouldUpdateHijri(t[5])) {
-                    console.log('اسلامی تاریخ اپڈیٹ ہو گئی - مغرب کے بعد');
+                // 1. دن (24 گھنٹے بعد بدلے گا)
+                const urduDay = getUrduDay(now);
+                
+                // 2. اسلامی تاریخ (مغرب کے بعد بدلے گی)
+                const hijriData = getHijriDate();
+                
+                // 3. خاص دن (اسلامی تاریخ کے حساب سے)
+                const specialDay = getSpecialDay(hijriData.day, hijriData.month);
+                
+                // ڈسپلے - تینوں الگ الگ
+                let dateDisplay = `<span class="week-day">${urduDay}</span> ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">${hijriData.string}</span>`;
+                
+                document.getElementById('fullDateDisplay').innerHTML = dateDisplay;
+                
+                // خاص دن دکھائیں
+                const specialDiv = document.getElementById('specialDayDisplay');
+                if (specialDay) {
+                    specialDiv.style.display = 'inline-block';
+                    specialDiv.innerHTML = `🕋 ${specialDay}`;
+                } else {
+                    specialDiv.style.display = 'none';
                 }
                 
-                const hijriStr = getHijriDate();
-                document.getElementById('fullDateDisplay').innerHTML = `آج کے اوقات: ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">اسلامی تاریخ: ${hijriStr}</span>`;
-                
-                const grid = document.getElementById('cardGrid'); grid.innerHTML = '';
+                const grid = document.getElementById('cardGrid'); 
+                grid.innerHTML = '';
                 const display = [
                     {l:"فجر",v:t[0],j:jF}, {l:"طلوع",v:t[1]}, {l:"اشراق",v:ishraq}, {l:"چاشت",v:chasht},
                     {l:"ضحوۃ",v:t[2]}, {l:"ممنوع",v:zw,w:true}, {l:"ظہر",v:t[3],j:jZ},
                     {l:"عصر",v:t[4],j:jA}, {l:"مغرب",v:t[5],j:jM}, {l:"عشاء",v:t[6],j:jI}
                 ];
-                display.forEach(i => { grid.innerHTML += `<div class="time-box"><span class="t-label ${i.w?'danger':''}">${i.l}</span><span class="t-val">${i.v}</span>${i.j?`<span class="j-tag">جماعت: ${i.j}</span>`:''}</div>`; });
+                display.forEach(i => { 
+                    grid.innerHTML += `<div class="time-box"><span class="t-label ${i.w?'danger':''}">${i.l}</span><span class="t-val">${i.v}</span>${i.j?`<span class="j-tag">جماعت: ${i.j}</span>`:''}</div>`; 
+                });
             }
         }
     }
