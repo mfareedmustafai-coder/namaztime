@@ -346,6 +346,25 @@
         return `${day} ${months[month]} ${year}ھ`;
     }
 
+    // ========== خودکار شہر سلیکٹ - انٹرنیٹ کے بغیر ==========
+    function detectUserCity() {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        
+        if (timezone.includes("Karachi") || timezone.includes("Asia/Karachi")) {
+            return "کراچی";
+        }
+        else if (timezone.includes("Kolkata") || timezone.includes("Asia/Kolkata")) {
+            return "لاہور";
+        }
+        else if (timezone.includes("Dubai") || timezone.includes("Riyadh") || 
+                 timezone.includes("Qatar") || timezone.includes("Muscat")) {
+            return "کراچی";
+        }
+        else {
+            return "اسلام آباد";
+        }
+    }
+
     function renderApp() {
         const mi = parseInt(document.getElementById('monthSelect').value);
         const co = parseInt(selC.value);
@@ -393,8 +412,11 @@
         }
     }
     
-    // ڈیفالٹ کراچی اور موجودہ مہینہ
-    selC.value = 0; 
+    // ڈیفالٹ شہر خودکار سلیکٹ
+    const defaultCity = detectUserCity();
+    const defaultCityObj = uniqueCities.find(c => c.n === defaultCity);
+    selC.value = defaultCityObj ? defaultCityObj.o : 0; 
+    
     document.getElementById('monthSelect').value = new Date().getMonth(); 
     renderApp();
 </script>
