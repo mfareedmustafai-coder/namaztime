@@ -284,15 +284,25 @@
 
     const selC = document.getElementById('citySelect');
     pkCities.forEach(c => { let o = document.createElement('option'); o.value = c.o; o.innerText = c.n; selC.appendChild(o); });
-
-    function getSpecialDayUrdu(day, month) {
-        if(month === 1 && day === 10) return "عاشورہ (10 محرم)";
+function getSpecialDayUrdu(day, month) {
+        // month index: 1=Muharram, 3=R.Awwal, 7=Rajab, 8=Shaban, 9=Ramadan, 10=Shawwal, 12=ZilHijjah
+        if(month === 1 && day === 10) return "یومِ عاشورہ (10 محرم الحرام)";
         if(month === 3 && day === 12) return "عید میلاد النبی ﷺ (12 ربیع الاول)";
-        if(month === 7 && day === 27) return "شبِ معراج (27 رجب)";
-        if(month === 8 && day === 15) return "شبِ برات (15 شعبان)";
-        if(month === 9) return "رمضان المبارک کا مقدس مہینہ";
-        if(month === 10 && day === 1) return "عید الفطر (یکم شوال)";
-        if(month === 12 && day === 10) return "عید الاضحی";
+        if(month === 7 && day === 27) return "شبِ معراج (27 رجب المرجب)";
+        if(month === 8 && (day === 14 || day === 15)) return "شبِ برات (15 شعبان المعظم)";
+        if(month === 8 && (day === 29 || day === 30)) return "چاند رات (رمضان المبارک)";
+        
+        if(month === 9 && day === 1) return "رمضان المبارک کا پہلا روزہ";
+        if(month === 9 && (day === 21 || day === 23 || day === 25 || day === 27 || day === 29)) return "لیلۃ القدر (شبِ قدر)";
+        if(month === 9 && (day === 29 || day === 30)) return "چاند رات (عید الفطر)";
+        
+        if(month === 10 && day === 1) return "عید الفطر (یکم شوال المکرم)";
+        if(month === 11 && (day === 29 || day === 30)) return "چاند رات (عید الاضحی)";
+        h
+        if(month === 12 && day <= 9) return "عشرہ ذوالحجۃ الحرام";
+        if(month === 12 && day === 9) return "یومِ عرفہ (حج کا دن)";
+        if(month === 12 && day === 10) return "عید الاضحی (قربانی کا دن)";
+        
         return "کچھ بھی نہیں ہے";
     }
 
