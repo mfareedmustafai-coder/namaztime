@@ -111,8 +111,18 @@
             border-radius: 15px;
             margin: 15px auto;
             font-size: 28px;
-            max-width: 500px;
+            max-width: 700px;
             font-weight: bold;
+            line-height: 1.5;
+        }
+        
+        .chand-rat {
+            color: #ffd700;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            font-size: 26px;
+            text-shadow: 0 0 5px rgba(255,215,0,0.5);
         }
 
         .times-grid {
@@ -329,16 +339,42 @@
     pkCities.forEach(c => { let o = document.createElement('option'); o.value = c.o; o.innerText = c.n; selC.appendChild(o); });
 
     function getSpecialDayUrdu(day, month) {
-        if(month === 1 && day === 10) return "عاشورہ (10 محرم)";
-        if(month === 3 && day === 12) return "عید میلاد النبی ﷺ (12 ربیع الاول)";
-        if(month === 7 && day === 27) return "شبِ معراج (27 رجب)";
-        if(month === 8 && day === 15) return "شبِ برات (15 شعبان)";
-        if(month === 9) return "رمضان المبارک کا مہینہ";
-        if(month === 9 && day === 27) return "شبِ قدر (متوقع)";
-        if(month === 10 && day === 1) return "عید الفطر";
-        if(month === 12 && day === 9) return "یومِ عرفہ (9 ذوالحجہ)";
-        if(month === 12 && day === 10) return "عید الاضحی (10 ذوالحجہ)";
-        return "کوئی خاص دن نہیں";
+        // اسلامی مہینوں کے نام (اردو)
+        const urduMonths = [
+            "", "محرم", "صفر", "ربیع الاول", "ربیع الثانی", 
+            "جمادی الاول", "جمادی الثانی", "رجب", "شعبان", 
+            "رمضان", "شوال", "ذوالقعدہ", "ذوالحجہ"
+        ];
+        
+        // خاص دن
+        let specialDay = "";
+        if(month === 1 && day === 10) specialDay = "عاشورہ (10 محرم)";
+        else if(month === 3 && day === 12) specialDay = "عید میلاد النبی ﷺ (12 ربیع الاول)";
+        else if(month === 7 && day === 27) specialDay = "شبِ معراج (27 رجب)";
+        else if(month === 8 && day === 15) specialDay = "شبِ برات (15 شعبان)";
+        else if(month === 9 && day === 27) specialDay = "شبِ قدر (27 رمضان)";
+        else if(month === 10 && day === 1) specialDay = "عید الفطر";
+        else if(month === 12 && day === 9) specialDay = "یومِ عرفہ (9 ذوالحجہ)";
+        else if(month === 12 && day === 10) specialDay = "عید الاضحی (10 ذوالحجہ)";
+        
+        // چاند راتیں - ہر مہینے کی 29 تاریخ کو اس مہینے کی چاند رات
+        let chandRat = "";
+        if(day === 29) {
+            if(month === 1) chandRat = "🌙 محرم کی چاند رات (29 محرم)";
+            else if(month === 2) chandRat = "🌙 صفر کی چاند رات (29 صفر)";
+            else if(month === 3) chandRat = "🌙 ربیع الاول کی چاند رات (29 ربیع الاول)";
+            else if(month === 4) chandRat = "🌙 ربیع الثانی کی چاند رات (29 ربیع الثانی)";
+            else if(month === 5) chandRat = "🌙 جمادی الاول کی چاند رات (29 جمادی الاول)";
+            else if(month === 6) chandRat = "🌙 جمادی الثانی کی چاند رات (29 جمادی الثانی)";
+            else if(month === 7) chandRat = "🌙 رجب کی چاند رات (29 رجب)";
+            else if(month === 8) chandRat = "🌙 شعبان کی چاند رات (29 شعبان)";
+            else if(month === 9) chandRat = "🌙 رمضان المبارک کی چاند رات (29 رمضان)";
+            else if(month === 10) chandRat = "🌙 شوال کی چاند رات (29 شوال)";
+            else if(month === 11) chandRat = "🌙 ذوالقعدہ کی چاند رات (29 ذوالقعدہ)";
+            else if(month === 12) chandRat = "🌙 ذوالحجہ کی چاند رات (29 ذوالحجہ)";
+        }
+        
+        return { specialDay, chandRat };
     }
 
     async function renderApp() {
@@ -390,10 +426,17 @@
                     if(hDay === 0) { hDay = 29; hMonthIdx--; }
 
                     const hijriStr = `${hDay} ${uMonths[hMonthIdx]} ${h.year}ھ`;
-                    const special = getSpecialDayUrdu(hDay, hMonthIdx);
+                    const { specialDay, chandRat } = getSpecialDayUrdu(hDay, hMonthIdx);
+
+                    // مخصوص دن اور چاند رات دونوں دکھائیں
+                    let specialDisplay = "کوئی خاص دن نہیں";
+                    if (specialDay) specialDisplay = specialDay;
+                    
+                    let chandDisplay = "";
+                    if (chandRat) chandDisplay = `<span class="chand-rat">${chandRat}</span>`;
 
                     document.getElementById('fullDateDisplay').innerHTML = `<span class="day-highlight">${dayName}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">${hijriStr}</span>`;
-                    document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>${special}</b>`;
+                    document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>${specialDisplay}</b>${chandDisplay}`;
                 } catch (e) { 
                     document.getElementById('fullDateDisplay').innerHTML = `<span class="day-highlight">${dayName}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">تاریخ دستیاب نہیں</span>`;
                     document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>معلوم نہیں</b>`;
