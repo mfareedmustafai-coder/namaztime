@@ -77,19 +77,17 @@
             margin-bottom: 15px;
         }
 
-        .date-info { font-size: 20px; margin-bottom: 10px; line-height: 1.6; font-weight: bold; }
-        .urdu-day { color: #fff; background: rgba(0,0,0,0.2); padding: 2px 15px; border-radius: 10px; margin-left: 10px; }
+        .date-info { font-size: 18px; margin-bottom: 10px; line-height: 1.6; }
         .hijri-date { color: var(--accent); font-weight: bold; border-right: 2px solid rgba(255,255,255,0.3); padding-right: 12px; margin-right: 12px; }
         
         .special-day-box {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid var(--accent);
+            background: rgba(255,255,255,0.15);
+            border: 1px dashed var(--accent);
             padding: 10px;
             border-radius: 10px;
             margin: 10px auto;
-            font-size: 18px;
-            max-width: 500px;
-            color: #fff;
+            font-size: 16px;
+            max-width: 400px;
         }
 
         .times-grid {
@@ -139,8 +137,8 @@
 
 <div class="container">
     <header>
-        <h1>نماز کے اوقات کا ٹائم ٹیبل</h1>
-        <h2>مطابق دارالافتاء اہلسنت (حنفی)</h2>
+        <h1>پاکستان نماز ٹائم ٹیبل</h1>
+        <h2>مطابق دارالافتاء اہلسنت (دعوتِ اسلامی)</h2>
         <span class="dev-name">M.FAREED MUSTAFAI</span>
     </header>
 
@@ -162,7 +160,7 @@
 
     <div class="today-card">
         <div id="cityNameLabel" class="city-badge">کراچی</div>
-        <div class="date-info" id="fullDateDisplay">لوڈنگ...</div>
+        <div class="date-info" id="fullDateDisplay">لوڈنگ لائیو اسلامی تاریخ...</div>
         <div class="special-day-box" id="makhsoosDin">مخصوص دن: لوڈنگ...</div>
         <div class="times-grid" id="cardGrid"></div>
     </div>
@@ -181,86 +179,18 @@
     <footer>
         <b>اہم معلومات:</b> یہ اوقات دارالافتاء اہلسنت کراچی کے دائمی نقشے کے مطابق ہیں۔ <br>
         1. <b>اسلامی تاریخ:</b> گوگل لائیو ڈیٹا کے مطابق ہے اور مغرب کے وقت بدلتی ہے۔ <br>
-        2. <b>دن کا نام:</b> اردو میں خودکار اپڈیٹ ہوتا ہے۔
+        2. <b>اشراق:</b> طلوع کے 20 منٹ بعد۔ 3. <b>چاشت:</b> طلوع اور ضحوۃ کا درمیانی وقت۔
         <div class="footer-name">Developed By: M.FAREED MUSTAFAI</div>
     </footer>
 </div>
 
 <script>
-    // ========== 200+ پاکستانی شہر ==========
-    // ماں کی قسم! صرف شہر ایڈ کیے ہیں، کچھ نہیں بدلا
     const pkCities = [
-        // ========== بڑے شہر ==========
         {n:"کراچی", o:0}, {n:"حیدرآباد", o:-3}, {n:"لاہور", o:-40}, {n:"اسلام آباد", o:-46}, 
         {n:"راولپنڈی", o:-46}, {n:"فیصل آباد", o:-32}, {n:"ملتان", o:-25}, 
-        {n:"گوجرانوالہ", o:-42}, {n:"پشاور", o:-24}, {n:"کوئٹہ", o:12}, 
-        {n:"سرگودھا", o:-35}, {n:"بہاولپور", o:-26}, {n:"سیالکوٹ", o:-44}, 
-        {n:"سکھر", o:-9}, {n:"لاڑکانہ", o:-8}, {n:"مردان", o:-45}, 
-        {n:"رحیم یار خان", o:-18}, {n:"گجرات", o:-43}, {n:"اوکاڑہ", o:-35}, 
-        {n:"نوشہرہ", o:-26}, {n:"چنیوٹ", o:-33}, {n:"حافظ آباد", o:-40},
-        
-        // ========== پنجاب ==========
-        {n:"اٹک", o:-48}, {n:"بہاولنگر", o:-31}, {n:"بھکر", o:-22}, {n:"چکوال", o:-45}, 
-        {n:"چشتیاں", o:-28}, {n:"ڈیرہ غازی خان", o:-18}, {n:"گوجرخان", o:-45}, 
-        {n:"جھنگ", o:-30}, {n:"جہلم", o:-48}, {n:"قصور", o:-41}, {n:"خانیوال", o:-28}, 
-        {n:"لیہ", o:-20}, {n:"لودھراں", o:-24}, {n:"منڈی بہاؤالدین", o:-42}, 
-        {n:"میانوالی", o:-22}, {n:"مظفر گڑھ", o:-21}, {n:"نارووال", o:-46}, 
-        {n:"ننکانہ صاحب", o:-39}, {n:"پاکپتن", o:-37}, {n:"راجن پور", o:-17}, 
-        {n:"صادق آباد", o:-18}, {n:"ساہیوال", o:-34}, {n:"شیخوپورہ", o:-40}, 
-        {n:"توبہ ٹیک سنگھ", o:-37}, {n:"ویہاڑی", o:-31}, {n:"علی پور", o:-27}, 
-        {n:"بھالوال", o:-38}, {n:"بورے والا", o:-30}, {n:"ڈسکہ", o:-43}, 
-        {n:"جتوئی", o:-22}, {n:"کامونکی", o:-43}, {n:"کامرہ", o:-43}, 
-        {n:"کھاریاں", o:-48}, {n:"کوٹ ادو", o:-21}, {n:"میلسی", o:-30}, 
-        {n:"موریدکے", o:-40}, {n:"پسرور", o:-43}, {n:"پنڈ دادن خان", o:-48}, 
-        {n:"واہ کینٹ", o:-47}, {n:"وزیرآباد", o:-43}, {n:"عارف والا", o:-30},
-        
-        // ========== سندھ ==========
-        {n:"بدین", o:2}, {n:"دادو", o:-4}, {n:"گھوٹکی", o:-10}, {n:"جیکب آباد", o:-14}, 
-        {n:"جیمشورو", o:-4}, {n:"کشمور", o:-16}, {n:"خیرپور", o:-11}, 
-        {n:"مٹیاری", o:-4}, {n:"میرپور خاص", o:-1}, {n:"مورو", o:-7}, 
-        {n:"نوشہرو فیروز", o:-6}, {n:"نوابشاہ", o:-5}, {n:"قمبر شہدادکوٹ", o:-8}, 
-        {n:"سنگھڑ", o:-1}, {n:"شکارپور", o:-13}, {n:"ٹنڈو آدم", o:-4}, 
-        {n:"ٹنڈو اللہ یار", o:-3}, {n:"ٹنڈو محمد خان", o:-2}, {n:"تھرپارکر", o:2}, 
-        {n:"تھٹہ", o:1}, {n:"عمرکوٹ", o:1}, {n:"سیہون", o:-1}, {n:"مٹھی", o:1},
-        
-        // ========== خیبر پختونخوا ==========
-        {n:"ایبٹ آباد", o:-51}, {n:"بنوں", o:-22}, {n:"بٹگرام", o:-52}, 
-        {n:"بونیر", o:-47}, {n:"چارسدہ", o:-25}, {n:"چترال", o:-56}, 
-        {n:"ڈیرہ اسماعیل خان", o:-20}, {n:"ہنگو", o:-22}, {n:"ہری پور", o:-49}, 
-        {n:"کرک", o:-22}, {n:"کوہاٹ", o:-22}, {n:"لکی مروت", o:-20}, 
-        {n:"دیر زیریں", o:-50}, {n:"دیر بالا", o:-52}, {n:"مانسہرہ", o:-52}, 
-        {n:"شنگلہ", o:-48}, {n:"صوابی", o:-28}, {n:"سوات", o:-52}, 
-        {n:"ٹانک", o:-20}, {n:"تورغر", o:-25}, {n:"ناران", o:-55}, {n:"کالام", o:-54},
-        
-        // ========== بلوچستان ==========
-        {n:"آواران", o:24}, {n:"بارکھان", o:18}, {n:"بولان", o:15}, 
-        {n:"چاغی", o:42}, {n:"ڈیرہ بگٹی", o:14}, {n:"گوادر", o:36}, 
-        {n:"ہرنائی", o:14}, {n:"حب", o:6}, {n:"جعفرآباد", o:13}, 
-        {n:"جھل مگسی", o:16}, {n:"قلات", o:20}, {n:"کیچ", o:32}, 
-        {n:"خاران", o:36}, {n:"خضدار", o:18}, {n:"کوہلو", o:16}, 
-        {n:"لسبیلہ", o:9}, {n:"لورالائی", o:18}, {n:"مستونگ", o:16}, 
-        {n:"موسیٰ خیل", o:17}, {n:"نصیر آباد", o:13}, {n:"نوشکی", o:40}, 
-        {n:"پنجگور", o:34}, {n:"پشین", o:14}, {n:"قلعہ سیف اللہ", o:16}, 
-        {n:"شیرانی", o:17}, {n:"سیبی", o:15}, {n:"واشک", o:42}, 
-        {n:"ژوب", o:20}, {n:"زیارت", o:14}, {n:"چمن", o:12}, {n:"دالبندین", o:42},
-        
-        // ========== گلگت بلتستان ==========
-        {n:"گلگت", o:-70}, {n:"سکردو", o:-75}, {n:"ہنزہ", o:-72}, 
-        {n:"نگر", o:-71}, {n:"دیامر", o:-68}, {n:"گھانچے", o:-76}, 
-        {n:"استور", o:-73}, {n:"شگر", o:-76}, {n:"خپلو", o:-77},
-        
-        // ========== آزاد کشمیر ==========
-        {n:"مظفرآباد", o:-53}, {n:"میرپور", o:-50}, {n:"باغ", o:-52}, 
-        {n:"بھمبر", o:-51}, {n:"کوٹلی", o:-52}, {n:"پونچھ", o:-53}, 
-        {n:"ہٹیاں", o:-54}, {n:"نیلم", o:-55}, {n:"سڈنوتی", o:-53},
-        
-        // ========== مزید شہر ==========
-        {n:"چکوال", o:-45}, {n:"تلہ گنگ", o:-49}, {n:"ٹیکسلا", o:-47},
-        {n:"حسن ابدال", o:-47}, {n:"فتح جنگ", o:-47}, {n:"پنڈی گھیب", o:-48},
-        {n:"کلرکہار", o:-49}, {n:"چوا سیدن شاہ", o:-48}, {n:"بھلوال", o:-38},
-        {n:"سمندری", o:-34}, {n:"جڑانوالہ", o:-33}, {n:"کمالیہ", o:-35},
-        {n:"گوجرہ", o:-36}, {n:"پیر محل", o:-33}, {n:"کوٹ سلطان", o:-25},
-        {n:"کبیر والا", o:-28}, {n:"منڈی یزمان", o:-26}, {n:"خانیوال", o:-28}
+        {n:"گجرانوالہ", o:-42}, {n:"پشاور", o:-24}, {n:"کوئٹہ", o:12}, 
+        {n:"بہاولنگر", o:-31}, {n:"سکھر", o:-9}, {n:"سیالکوٹ", o:-44}, 
+        {n:"سرگودھا", o:-35}, {n:"بہاولپور", o:-26}
     ].sort((a,b) => a.n.localeCompare(b.n));
 
     const baseData = {
@@ -290,9 +220,11 @@
         if(month === 3 && day === 12) return "عید میلاد النبی ﷺ (12 ربیع الاول)";
         if(month === 7 && day === 27) return "شبِ معراج (27 رجب)";
         if(month === 8 && day === 15) return "شبِ برات (15 شعبان)";
-        if(month === 9) return "رمضان المبارک کا مقدس مہینہ";
-        if(month === 10 && day === 1) return "عید الفطر (یکم شوال)";
-        if(month === 12 && day === 10) return "عید الاضحی";
+        if(month === 9) return "رمضان المبارک کا مہینہ";
+        if(month === 9 && day === 27) return "شبِ قدر (متوقع)";
+        if(month === 10 && day === 1) return "عید الفطر";
+        if(month === 12 && day === 9) return "یومِ عرفہ (9 ذوالحجہ)";
+        if(month === 12 && day === 10) return "عید الاضحی (10 ذوالحجہ)";
         return "کچھ بھی نہیں ہے";
     }
 
@@ -316,44 +248,43 @@
                 let b = sm + Math.round(((em - sm) / (dCount - 1)) * (d - 1));
                 t.push(mToT(b + co));
             }
-            const ish = mToT(tToM(t[1]) + 20), cha = mToT(tToM(t[1]) + Math.round((tToM(t[2]) - tToM(t[1])) / 2)), zw = mToT(tToM(t[3]) - 20); 
+            const ishraq = mToT(tToM(t[1]) + 20), chasht = mToT(tToM(t[1]) + Math.round((tToM(t[2]) - tToM(t[1])) / 2)), zw = mToT(tToM(t[3]) - 20); 
             const jF = mToT(rndJ(tToM(t[0]), 25)), jZ = "01:30", jA = mToT(rndJ(tToM(t[4]), 20)), jM = mToT(tToM(t[5]) + 3), jI = mToT(rndJ(tToM(t[6]), 30));
 
             const isT = (mi === now.getMonth() && d === now.getDate());
             if (isT) todayMaghrib = t[5]; 
 
             const row = document.createElement('tr'); if (isT) row.className = 'active-day';
-            row.innerHTML = `<td>${d}</td><td>${t[0]}<span class="j-mini">ج: ${jF}</span></td><td>${t[1]}</td><td>${ish}</td><td>${cha}</td><td>${t[2]}</td><td class="danger">${zw}</td><td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td><td>${t[4]}<span class="j-mini">ج: ${jA}</span></td><td>${t[5]}<span class="j-mini">ج: ${jM}</span></td><td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>`;
+            row.innerHTML = `<td>${d}</td><td>${t[0]}<span class="j-mini">ج: ${jF}</span></td><td>${t[1]}</td><td>${ishraq}</td><td>${chasht}</td><td>${t[2]}</td><td class="danger">${zw}</td><td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td><td>${t[4]}<span class="j-mini">ج: ${jA}</span></td><td>${t[5]}<span class="j-mini">ج: ${jM}</span></td><td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>`;
             tb.appendChild(row);
 
             if (isT) {
                 const ms = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
-                const dayUrdu = urduDays[now.getDay()];
+                const dayName = urduDays[now.getDay()];
                 
                 try {
-                    let hDate = new Date();
-                    if (now.getHours() * 60 + now.getMinutes() >= tToM(todayMaghrib)) hDate.setDate(hDate.getDate() + 1);
+                    let hijriCheckDate = new Date();
+                    if (now.getHours() * 60 + now.getMinutes() >= tToM(todayMaghrib)) hijriCheckDate.setDate(hijriCheckDate.getDate() + 1);
                     
-                    const res = await fetch(`https://api.aladhan.com/v1/gToH?date=${hDate.getDate()}-${hDate.getMonth()+1}-${hDate.getFullYear()}`);
+                    const res = await fetch(`https://api.aladhan.com/v1/gToH?date=${hijriCheckDate.getDate()}-${hijriCheckDate.getMonth()+1}-${hijriCheckDate.getFullYear()}`);
                     const data = await res.json();
                     const h = data.data.hijri;
                     const uMonths = ["","محرم الحرام", "صفر المظفر", "ربیع الاول", "ربیع الثانی", "جمادی الاول", "جمادی الثانی", "رجب المرجب", "شعبان المعظم", "رمضان المبارک", "شوال المکرم", "ذوالقعدۃ الحرام", "ذوالحجۃ الحرام"];
                     
-                    let hDay = parseInt(h.day) - 1; // Pak Adjustment
+                    // Pakistan Offset Adjustment (Subtract 1 if API is ahead of Pak sighting)
+                    let hDay = parseInt(h.day) - 1; 
                     let hMonthIdx = parseInt(h.month.number);
-                    if(hDay <= 0) { hDay = 30; hMonthIdx--; }
+                    if(hDay === 0) { hDay = 29; hMonthIdx--; }
 
                     const hijriStr = `${hDay} ${uMonths[hMonthIdx]} ${h.year}ھ`;
                     const special = getSpecialDayUrdu(hDay, hMonthIdx);
 
-                    document.getElementById('fullDateDisplay').innerHTML = `<span class="urdu-day">${dayUrdu}</span> ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">اسلامی تاریخ: ${hijriStr}</span>`;
+                    document.getElementById('fullDateDisplay').innerHTML = `${dayName} | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">${hijriStr}</span>`;
                     document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>${special}</b>`;
-                } catch (e) { 
-                    document.getElementById('fullDateDisplay').innerText = dayUrdu + " | ڈیٹا ایرر"; 
-                }
+                } catch (e) { document.getElementById('fullDateDisplay').innerText = "انٹرنیٹ ایرر"; }
                 
                 const grid = document.getElementById('cardGrid'); grid.innerHTML = '';
-                const display = [{l:"فجر",v:t[0],j:jF},{l:"طلوع",v:t[1]},{l:"اشراق",v:ish},{l:"چاشت",v:cha},{l:"ضحوۃ",v:t[2]},{l:"ممنوع",v:zw,w:true},{l:"ظہر",v:t[3],j:jZ},{l:"عصر",v:t[4],j:jA},{l:"مغرب",v:t[5],j:jM},{l:"عشاء",v:t[6],j:jI}];
+                const display = [{l:"فجر",v:t[0],j:jF}, {l:"طلوع",v:t[1]}, {l:"اشراق",v:ishraq}, {l:"چاشت",v:chasht}, {l:"ضحوۃ",v:t[2]}, {l:"ممنوع",v:zw,w:true}, {l:"ظہر",v:t[3],j:jZ}, {l:"عصر",v:t[4],j:jA}, {l:"مغرب",v:t[5],j:jM}, {l:"عشاء",v:t[6],j:jI}];
                 display.forEach(i => { grid.innerHTML += `<div class="time-box"><span class="t-label ${i.w?'danger':''}">${i.l}</span><span class="t-val">${i.v}</span>${i.j?`<span class="j-tag">جماعت: ${i.j}</span>`:''}</div>`; });
             }
         }
