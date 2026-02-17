@@ -449,9 +449,12 @@
         }
     }
     
-    // پہلے سے طے شدہ (کراچی اور موجودہ مہینہ)
-    selC.value = 0; 
-    document.getElementById('monthSelect').value = new Date().getMonth(); 
+    // ========== ڈیفالٹ کراچی اور موجودہ مہینہ ==========
+    // کراچی کا انڈیکس 0 ہے (پہلا آپشن)
+    selC.selectedIndex = 0;
+    // موجودہ مہینہ سیٹ کریں
+    document.getElementById('monthSelect').value = new Date().getMonth();
+    // رینڈر کریں
     renderApp();
 </script>
 </body>
