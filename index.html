@@ -270,8 +270,8 @@
 
     <footer>
         <b>اہم معلومات:</b> یہ اوقات دارالافتاء اہلسنت کراچی کے دائمی نقشے کے مطابق ہیں۔ <br>
-        1. <b>اسلامی تاریخ:</b> Aladhan.com سے لی جاتی ہے اور پاکستان کے لیے 1 دن کم کی جاتی ہے (سعودی 2 رمضان = پاکستانی 1 رمضان) <br>
-        2. <b>یہ ایڈجسٹمنٹ مستقل ہے:</b> ہمیشہ یاد رہے گا، تاریخ fixed نہیں ہے
+        1. <b>اسلامی تاریخ:</b> Aladhan.com سے لی جاتی ہے اور پاکستان کے لیے 1 دن کم کی جاتی ہے <br>
+        2. <b>تمام مخصوص دن شامل ہیں:</b> عاشورہ، عید میلاد النبی، شب معراج، شب برات، شب قدر (تمام طاق راتیں)، عید الفطر، یوم عرفہ، عید الاضحی
         <div class="footer-name">Developed By: M.FAREED MUSTAFAI</div>
     </footer>
 </div>
@@ -371,19 +371,43 @@
     const selC = document.getElementById('citySelect');
     pkCities.forEach(c => { let o = document.createElement('option'); o.value = c.o; o.innerText = c.n; selC.appendChild(o); });
 
+    // ========== تمام مخصوص دنوں کے ساتھ اپڈیٹ شدہ فنکشن ==========
     function getSpecialDayUrdu(day, month) {
         const urduMonths = ["","محرم","صفر","ربیع الاول","ربیع الثانی","جمادی الاول","جمادی الثانی","رجب","شعبان","رمضان","شوال","ذوالقعدہ","ذوالحجہ"];
         
         let specialDay = "";
-        if(month === 1 && day === 10) specialDay = "عاشورہ (10 محرم)";
-        else if(month === 3 && day === 12) specialDay = "عید میلاد النبی ﷺ (12 ربیع الاول)";
-        else if(month === 7 && day === 27) specialDay = "شبِ معراج (27 رجب)";
-        else if(month === 8 && day === 15) specialDay = "شبِ برات (15 شعبان)";
-        else if(month === 9 && day === 27) specialDay = "شبِ قدر (27 رمضان)";
-        else if(month === 10 && day === 1) specialDay = "عید الفطر";
-        else if(month === 12 && day === 9) specialDay = "یومِ عرفہ (9 ذوالحجہ)";
-        else if(month === 12 && day === 10) specialDay = "عید الاضحی (10 ذوالحجہ)";
         
+        // محرم
+        if(month === 1 && day === 10) specialDay = "عاشورہ (10 محرم)";
+        
+        // ربیع الاول
+        if(month === 3 && day === 12) specialDay = "عید میلاد النبی ﷺ (12 ربیع الاول)";
+        
+        // رجب
+        if(month === 7 && day === 27) specialDay = "شبِ معراج (27 رجب)";
+        
+        // شعبان
+        if(month === 8 && day === 15) specialDay = "شبِ برات (15 شعبان)";
+        
+        // رمضان - شب قدر (آخری 10 طاق راتیں)
+        if(month === 9) {
+            if(day === 21) specialDay = "شبِ قدر کا احتمال (21 رمضان)";
+            else if(day === 23) specialDay = "شبِ قدر کا احتمال (23 رمضان)";
+            else if(day === 25) specialDay = "شبِ قدر کا احتمال (25 رمضان)";
+            else if(day === 27) specialDay = "شبِ قدر کا احتمال (27 رمضان)";
+            else if(day === 29) specialDay = "شبِ قدر کا احتمال (29 رمضان)";
+        }
+        
+        // شوال
+        if(month === 10 && day === 1) specialDay = "عید الفطر";
+        
+        // ذوالحجہ
+        if(month === 12) {
+            if(day === 9) specialDay = "یومِ عرفہ (9 ذوالحجہ)";
+            else if(day === 10) specialDay = "عید الاضحی (10 ذوالحجہ)";
+        }
+        
+        // چاند راتیں - ہر مہینے کی 29 اور 30 تاریخ
         let chandRat = "";
         if(day === 29 || day === 30) {
             if(month === 1) chandRat = "🌙 محرم کی چاند رات";
@@ -408,29 +432,23 @@
     // ========== Aladhan.com API + پاکستان ایڈجسٹمنٹ (ہمیشہ 1 دن کم) ==========
     async function getHijriDateFromAPI(date) {
         try {
-            // Aladhan.com API سے ڈیٹا لینا
             const response = await fetch(`https://api.aladhan.com/v1/gToH/${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`);
             const data = await response.json();
             
             if (data && data.data && data.data.hijri) {
                 const h = data.data.hijri;
                 
-                // سعودی تاریخ (Aladhan.com سے)
                 const saudiDay = parseInt(h.day);
                 const saudiMonth = parseInt(h.month.number);
                 const saudiYear = h.year;
                 
-                // پاکستان کے لیے 1 دن کم کریں
                 let pakistaniDay = saudiDay - 1;
                 let pakistaniMonth = saudiMonth;
                 let pakistaniYear = saudiYear;
                 
-                // اگر دن 0 ہو جائے تو پچھلے مہینے کی 29 تاریخ
                 if(pakistaniDay === 0) {
                     pakistaniDay = 29;
                     pakistaniMonth--;
-                    
-                    // اگر مہینہ 0 ہو جائے تو پچھلے سال کا 12واں مہینہ
                     if(pakistaniMonth === 0) {
                         pakistaniMonth = 12;
                         pakistaniYear--;
@@ -447,25 +465,19 @@
                     day: pakistaniDay,
                     month: pakistaniMonth,
                     year: pakistaniYear,
-                    monthName: monthNames[pakistaniMonth],
-                    originalSaudi: `${saudiDay} ${monthNames[saudiMonth]} ${saudiYear}ھ`
+                    monthName: monthNames[pakistaniMonth]
                 };
             }
-            
             throw new Error('API ڈیٹا نہیں ملا');
-            
         } catch (error) {
             console.log('API error:', error);
-            
-            // اگر API کام نہ کرے تو بیک اپ کیلکولیشن
             return getBackupDate(date);
         }
     }
     
     function getBackupDate(date) {
-        // بیک اپ کیلکولیشن - 18 فروری 2026 کو 1 رمضان
         const baseDate = new Date("2026-02-18");
-        const baseHijri = { day: 1, month: 9, year: 1447 }; // 1 رمضان 1447ھ
+        const baseHijri = { day: 1, month: 9, year: 1447 };
         
         const diffTime = date - baseDate;
         const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
@@ -474,7 +486,6 @@
         let newMonth = baseHijri.month;
         let newYear = baseHijri.year;
         
-        // اسلامی مہینوں کی ایڈجسٹمنٹ
         while (newDay > 30) {
             newDay -= 30;
             newMonth++;
@@ -551,7 +562,6 @@
                 try {
                     let hijriDate;
                     if (now.getHours() * 60 + now.getMinutes() >= tToM(todayMaghrib)) {
-                        // مغرب کے بعد اگلی تاریخ
                         const tomorrow = new Date(now);
                         tomorrow.setDate(tomorrow.getDate() + 1);
                         hijriDate = await getHijriDateFromAPI(tomorrow);
@@ -560,13 +570,12 @@
                     }
 
                     const hijriStr = `${hijriDate.day} ${hijriDate.monthName} ${hijriDate.year}ھ`;
+                    
+                    // اپڈیٹ شدہ فنکشن سے مخصوص دن اور چاند رات لیں
                     const { specialDay, chandRat } = getSpecialDayUrdu(hijriDate.day, hijriDate.month);
 
-                    let specialDisplay = "کوئی خاص دن نہیں";
-                    if (specialDay) specialDisplay = specialDay;
-                    
-                    let chandDisplay = "";
-                    if (chandRat) chandDisplay = `<span class="chand-rat">${chandRat}</span>`;
+                    let specialDisplay = specialDay || "کوئی خاص دن نہیں";
+                    let chandDisplay = chandRat ? `<span class="chand-rat">${chandRat}</span>` : "";
 
                     document.getElementById('fullDateDisplay').innerHTML = `<span class="day-highlight">${dayName}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">${hijriStr}</span>`;
                     document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>${specialDisplay}</b>${chandDisplay}`;
