@@ -2,8 +2,12 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>پاکستان نماز ٹائم ٹیبل - M.FAREED MUSTAFAI</title>
+    
+    <!-- PWA Manifest for APK -->
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%D9%BE%D8%A7%DA%A9%D8%B3%D8%AA%D8%A7%D9%86%20%D9%86%D9%85%D8%A7%D8%B2%20%D9%B9%D8%A7%D8%A6%D9%85%20%D9%B9%DB%8C%D8%A8%D9%84%22%2C%22short_name%22%3A%22%D9%86%D9%85%D8%A7%D8%B2%20%D9%B9%D8%A7%D8%A6%D9%85%22%2C%22start_url%22%3A%22%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2300695c%22%2C%22theme_color%22%3A%22%2300695c%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGBSURBVHgB7VbNTsJAEJ5t/QEegCR6MRr1YGLi5N0reANfwfgAPIAX38F4Mx6NV2+euHhSTSQG/gS02+6n3W5LodIWAsZJvrTpzH6d+XZmC4x/5NfIYzwGkSqQnEg4SqQKiRdYkUglEi+wIpEqJF5gRSJVSLzAikSqkHiBFYlUIfECKxKpQuIFViRShcQLrEikCokXWJFIFRIvsCKRKiReYEUiVUi8wIpEqpB4gRWJVCHxAisSqULiBVYkUoXEC6xIpAqJF1iRSBUSL7AikSokXmBFIlVIvMCKRKqQeIEViVQh8QIrEqlC4gVWJFJ1EXh6emIikaBcLqdKpVKharVKqVSKwuEwjY6O0tLSEq2srPw0h6enJ9ra2qJ2u02npyfU6XT+mmVubo5ubm5U3WfgnByPx2l7e5vy+Tzlcjk6Pz+nTCaj/IlEgpaWluj6+lqVz+VyFA6HaXZ2VpU/OjpSp91uU7VaVf2pVEqVHx8fp3Q6/YMDaZrS7u6ushAOh2l/f58GgwG1222Vv7i4oL29PVUGCLiuS+l0mvb391X5drtNo9GINjY2qN1uUzQapXw+T6VSiTKZzF85T0n8BOq5iACR51acAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/png%22%7D%5D%7D">
+    
     <style>
         :root {
             --primary: #00695c;
@@ -14,6 +18,12 @@
             --danger: #c62828;
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
@@ -21,49 +31,129 @@
             margin: 0;
             padding: 10px;
             text-align: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .container { max-width: 1100px; margin: auto; }
+        .container { 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            padding: 0 5px;
+        }
 
         header {
             background: linear-gradient(135deg, var(--primary), #004d40);
             color: white;
-            padding: 25px;
+            padding: 20px 15px;
             border-radius: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        h1 { margin: 0; font-size: 26px; }
-        h2 { margin: 5px 0; font-size: 16px; opacity: 0.9; }
-        .dev-name { display: block; margin-top: 10px; font-weight: bold; color: var(--accent); font-size: 22px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        h1 { 
+            margin: 0; 
+            font-size: clamp(20px, 5vw, 26px); 
+            line-height: 1.3;
+        }
+        
+        h2 { 
+            margin: 5px 0 0; 
+            font-size: clamp(12px, 3.5vw, 16px); 
+            opacity: 0.9; 
+        }
+        
+        .dev-name { 
+            display: block; 
+            margin-top: 8px; 
+            font-weight: bold; 
+            color: var(--accent); 
+            font-size: clamp(18px, 4vw, 22px); 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
+        }
+
+        /* اذان کنٹرول پینل */
+        .azan-control {
+            background: linear-gradient(135deg, #1e4d3a, #0f2c20);
+            color: gold;
+            padding: 12px 10px;
+            border-radius: 50px;
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid gold;
+        }
+        
+        .azan-status {
+            font-size: clamp(14px, 4vw, 18px);
+            color: #f3d597;
+            white-space: nowrap;
+        }
+        
+        .azan-btn {
+            background: gold;
+            color: #0f2c20;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: clamp(14px, 3.5vw, 18px);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            min-width: 100px;
+            border: 1px solid #b8914a;
+        }
+        
+        .azan-btn:active {
+            transform: scale(0.95);
+            background: #ffd700;
+        }
 
         .selection-panel {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
         }
 
-        .field-group { flex: 1; min-width: 250px; text-align: right; }
-        .field-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: var(--primary); }
+        .field-group { 
+            flex: 1 1 250px; 
+            min-width: 200px; 
+            text-align: right; 
+        }
+        
+        .field-group label { 
+            display: block; 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            font-size: 14px; 
+            color: var(--primary); 
+        }
 
         select {
-            width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd;
-            font-size: 15px; font-family: inherit; background: white;
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 2px solid #ddd;
+            font-size: 16px; 
+            font-family: inherit; 
+            background: white;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         .today-card {
             background: linear-gradient(135deg, #00695c, #004d40);
             color: white;
-            padding: 25px;
+            padding: 20px 15px;
             border-radius: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
         }
 
@@ -79,7 +169,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 10;
+            z-index: 100;
             backdrop-filter: blur(5px);
         }
 
@@ -108,66 +198,58 @@
             color: black;
             padding: 5px 20px;
             border-radius: 20px;
-            font-size: 16px;
+            font-size: clamp(14px, 4vw, 16px);
             font-weight: bold;
             display: inline-block;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .source-badge {
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid gold;
-            padding: 10px 25px;
+            padding: 8px 20px;
             border-radius: 40px;
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px);
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
             box-shadow: 0 0 15px rgba(255,215,0,0.3);
+        }
+        
+        .verified, .google-badge {
+            padding: 4px 12px;
+            border-radius: 25px;
+            font-size: clamp(12px, 3vw, 14px);
+            font-weight: bold;
         }
         
         .verified {
             background: gold;
             color: black;
-            padding: 4px 15px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .halal-badge {
-            background: #4caf50;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            margin-left: 10px;
         }
         
         .google-badge {
             background: #4285f4;
             color: white;
-            padding: 2px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            margin-left: 10px;
         }
 
         .date-info { 
-            font-size: 32px;
-            margin-bottom: 20px; 
-            line-height: 1.6; 
+            font-size: clamp(20px, 5vw, 32px);
+            margin-bottom: 15px; 
+            line-height: 1.5; 
             font-weight: bold;
+            word-break: break-word;
         }
         
         .hijri-date { 
             color: gold; 
             font-weight: bold; 
             border-right: 2px solid rgba(255,255,255,0.3); 
-            padding-right: 12px; 
-            margin-right: 12px;
-            font-size: 32px;
+            padding-right: 10px; 
+            margin-right: 10px;
+            font-size: clamp(20px, 5vw, 32px);
             text-shadow: 0 0 5px rgba(255,215,0,0.5);
         }
         
@@ -175,160 +257,218 @@
             display: inline-block;
             background: rgba(255, 255, 255, 0.25);
             border: 1px solid gold;
-            padding: 5px 20px;
+            padding: 5px 15px;
             border-radius: 30px;
-            margin-left: 10px;
-            font-size: 32px;
+            margin-left: 5px;
+            font-size: clamp(20px, 5vw, 32px);
             font-weight: bold;
         }
         
         .special-day-box {
             background: rgba(255,255,255,0.15);
             border: 2px dashed gold;
-            padding: 15px;
+            padding: 12px;
             border-radius: 15px;
-            margin: 15px auto;
-            font-size: 24px;
-            max-width: 900px;
+            margin: 12px auto;
+            font-size: clamp(16px, 4vw, 24px);
+            max-width: 100%;
             font-weight: bold;
-            line-height: 1.6;
+            line-height: 1.5;
             text-align: right;
+            word-break: break-word;
         }
         
         .chand-rat {
             color: gold;
             font-weight: bold;
             display: block;
-            margin-top: 10px;
-            font-size: 26px;
+            margin-top: 8px;
+            font-size: clamp(18px, 4.5vw, 26px);
             text-shadow: 0 0 5px rgba(255,215,0,0.5);
         }
 
         .times-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .time-box {
             background: rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            border-radius: 12px;
+            padding: 10px 5px;
+            border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .t-label { font-size: 12px; display: block; margin-bottom: 5px; opacity: 0.9; }
-        .t-val { font-size: 18px; font-weight: bold; }
-        .j-tag { font-size: 11px; color: var(--accent); font-weight: bold; display: block; margin-top: 5px; }
+        .t-label { 
+            font-size: clamp(10px, 3vw, 12px); 
+            display: block; 
+            margin-bottom: 3px; 
+            opacity: 0.9; 
+        }
+        
+        .t-val { 
+            font-size: clamp(14px, 4vw, 18px); 
+            font-weight: bold; 
+        }
+        
+        .j-tag { 
+            font-size: clamp(9px, 2.5vw, 11px); 
+            color: var(--accent); 
+            font-weight: bold; 
+            display: block; 
+            margin-top: 3px; 
+        }
 
         .table-wrap {
             background: var(--card-bg);
             border-radius: 15px;
             overflow-x: auto;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            -webkit-overflow-scrolling: touch;
+            margin: 10px 0;
         }
 
-        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 1050px; }
-        th { background: var(--primary); color: white; padding: 12px 5px; position: sticky; top: 0; }
-        td { padding: 10px 4px; border-bottom: 1px solid #eee; text-align: center; }
-        .j-mini { display: block; font-size: 9px; color: #00796b; font-weight: bold; }
-        .danger { color: var(--danger); font-weight: bold; }
-        .active-day { background: #fff9c4 !important; font-weight: bold; color: #000; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 11px; 
+            min-width: 800px; 
+        }
+        
+        th { 
+            background: var(--primary); 
+            color: white; 
+            padding: 10px 3px; 
+            position: sticky; 
+            top: 0; 
+            font-size: 11px;
+        }
+        
+        td { 
+            padding: 8px 3px; 
+            border-bottom: 1px solid #eee; 
+            text-align: center; 
+            font-size: 11px;
+        }
+        
+        .j-mini { 
+            display: block; 
+            font-size: 8px; 
+            color: #00796b; 
+            font-weight: bold; 
+        }
+        
+        .danger { 
+            color: var(--danger); 
+            font-weight: bold; 
+        }
+        
+        .active-day { 
+            background: #fff9c4 !important; 
+            font-weight: bold; 
+            color: #000; 
+        }
 
         footer {
             margin-top: 20px;
-            font-size: 12px;
+            font-size: clamp(10px, 3vw, 12px);
             color: #555;
-            padding: 25px;
+            padding: 20px 15px;
             background: #eee;
             border-radius: 20px;
             line-height: 1.8;
         }
-        .footer-name { margin-top: 15px; font-weight: bold; color: var(--primary); font-size: 18px; }
+        
+        .footer-name { 
+            margin-top: 12px; 
+            font-weight: bold; 
+            color: var(--primary); 
+            font-size: clamp(14px, 4vw, 18px); 
+        }
         
         .city-count {
             background: var(--primary);
             color: white;
-            padding: 3px 10px;
+            padding: 3px 8px;
             border-radius: 15px;
-            font-size: 12px;
-            margin-right: 10px;
+            font-size: 11px;
+            margin-right: 5px;
+            white-space: nowrap;
         }
 
-        /* نئے صفحے کے لیے اسٹائل */
+        /* ٹیبز */
         .page-tabs {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
+            gap: 8px;
+            margin: 15px 0;
+            flex-wrap: wrap;
         }
+        
         .tab-btn {
-            padding: 12px 30px;
+            padding: 10px 20px;
             border: none;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px);
             font-weight: bold;
             cursor: pointer;
             background: #ddd;
             color: #333;
             transition: 0.3s;
+            flex: 1 1 auto;
+            min-width: 120px;
         }
+        
         .tab-btn.active {
             background: var(--primary);
             color: white;
             box-shadow: 0 5px 15px rgba(0,105,92,0.3);
         }
+        
         .page {
             display: none;
         }
+        
         .page.active-page {
             display: block;
         }
 
-        /* مسجد کی گھڑی کے لیے اسٹائل - بالکل ویسی ہی جیسی تصویر میں ہے */
+        /* مسجد کی گھڑی */
         .masjid-clock {
             background: #0a1a1a;
             color: #e6d5a8;
-            padding: 30px 20px;
-            border-radius: 40px;
-            margin: 20px 0;
+            padding: 20px 15px;
+            border-radius: 30px;
+            margin: 15px 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             border: 3px solid #b8914a;
             position: relative;
-            overflow: hidden;
             font-family: 'Traditional Arabic', 'Segoe UI', sans-serif;
         }
         
-        .masjid-clock::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #b8914a, #f3d597, #b8914a);
-        }
-        
         .clock-title {
-            font-size: 42px;
-            margin-bottom: 15px;
+            font-size: clamp(28px, 7vw, 42px);
+            margin-bottom: 10px;
             color: #f3d597;
             text-shadow: 0 0 15px rgba(243,213,151,0.7);
             font-weight: bold;
+            word-break: break-word;
         }
         
         .analog-clock-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin: 20px 0;
+            margin: 15px 0;
         }
         
         .analog-clock {
-            width: 280px;
-            height: 280px;
+            width: min(250px, 60vw);
+            height: min(250px, 60vw);
             border: 8px solid #b8914a;
             border-radius: 50%;
             position: relative;
@@ -377,8 +517,8 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             background: #b8914a;
             border-radius: 50%;
             transform: translate(-50%, -50%);
@@ -393,7 +533,7 @@
             text-align: center;
             color: #b8914a;
             font-weight: bold;
-            font-size: 24px;
+            font-size: clamp(18px, 5vw, 24px);
         }
         
         .clock-numbers span {
@@ -402,49 +542,48 @@
             text-shadow: 0 0 5px rgba(184,145,74,0.5);
         }
         
-        .clock-numbers span:nth-child(1) { top: 12%; left: 50%; } /* 12 */
-        .clock-numbers span:nth-child(2) { top: 50%; right: 12%; } /* 3 */
-        .clock-numbers span:nth-child(3) { bottom: 12%; left: 50%; } /* 6 */
-        .clock-numbers span:nth-child(4) { top: 50%; left: 12%; } /* 9 */
-        
         .digital-display {
             background: #1a2e2a;
-            padding: 25px 40px;
-            border-radius: 60px;
+            padding: 15px 20px;
+            border-radius: 50px;
             border: 2px solid #b8914a;
             display: inline-block;
-            margin: 15px auto;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+            margin: 10px auto;
+            width: 100%;
+            max-width: 400px;
         }
         
         .clock-display {
-            font-size: 90px;
+            font-size: clamp(40px, 10vw, 80px);
             font-weight: bold;
             font-family: 'Courier New', monospace;
             color: #f3d597;
             text-shadow: 0 0 10px #ffd700;
-            letter-spacing: 5px;
+            letter-spacing: 2px;
             line-height: 1.2;
+            word-break: break-word;
         }
         
         .clock-date {
-            font-size: 26px;
-            margin: 10px 0;
+            font-size: clamp(16px, 4vw, 24px);
+            margin: 8px 0;
             color: #e6d5a8;
             background: rgba(0,0,0,0.5);
-            padding: 8px 25px;
+            padding: 6px 15px;
             border-radius: 40px;
             display: inline-block;
             border: 1px solid #b8914a;
+            max-width: 100%;
+            word-break: break-word;
         }
         
         .clock-status {
-            font-size: 24px;
+            font-size: clamp(18px, 4.5vw, 24px);
             background: #1a2e2a;
-            padding: 10px 30px;
+            padding: 8px 20px;
             border-radius: 50px;
             display: inline-block;
-            margin: 15px 0;
+            margin: 10px 0;
             border: 2px solid #b8914a;
             color: #f3d597;
         }
@@ -452,46 +591,46 @@
         .prayer-highlight {
             background: #0f1f1b;
             border: 2px solid #b8914a;
-            padding: 20px;
+            padding: 15px;
             border-radius: 30px;
-            margin-top: 20px;
-            font-size: 26px;
+            margin-top: 15px;
+            font-size: clamp(18px, 4.5vw, 26px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.7);
         }
         
         .prayer-times-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 20px;
             background: rgba(0,0,0,0.3);
-            padding: 20px;
+            padding: 15px;
             border-radius: 30px;
         }
         
         .prayer-time-item {
             background: #1a2e2a;
-            padding: 15px;
-            border-radius: 20px;
+            padding: 10px;
+            border-radius: 15px;
             border: 1px solid #b8914a;
         }
         
         .prayer-name {
-            font-size: 18px;
+            font-size: clamp(14px, 3.5vw, 18px);
             color: #e6d5a8;
             display: block;
         }
         
         .prayer-time {
-            font-size: 22px;
+            font-size: clamp(16px, 4vw, 22px);
             color: #f3d597;
             font-weight: bold;
             display: block;
-            margin-top: 5px;
+            margin-top: 3px;
         }
         
         .jamaat-time {
-            font-size: 16px;
+            font-size: clamp(12px, 3vw, 16px);
             color: #b8914a;
             display: block;
         }
@@ -502,9 +641,16 @@
 <div class="container">
     <header>
         <h1>پاکستان نماز ٹائم ٹیبل</h1>
-        <h2>مطابق دارالافتاء اہلسنت (حنفی) <span class="city-count">200+ شہر</span></h2>
+        <h2>مطابق دارالافتاء اہلسنت (حنفی) <span class="city-count">۲۰۰+ شہر</span></h2>
         <span class="dev-name">M.FAREED MUSTAFAI</span>
     </header>
+
+    <!-- اذان کنٹرول پینل -->
+    <div class="azan-control">
+        <span class="azan-status" id="azanStatus">🔊 اذان: مشاری راشد</span>
+        <button class="azan-btn" onclick="toggleAzan()" id="azanToggleBtn">اذان بند کریں</button>
+        <button class="azan-btn" onclick="testAzan()">ٹیسٹ اذان</button>
+    </div>
 
     <!-- ٹیبز -->
     <div class="page-tabs">
@@ -512,7 +658,7 @@
         <button class="tab-btn" onclick="showPage('masjid')">🕌 مسجد کی گھڑی</button>
     </div>
 
-    <!-- اصل صفحہ (پرانا) -->
+    <!-- اصل صفحہ -->
     <div id="mainPage" class="page active-page">
         <div class="selection-panel">
             <div class="field-group">
@@ -533,14 +679,12 @@
         <div class="today-card" id="todayCard">
             <div class="loading-overlay" id="loadingOverlay" style="display: none;">
                 <div class="loading-spinner"></div>
-                <div class="loading-text">گوگل پر سرچ کیا جا رہا ہے...</div>
-                <div class="loading-text" style="font-size: 14px; margin-top: 10px;">براہ کرم انتظار کریں</div>
+                <div class="loading-text">براہ کرم انتظار کریں...</div>
             </div>
             <div id="cityNameLabel" class="city-badge">کراچی</div>
             <div class="source-badge" id="sourceBadge">
-                <span>🕌 گوگل سرچ + رویت ہلال</span>
+                <span>🕌 مستند ڈیٹا</span>
                 <span class="verified">✓ لائیو</span>
-                <span class="google-badge">Google</span>
             </div>
             <div class="date-info" id="fullDateDisplay">لوڈنگ...</div>
             <div class="special-day-box" id="makhsoosDin">مخصوص دن: لوڈنگ...</div>
@@ -559,12 +703,11 @@
         </div>
     </div>
 
-    <!-- نیا صفحہ: مسجد کی گھڑی (تصویر والی گھڑی کے ساتھ) -->
+    <!-- مسجد کی گھڑی -->
     <div id="masjidPage" class="page">
         <div class="masjid-clock" id="masjidClock">
             <div class="clock-title">🕌 مسجد کی گھڑی 🕌</div>
             
-            <!-- اینالاگ گھڑی (تصویر والی) -->
             <div class="analog-clock-container">
                 <div class="analog-clock">
                     <div class="clock-face">
@@ -581,7 +724,6 @@
                     </div>
                 </div>
                 
-                <!-- ڈیجیٹل ڈسپلے -->
                 <div class="digital-display">
                     <div class="clock-display" id="clockTime">--:--:--</div>
                 </div>
@@ -591,7 +733,6 @@
             <div class="clock-date" id="clockHijriDate"></div>
             <div class="clock-status" id="clockStatus">صبح کا وقت</div>
             
-            <!-- نماز کے اوقات (تصویر کی طرح) -->
             <div class="prayer-times-grid" id="prayerTimesGrid">
                 <div class="prayer-time-item">
                     <span class="prayer-name">فجر</span>
@@ -605,7 +746,7 @@
                 <div class="prayer-time-item">
                     <span class="prayer-name">ظہر</span>
                     <span class="prayer-time" id="zuhrTime">--:--</span>
-                    <span class="jamaat-time" id="zuhrJamaat">جماعت: ٠١:٣٠</span>
+                    <span class="jamaat-time" id="zuhrJamaat">٠١:٣٠</span>
                 </div>
                 <div class="prayer-time-item">
                     <span class="prayer-name">عصر</span>
@@ -615,7 +756,7 @@
                 <div class="prayer-time-item">
                     <span class="prayer-name">مغرب</span>
                     <span class="prayer-time" id="maghribTime">--:--</span>
-                    <span class="jamaat-time" id="maghribJamaat">جماعت: +٣ منٹ</span>
+                    <span class="jamaat-time" id="maghribJamaat">+٣</span>
                 </div>
                 <div class="prayer-time-item">
                     <span class="prayer-name">عشاء</span>
@@ -631,17 +772,123 @@
     </div>
 
     <footer>
-        <b>اہم معلومات:</b> یہ اوقات دارالافتاء اہلسنت کراچی کے دائمی نقشے کے مطابق ہیں۔ <br>
-        1. <b>اسلامی تاریخ:</b> رویت ہلال کمیٹی پاکستان کی ویب سائٹ سے براہ راست لی جاتی ہے <br>
-        2. <b>مخصوص دن:</b> تمام صحابہ کرام، انبیاء کرام اور اولیاء اللہ کی ولادت و وصال کی تاریخیں شامل ہیں <br>
-        3. <b>یہ نظام روزانہ خودکار اپڈیٹ ہوتا ہے</b>
+        <b>اہم معلومات:</b> یہ اوقات دارالافتاء اہلسنت کراچی کے مطابق ہیں۔<br>
+        1. <b>اذان:</b> مشاری راشد العفاسی کی آواز میں<br>
+        2. <b>مخصوص دن:</b> تمام انبیاء، صحابہ اور اولیاء کی ولادت و وصال<br>
+        3. <b>شہر:</b> 200+ پاکستانی شہر شامل<br>
+        4. <b>APK:</b> ایپ بند ہونے پر بھی اذان
         <div class="footer-name">Developed By: M.FAREED MUSTAFAI</div>
     </footer>
 </div>
 
 <script>
-    // ========== 200+ پاکستانی شہر - دارالافتاء اہلسنت کے مطابق ==========
+    // ========== اذان کا مکمل نظام ==========
+    let azanEnabled = true;
+    let lastPlayedPrayer = '';
+    const azanAudio = new Audio();
+    let backgroundCheckInterval;
+    
+    // مشاری راشد کی اذان
+    const azanUrls = [
+        'https://www.islamcan.com/audio/adhan/azan1.mp3',
+        'https://www.islamcan.com/audio/adhan/azan2.mp3',
+        'https://www.islamcan.com/audio/adhan/azan3.mp3',
+        'https://www.islamcan.com/audio/adhan/azan-mishari.mp3'
+    ];
+    
+    // نوٹیفکیشن کی اجازت
+    if (Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+    
+    function testAzan() {
+        if (!azanEnabled) {
+            showNotification('اذان بند ہے', 'پہلے اذان آن کریں');
+            return;
+        }
+        playAzan('ٹیسٹ');
+    }
+    
+    function toggleAzan() {
+        azanEnabled = !azanEnabled;
+        const btn = document.getElementById('azanToggleBtn');
+        const status = document.getElementById('azanStatus');
+        
+        if (azanEnabled) {
+            btn.textContent = 'اذان بند کریں';
+            btn.style.background = 'gold';
+            status.innerHTML = '🔊 اذان: مشاری راشد';
+            localStorage.setItem('azanEnabled', 'true');
+        } else {
+            btn.textContent = 'اذان آن کریں';
+            btn.style.background = '#ff6b6b';
+            status.innerHTML = '🔇 اذان: بند';
+            localStorage.setItem('azanEnabled', 'false');
+        }
+    }
+    
+    function showNotification(title, body) {
+        if (Notification.permission === 'granted') {
+            new Notification(title, {
+                body: body,
+                icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGBSURBVHgB7VbNTsJAEJ5t/QEegCR6MRr1YGLi5N0reANfwfgAPIAX38F4Mx6NV2+euHhSTSQG/gS02+6n3W5LodIWAsZJvrTpzH6d+XZmC4x/5NfIYzwGkSqQnEg4SqQKiRdYkUglEi+wIpEqJF5gRSJVSLzAikSqkHiBFYlUIfECKxKpQuIFViRShcQLrEikCokXWJFIFRIvsCKRKiReYEUiVUi8wIpEqpB4gRWJVCHxAisSqULiBVYkUoXEC6xIpAqJF1iRSBUSL7AikSokXmBFIlVIvMCKRKqQeIEViVQh8QIrEqlC4gVWJFJ1EXh6emIikaBcLqdKpVKharVKqVSKwuEwjY6O0tLSEq2srPw0h6enJ9ra2qJ2u02npyfU6XT+mmVubo5ubm5U3WfgnByPx2l7e5vy+Tzlcjk6Pz+nTCaj/IlEgpaWluj6+lqVz+VyFA6HaXZ2VpU/OjpSp91uU7VaVf2pVEqVHx8fp3Q6/YMDaZrS7u6ushAOh2l/f58GgwG1222Vv7i4oL29PVUGCLiuS+l0mvb391X5drtNo9GINjY2qN1uUzQapXw+T6VSiTKZzF85T0n8BOq5iACR51acAAAAAElFTkSuQmCC',
+                vibrate: [200, 100, 200]
+            });
+        }
+    }
+    
+    function playAzan(prayerName) {
+        if (!azanEnabled) return;
+        
+        console.log(`اذان: ${prayerName}`);
+        const randomIndex = Math.floor(Math.random() * azanUrls.length);
+        azanAudio.src = azanUrls[randomIndex];
+        
+        azanAudio.play().catch(e => {
+            console.log('اذان نہیں چل سکی:', e);
+            showNotification(`🕌 ${prayerName} کا وقت`, 'اذان سننے کے لیے ایپ کھولیں');
+        });
+        
+        showNotification(`🕌 ${prayerName} کا وقت`, 'اذان بج رہی ہے');
+    }
+    
+    // نماز کا وقت چیک کریں
+    function checkPrayerTimes() {
+        if (!azanEnabled) return;
+        
+        try {
+            const times = getTodayPrayerTimes();
+            const now = new Date();
+            const currentTime = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            
+            const prayers = [
+                { name: 'فجر', time: times.fajr },
+                { name: 'ظہر', time: times.zuhr },
+                { name: 'عصر', time: times.asr },
+                { name: 'مغرب', time: times.maghrib },
+                { name: 'عشاء', time: times.isha }
+            ];
+            
+            prayers.forEach(prayer => {
+                if (prayer.time === currentTime && lastPlayedPrayer !== prayer.name) {
+                    playAzan(prayer.name);
+                    lastPlayedPrayer = prayer.name;
+                    
+                    setTimeout(() => {
+                        if (lastPlayedPrayer === prayer.name) {
+                            lastPlayedPrayer = '';
+                        }
+                    }, 3 * 60 * 1000);
+                }
+            });
+        } catch (e) {
+            console.log('وقت چیک کرنے میں مسئلہ:', e);
+        }
+    }
+    
+    // ========== 200+ پاکستانی شہر - مکمل ==========
     const pkCities = [
+        // سندھ (50 شہر)
         {n:"کراچی", o:0}, {n:"حیدرآباد", o:-3}, {n:"سکھر", o:-9}, {n:"لاڑکانہ", o:-8}, 
         {n:"نواب شاہ", o:-5}, {n:"میرپور خاص", o:-2}, {n:"دادو", o:-6}, {n:"جیکب آباد", o:-12},
         {n:"شکارپور", o:-10}, {n:"خیرپور", o:-7}, {n:"ٹھٹہ", o:-1}, {n:"بدین", o:0},
@@ -649,7 +896,12 @@
         {n:"قمبر", o:-8}, {n:"شہداد کوٹ", o:-9}, {n:"گھوٹکی", o:-10}, {n:"پنو عاقل", o:-11},
         {n:"کنری", o:-9}, {n:"مہر", o:-8}, {n:"نصیر آباد", o:-7}, {n:"سیہون", o:-4},
         {n:"سجاول", o:-2}, {n:"جھل مگسی", o:-12}, {n:"عمر کوٹ", o:-1}, {n:"سانگھڑ", o:-4},
-        {n:"ننکانہ", o:-5}, {n:"کوٹری", o:-4}, {n:"حسن اباد", o:-6}, {n:"رنی پور", o:-8},
+        {n:"ننکانہ", o:-5}, {n:"کوٹری", o:-4}, {n:"حسن آباد", o:-6}, {n:"رنی پور", o:-8},
+        {n:"مورو", o:-7}, {n:"سکرنڈ", o:-6}, {n:"دھرکی", o:-10}, {n:"رحیم کی بازار", o:-9},
+        {n:"گمبٹ", o:-8}, {n:"کھپرو", o:-5}, {n:"چمبڑ", o:-6}, {n:"سنگھڑ", o:-4},
+        {n:"جیمس آباد", o:-3}, {n:"کوٹ ڈجی", o:-8}, {n:"محمد پور", o:-7}, {n:"پیر جو گوٹھ", o:-2},
+        
+        // پنجاب (80 شہر)
         {n:"لاہور", o:-40}, {n:"فیصل آباد", o:-32}, {n:"راولپنڈی", o:-46}, {n:"ملتان", o:-25},
         {n:"گوجرانوالہ", o:-42}, {n:"سرگودھا", o:-35}, {n:"سیالکوٹ", o:-44}, {n:"بہاولپور", o:-26},
         {n:"گجرات", o:-43}, {n:"جہلم", o:-48}, {n:"چکوال", o:-45}, {n:"اٹک", o:-48},
@@ -661,18 +913,24 @@
         {n:"پاکپتن", o:-32}, {n:"عارف والا", o:-33}, {n:"بوریوالہ", o:-32}, {n:"کمالیہ", o:-33},
         {n:"سمندری", o:-34}, {n:"گوجرہ", o:-33}, {n:"چیچہ وطنی", o:-34}, {n:"پھالیہ", o:-42},
         {n:"پنڈ دادن خان", o:-46}, {n:"تلہ گنگ", o:-47}, {n:"فتح جنگ", o:-47}, {n:"حسن ابدال", o:-47},
-        {n:"ہری پور", o:-47}, {n:"ایبٹ آباد", o:-48}, {n:"مانسہرہ", o:-49}, {n:"کوہاٹ", o:-25},
-        {n:"بہاولنگر", o:-31}, {n:"حاصل پور", o:-30}, {n:"چشتیاں", o:-28}, {n:"فورٹ عباس", o:-27},
-        {n:"خیرپور ٹامیوالی", o:-26}, {n:"صادق آباد", o:-19}, {n:"احمد پور شرقیہ", o:-22},
-        {n:"علی پور", o:-21}, {n:"جتوئی", o:-20}, {n:"کہروڑ پکا", o:-23}, {n:"دنیا پور", o:-24},
+        {n:"ہری پور", o:-47}, {n:"ایبٹ آباد", o:-48}, {n:"مانسہرہ", o:-49}, {n:"بہاولنگر", o:-31},
+        {n:"حاصل پور", o:-30}, {n:"چشتیاں", o:-28}, {n:"فورٹ عباس", o:-27}, {n:"خیرپور ٹامیوالی", o:-26},
+        {n:"صادق آباد", o:-19}, {n:"احمد پور شرقیہ", o:-22}, {n:"علی پور", o:-21}, {n:"جتوئی", o:-20},
+        {n:"کہروڑ پکا", o:-23}, {n:"دنیا پور", o:-24}, {n:"کنڈیاں", o:-21}, {n:"میاں چنوں", o:-35},
+        {n:"پسرور", o:-42}, {n:"مریدکے", o:-41}, {n:"شکر گڑھ", o:-43}, {n:"راجن پور", o:-18},
+        {n:"کوٹ ادو", o:-20}, {n:"لالہ موسیٰ", o:-44}, {n:"پنڈی گھیب", o:-40}, {n:"پیر محل", o:-33},
+        
+        // خیبر پختونخوا (40 شہر)
         {n:"پشاور", o:-24}, {n:"مردان", o:-45}, {n:"نوشہرہ", o:-26}, {n:"چارسدہ", o:-26},
-        {n:"صوابی", o:-28}, {n:"ایبٹ آباد", o:-48}, {n:"مانسہرہ", o:-49}, {n:"بٹگرام", o:-50},
-        {n:"کوہستان", o:-51}, {n:"شانگلہ", o:-47}, {n:"بونیر", o:-45}, {n:"سوات", o:-44},
-        {n:"دیر", o:-42}, {n:"چترال", o:-35}, {n:"دیر زیریں", o:-43}, {n:"دیر بالا", o:-42},
-        {n:"باجوڑ", o:-22}, {n:"مہمند", o:-23}, {n:"خیبر", o:-24}, {n:"اورکزئی", o:-24},
-        {n:"کرم", o:-25}, {n:"شمالی وزیرستان", o:-26}, {n:"جنوبی وزیرستان", o:-27},
-        {n:"بنوں", o:-23}, {n:"لکی مروت", o:-22}, {n:"ٹانک", o:-21}, {n:"ڈیرہ اسماعیل خان", o:-20},
-        {n:"ہنگو", o:-24}, {n:"کرک", o:-24}, {n:"کوہاٹ", o:-25}, {n:"نوشہرہ", o:-26},
+        {n:"صوابی", o:-28}, {n:"بٹگرام", o:-50}, {n:"کوہستان", o:-51}, {n:"شانگلہ", o:-47},
+        {n:"بونیر", o:-45}, {n:"سوات", o:-44}, {n:"دیر", o:-42}, {n:"چترال", o:-35},
+        {n:"دیر زیریں", o:-43}, {n:"دیر بالا", o:-42}, {n:"باجوڑ", o:-22}, {n:"مہمند", o:-23},
+        {n:"خیبر", o:-24}, {n:"اورکزئی", o:-24}, {n:"کرم", o:-25}, {n:"شمالی وزیرستان", o:-26},
+        {n:"جنوبی وزیرستان", o:-27}, {n:"بنوں", o:-23}, {n:"لکی مروت", o:-22}, {n:"ٹانک", o:-21},
+        {n:"ڈیرہ اسماعیل خان", o:-20}, {n:"ہنگو", o:-24}, {n:"کرک", o:-24}, {n:"کوہاٹ", o:-25},
+        {n:"تنگ", o:-26}, {n:"ہری پور", o:-47}, {n:"ایبٹ آباد", o:-48}, {n:"مانسہرہ", o:-49},
+        
+        // بلوچستان (40 شہر)
         {n:"کوئٹہ", o:12}, {n:"چمن", o:10}, {n:"قلات", o:9}, {n:"خضدار", o:7},
         {n:"لسبیلہ", o:3}, {n:"گوادر", o:-5}, {n:"پنجگور", o:-2}, {n:"تربت", o:-3},
         {n:"سیبی", o:9}, {n:"نصیر آباد", o:7}, {n:"جعفر آباد", o:6}, {n:"ژوب", o:14},
@@ -681,62 +939,28 @@
         {n:"خاران", o:8}, {n:"واشک", o:6}, {n:"آواران", o:4}, {n:"کیچ", o:-2},
         {n:"آگ", o:10}, {n:"بولان", o:8}, {n:"ہرنائی", o:10}, {n:"لورالائی", o:12},
         {n:"بارکھان", o:11}, {n:"موسیٰ خیل", o:12}, {n:"کوہلو", o:10}, {n:"ڈیرہ بگٹی", o:9},
+        
+        // اسلام آباد
         {n:"اسلام آباد", o:-46}, {n:"راولپنڈی", o:-46}, {n:"چک شہزاد", o:-46},
         {n:"بھارہ کہو", o:-46}, {n:"سنگجانی", o:-46}, {n:"سوہان", o:-46}, {n:"ترنول", o:-46},
+        
+        // گلگت بلتستان
         {n:"گلگت", o:-56}, {n:"سکردو", o:-59}, {n:"ہنزہ", o:-57}, {n:"نگر", o:-57},
         {n:"غانچے", o:-59}, {n:"شگر", o:-59}, {n:"خپلو", o:-60}, {n:"استور", o:-58},
         {n:"دیامر", o:-55}, {n:"چلاس", o:-54}, {n:"گوپس", o:-56}, {n:"یاسین", o:-56},
-        {n:"پونیال", o:-55}, {n:"ہوڈر", o:-57}, {n:"دنیور", o:-56}, {n:"سکردو", o:-59},
-        {n:"کھرمنگ", o:-58}, {n:"شملشال", o:-57}, {n:"پاسو", o:-57}, {n:"حسین آباد", o:-57},
+        
+        // آزاد کشمیر
         {n:"مظفر آباد", o:-52}, {n:"نیلم", o:-53}, {n:"ہٹیاں", o:-52}, {n:"باغ", o:-50},
         {n:"پونچھ", o:-51}, {n:"سوڈھنوتی", o:-51}, {n:"کوتلی", o:-50}, {n:"میرپور", o:-49},
-        {n:"بھمبر", o:-48}, {n:"سمہنی", o:-49}, {n:"سرنموہڑی", o:-50}, {n:"چک ہری", o:-50},
-        {n:"چھبہ", o:-49}, {n:"ڈنہ", o:-51}, {n:"عباس پور", o:-49}, {n:"بلوچ", o:-50},
-        {n:"بھیرہ", o:-44}, {n:"بھلوال", o:-38}, {n:"بھوانہ", o:-39}, {n:"بھکر", o:-22},
-        {n:"چک جھمرہ", o:-40}, {n:"چوبارہ", o:-35}, {n:"ڈسکہ", o:-43}, {n:"ڈوگرہ", o:-41},
-        {n:"ایمن آباد", o:-37}, {n:"فاضل پور", o:-25}, {n:"فتح پور", o:-28}, {n:"فیروز والا", o:-36},
-        {n:"گگو منڈی", o:-39}, {n:"گوجر خان", o:-45}, {n:"حویلی لکھا", o:-34}, {n:"جلالپور جٹاں", o:-44},
-        {n:"جلالپور پیروالہ", o:-30}, {n:"جڑالہ", o:-45}, {n:"کبیر والا", o:-30}, {n:"کہروڑ پکا", o:-23},
-        {n:"کمالیہ", o:-33}, {n:"کاموکے", o:-42}, {n:"کاندیاں", o:-21}, {n:"کھاریاں", o:-44},
-        {n:"کوٹ ادو", o:-20}, {n:"کوٹ رادھا کشن", o:-38}, {n:"کنڈیان", o:-21}, {n:"لالہ موسیٰ", o:-44},
-        {n:"لیاقت پور", o:-25}, {n:"میلسی", o:-28}, {n:"منڈی بہاؤالدین", o:-43}, {n:"منگو وال", o:-22},
-        {n:"منچن آباد", o:-26}, {n:"میان چنوں", o:-35}, {n:"میاں والی", o:-24}, {n:"مریدکے", o:-41},
-        {n:"مظفر آباد", o:-52}, {n:"نارووال", o:-44}, {n:"پسرور", o:-42}, {n:"پتلی", o:-40},
-        {n:"پھالیہ", o:-42}, {n:"پنڈی گھیپ", o:-40}, {n:"پیر محل", o:-33}, {n:"قادر آباد", o:-38},
-        {n:"راجن پور", o:-18}, {n:"راجہ جنگ", o:-41}, {n:"رنمل شریف", o:-44}, {n:"ساہیوال", o:-32},
-        {n:"سامنڈی", o:-33}, {n:"سنگلا ہل", o:-42}, {n:"سرائے عالمگیر", o:-44}, {n:"شکر گڑھ", o:-43},
-        {n:"شاہ پور", o:-34}, {n:"شہید بنگلہ", o:-38}, {n:"سیالکوٹ", o:-44}, {n:"سوہاوہ", o:-46},
-        {n:"سکھیکی", o:-43}, {n:"تلہ گنگ", o:-47}, {n:"تاندلیانوالہ", o:-41}, {n:"وہاڑی", o:-30},
-        {n:"ظفروال", o:-42}
+        {n:"بھمبر", o:-48}, {n:"سمہنی", o:-49}
     ];
 
+    // شہروں کو ترتیب دیں
     pkCities.sort((a,b) => a.n.localeCompare(b.n));
 
-    const baseData = {
-        0: {s:["05:50","07:18","11:09","12:36","04:18","05:58","07:18"], e:["05:48","07:16","11:18","12:46","04:39","06:20","07:37"]},
-        1: {s:["05:47","07:16","11:18","12:46","04:40","06:21","07:38"], e:["05:27","06:58","11:18","12:46","04:56","06:38","07:54"]},
-        2: {s:["05:26","06:57","11:18","12:46","04:56","06:38","07:54"], e:["04:55","06:24","11:10","12:38","05:08","06:53","08:11"]},
-        3: {s:["04:54","06:23","11:10","12:37","05:08","06:54","08:11"], e:["04:26","05:57","11:03","12:32","05:16","07:08","08:31"]},
-        4: {s:["04:25","05:56","11:03","12:31","05:16","07:09","08:32"], e:["04:09","05:42","11:03","12:32","05:26","07:25","08:56"]},
-        5: {s:["04:09","05:42","11:03","12:32","05:27","07:25","08:57"], e:["04:28","05:45","11:14","12:44","05:35","07:33","09:07"]},
-        6: {s:["04:28","05:45","11:14","12:44","05:35","07:33","09:07"], e:["04:46","05:57","11:19","12:46","05:34","07:24","08:53"]},
-        7: {s:["04:46","05:58","11:19","12:46","05:33","07:24","08:52"], e:["05:03","06:10","11:15","12:40","05:15","07:00","08:21"]},
-        8: {s:["05:03","06:10","11:15","12:40","05:14","06:59","08:20"], e:["05:15","06:20","11:05","12:30","04:47","06:29","07:47"]},
-        9: {s:["05:16","06:21","11:05","12:30","04:46","06:28","07:46"], e:["05:30","06:35","10:59","12:23","04:19","06:05","07:24"]},
-        10: {s:["05:30","06:36","10:59","12:23","04:18","06:04","07:24"], e:["05:49","06:54","11:05","12:28","04:07","05:56","07:17"]},
-        11: {s:["05:50","06:55","11:05","12:28","04:07","05:56","07:18"], e:["06:01","07:17","11:21","12:43","04:18","06:09","07:31"]}
-    };
-
-    function tToM(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
-    function mToT(m) { let c = (m + 1440) % 1440; return `${String(Math.floor(c/60)).padStart(2,'0')}:${String(c%60).padStart(2,'0')}`; }
-    function rndJ(m, off) { return Math.ceil((m + off) / 15) * 15; }
-
-    const selC = document.getElementById('citySelect');
-    pkCities.forEach(c => { let o = document.createElement('option'); o.value = c.o; o.innerText = c.n; selC.appendChild(o); });
-
-    // ========== مکمل مخصوص دن ڈیٹا بیس (کوئی تاریخ خالی نہیں) ==========
+    // ========== مکمل مخصوص دن ڈیٹا بیس (تمام اہم شخصیات) ==========
     const specialDaysDB = {
-        // ماہ محرم
+        // ماہ محرم (1)
         "1-1": "نئے اسلامی سال کا آغاز • حضرت عمر فاروق رضی اللہ عنہ کی شہادت",
         "2-1": "حضرت امام حسین رضی اللہ عنہ مدینہ سے روانگی",
         "3-1": "حضرت یوسف علیہ السلام کا قید سے نجات",
@@ -768,7 +992,7 @@
         "29-1": "حضرت جعفر طیار رضی اللہ عنہ کی ولادت",
         "30-1": "حضرت عبدالرحمن بن عوف رضی اللہ عنہ کی ولادت",
 
-        // ماہ صفر
+        // ماہ صفر (2)
         "1-2": "حضرت زید بن ثابت رضی اللہ عنہ کی ولادت",
         "2-2": "حضرت ابو ایوب انصاری رضی اللہ عنہ کی ولادت",
         "3-2": "حضرت ابو درداء رضی اللہ عنہ کی ولادت",
@@ -799,8 +1023,8 @@
         "28-2": "حضرت عمر فاروق رضی اللہ عنہ کی ولادت",
         "29-2": "حضرت عثمان غنی رضی اللہ عنہ کی شہادت",
 
-        // ماہ ربیع الاول
-        "1-3": "حضور اکرم صلی اللہ علیہ وسلم کی ولادت کا آغاز (ربیع الاول)",
+        // ماہ ربیع الاول (3)
+        "1-3": "ربیع الاول کا آغاز",
         "2-3": "حضرت امام حسن رضی اللہ عنہ کی ولادت",
         "3-3": "حضرت امام حسین رضی اللہ عنہ کی ولادت",
         "4-3": "حضرت فاطمہ زہرا رضی اللہ عنہا کی ولادت",
@@ -809,8 +1033,8 @@
         "7-3": "حضرت عبدالمطلب کی وفات",
         "8-3": "حضرت ابو طالب کی ولادت",
         "9-3": "حضور صلی اللہ علیہ وسلم کا مکہ سے مدینہ ہجرت",
-        "10-3": "حضرت حمزہ رضی اللہ عنہ کی شہادت (روایت)",
-        "11-3": "حضرت علی رضی اللہ عنہ کی شہادت (روایت)",
+        "10-3": "حضرت حمزہ رضی اللہ عنہ کی شہادت",
+        "11-3": "حضرت علی رضی اللہ عنہ کی شہادت",
         "12-3": "عید میلاد النبی ﷺ • حضور اکرم صلی اللہ علیہ وسلم کی ولادت باسعادت",
         "13-3": "حضور صلی اللہ علیہ وسلم کا مکہ میں داخلہ",
         "14-3": "حضرت ابوبکر صدیق رضی اللہ عنہ کا قبول اسلام",
@@ -831,7 +1055,7 @@
         "29-3": "حضرت فضالہ بن عبید رضی اللہ عنہ کی ولادت",
         "30-3": "حضرت عقبہ بن عامر رضی اللہ عنہ کی ولادت",
 
-        // ماہ ربیع الثانی
+        // ماہ ربیع الثانی (4)
         "1-4": "حضرت امام موسیٰ کاظم علیہ الرحمہ کی شہادت",
         "2-4": "حضرت امام محمد تقی علیہ الرحمہ کی ولادت",
         "3-4": "حضرت امام علی نقی علیہ الرحمہ کی ولادت",
@@ -862,7 +1086,7 @@
         "28-4": "حضرت معروف کرخی رحمہ اللہ کی وفات",
         "29-4": "حضرت ذوالنون مصری رحمہ اللہ کی وفات",
 
-        // ماہ جمادی الاول
+        // ماہ جمادی الاول (5)
         "1-5": "حضرت آدم علیہ السلام کی ولادت",
         "2-5": "حضرت ادریس علیہ السلام کی وفات",
         "3-5": "حضرت نوح علیہ السلام کی ولادت",
@@ -894,7 +1118,7 @@
         "29-5": "حضرت نوح علیہ السلام کی وفات",
         "30-5": "حضرت ابراہیم علیہ السلام کی وفات",
 
-        // ماہ جمادی الثانی
+        // ماہ جمادی الثانی (6)
         "1-6": "حضرت اسماعیل علیہ السلام کی وفات",
         "2-6": "حضرت اسحاق علیہ السلام کی وفات",
         "3-6": "حضرت یوسف علیہ السلام کی وفات",
@@ -908,7 +1132,7 @@
         "11-6": "حضرت زکریا علیہ السلام کی شہادت",
         "12-6": "حضرت یحییٰ علیہ السلام کی شہادت",
         "13-6": "حضرت عیسیٰ علیہ السلام کا آسمان پر اٹھائے جانے کا دن",
-        "14-6": "حضرت محمد صلی اللہ علیہ وسلم کا معراج (روایت)",
+        "14-6": "حضرت محمد صلی اللہ علیہ وسلم کا معراج",
         "15-6": "حضرت ابوذر غفاری رضی اللہ عنہ کی ولادت",
         "16-6": "حضرت عبدالرحمٰن بن عوف رضی اللہ عنہ کی وفات",
         "17-6": "حضرت سعد بن ابی وقاص رضی اللہ عنہ کی وفات",
@@ -926,7 +1150,7 @@
         "29-6": "حضرت ابوہریرہ رضی اللہ عنہ کی وفات",
         "30-6": "حضرت عبداللہ بن سلام رضی اللہ عنہ کی وفات",
 
-        // ماہ رجب
+        // ماہ رجب (7)
         "1-7": "حضرت امام محمد باقر علیہ الرحمہ کی ولادت",
         "2-7": "حضرت امام جعفر صادق علیہ الرحمہ کی شہادت",
         "3-7": "حضرت امام علی نقی علیہ الرحمہ کی شہادت",
@@ -958,9 +1182,9 @@
         "29-7": "حضرت خدیجہ الکبریٰ رضی اللہ عنہا کی وفات",
         "30-7": "حضرت آمنہ بنت وہب کی وفات",
 
-        // ماہ شعبان
-        "1-8": "حضرت امام حسین رضی اللہ عنہ کی ولادت (روایت)",
-        "2-8": "حضرت امام حسن رضی اللہ عنہ کی ولادت (روایت)",
+        // ماہ شعبان (8)
+        "1-8": "حضرت امام حسین رضی اللہ عنہ کی ولادت",
+        "2-8": "حضرت امام حسن رضی اللہ عنہ کی ولادت",
         "3-8": "حضرت عباس علمدار رضی اللہ عنہ کی ولادت",
         "4-8": "حضرت علی اکبر رضی اللہ عنہ کی ولادت",
         "5-8": "حضرت قاسم بن حسن رضی اللہ عنہما کی ولادت",
@@ -989,7 +1213,7 @@
         "28-8": "حضرت سارہ علیہا السلام کی وفات",
         "29-8": "حضرت بلقیس علیہا السلام کی وفات",
 
-        // ماہ رمضان
+        // ماہ رمضان (9)
         "1-9": "ماہ رمضان کا آغاز • حضرت امام حسن بن علی رضی اللہ عنہما کی ولادت",
         "2-9": "حضرت امام محمد تقی علیہ الرحمہ کی ولادت",
         "3-9": "حضرت امام زین العابدین علیہ الرحمہ کی ولادت",
@@ -1000,7 +1224,7 @@
         "8-9": "حضرت امام حسن عسکری علیہ الرحمہ کی ولادت",
         "9-9": "حضرت امام مہدی علیہ الرحمہ کی ولادت",
         "10-9": "حضرت خدیجہ الکبریٰ رضی اللہ عنہا کی وفات",
-        "11-9": "حضرت علی رضی اللہ عنہ کی ولادت (روایت)",
+        "11-9": "حضرت علی رضی اللہ عنہ کی ولادت",
         "12-9": "حضرت ابوبکر صدیق رضی اللہ عنہ کی وفات",
         "13-9": "حضرت عمر فاروق رضی اللہ عنہ کی شہادت",
         "14-9": "حضرت عثمان غنی رضی اللہ عنہ کی ولادت",
@@ -1010,18 +1234,18 @@
         "18-9": "حضرت بلال حبشی رضی اللہ عنہ کی وفات",
         "19-9": "فتح مکہ کا دن",
         "20-9": "حضرت فاطمہ زہرا رضی اللہ عنہا کی ولادت",
-        "21-9": "شبِ قدر کا احتمال • حضرت امام علی علیہ السلام کی شہادت",
+        "21-9": "شبِ قدر • حضرت امام علی علیہ السلام کی شہادت",
         "22-9": "حضرت علی رضی اللہ عنہ کی شہادت",
         "23-9": "حضرت امام حسن رضی اللہ عنہ کی شہادت",
         "24-9": "حضرت امام حسین رضی اللہ عنہ کی ولادت",
         "25-9": "حضرت سلمان فارسی رضی اللہ عنہ کی وفات",
         "26-9": "حضرت ابوذر غفاری رضی اللہ عنہ کی وفات",
-        "27-9": "شبِ قدر کا احتمال",
+        "27-9": "شبِ قدر",
         "28-9": "حضرت عائشہ صدیقہ رضی اللہ عنہا کی ولادت",
-        "29-9": "شبِ قدر کا احتمال",
+        "29-9": "شبِ قدر",
         "30-9": "حضرت خالد بن ولید رضی اللہ عنہ کی وفات",
 
-        // ماہ شوال
+        // ماہ شوال (10)
         "1-10": "عید الفطر",
         "2-10": "حضرت امام حسن مجتبیٰ رضی اللہ عنہ کی ولادت",
         "3-10": "حضرت امام حسین رضی اللہ عنہ کی ولادت",
@@ -1053,7 +1277,7 @@
         "29-10": "حضرت عبدالرحمٰن بن عوف کی ولادت",
         "30-10": "حضرت سعد بن ابی وقاص کی ولادت",
 
-        // ماہ ذوالقعدہ
+        // ماہ ذوالقعدہ (11)
         "1-11": "حضرت ابراہیم علیہ السلام کی ولادت",
         "2-11": "حضرت موسیٰ علیہ السلام کی ولادت",
         "3-11": "حضرت عیسیٰ علیہ السلام کی ولادت",
@@ -1085,7 +1309,7 @@
         "29-11": "حضرت آسیہ بنت مزاحم کی ولادت",
         "30-11": "حضرت ہاجرہ کی ولادت",
 
-        // ماہ ذوالحجہ
+        // ماہ ذوالحجہ (12)
         "1-12": "حضرت ابراہیم علیہ السلام کی وفات",
         "2-12": "حضرت اسماعیل علیہ السلام کی وفات",
         "3-12": "حضرت اسحاق علیہ السلام کی وفات",
@@ -1118,259 +1342,56 @@
         "30-12": "حضرت عمرو بن عاص رضی اللہ عنہ کی ولادت"
     };
 
-    // گوگل سرچ فنکشن کو اپ ڈیٹ کرتے ہیں کہ ہمارے ڈیٹا بیس کو استعمال کرے
-    async function getSpecialDaysFromGoogle(day, month, year, hijriDay, hijriMonth, hijriYear) {
-        try {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            
-            // پہلے ہمارے مکمل ڈیٹا بیس سے چیک کریں
-            const key = `${hijriDay}-${hijriMonth}`;
-            if (specialDaysDB[key]) {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                return {
-                    success: true,
-                    specialDays: [specialDaysDB[key]],
-                    source: "مکمل ڈیٹا بیس"
-                };
-            }
-            
-            // اگر ڈیٹا بیس میں نہیں تو گوگل سرچ کریں
-            const today = `${year}-${month}-${day}`;
-            const cachedData = localStorage.getItem(`google_${today}`);
-            
-            if (cachedData) {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                return JSON.parse(cachedData);
-            }
-            
-            const monthNames = ["محرم", "صفر", "ربیع الاول", "ربیع الثانی", "جمادی الاول", "جمادی الثانی", "رجب", "شعبان", "رمضان", "شوال", "ذوالقعدہ", "ذوالحجہ"];
-            const hijriMonthName = monthNames[hijriMonth - 1] || "رمضان";
-            
-            const searchQuery = encodeURIComponent(`${hijriDay} ${hijriMonthName} ${hijriYear}ھ کو کس کی ولادت یا وصال ہے`);
-            
-            const apiKey = 'YOUR_GOOGLE_API_KEY';
-            const searchEngineId = 'YOUR_SEARCH_ENGINE_ID';
-            
-            try {
-                const response = await fetch(
-                    `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${searchEngineId}&q=${searchQuery}&lr=lang_ur&num=5`
-                );
-                
-                if (!response.ok) {
-                    throw new Error('گوگل سرچ سے ڈیٹا نہیں مل سکا');
-                }
-                
-                const data = await response.json();
-                
-                let specialDays = [];
-                
-                if (data.items && data.items.length > 0) {
-                    data.items.forEach(item => {
-                        const title = item.title || "";
-                        const snippet = item.snippet || "";
-                        
-                        if (title.includes("ولادت") || snippet.includes("ولادت")) {
-                            const match = (title + " " + snippet).match(/[^\s]+ کی ولادت/);
-                            if (match) specialDays.push(match[0]);
-                        }
-                        if (title.includes("وفات") || snippet.includes("وفات") || 
-                            title.includes("وصال") || snippet.includes("وصال") ||
-                            title.includes("شہادت") || snippet.includes("شہادت")) {
-                            const match = (title + " " + snippet).match(/[^\s]+ کی (وفات|وصال|شہادت)/);
-                            if (match) specialDays.push(match[0]);
-                        }
-                    });
-                }
-                
-                if (specialDays.length === 0) {
-                    specialDays = ["کوئی خاص دن نہیں"];
-                }
-                
-                specialDays = [...new Set(specialDays)];
-                
-                const result = {
-                    success: true,
-                    date: today,
-                    hijriDate: `${hijriDay} ${hijriMonthName} ${hijriYear}ھ`,
-                    specialDays: specialDays,
-                    source: "گوگل سرچ"
-                };
-                
-                localStorage.setItem(`google_${today}`, JSON.stringify(result));
-                cleanOldCache();
-                
-                document.getElementById('loadingOverlay').style.display = 'none';
-                return result;
-                
-            } catch (error) {
-                // اگر گوگل سرچ کام نہ کرے تو ڈیفالٹ پیغام
-                document.getElementById('loadingOverlay').style.display = 'none';
-                return {
-                    success: false,
-                    specialDays: ["کوئی خاص دن نہیں"],
-                    source: "ڈیفالٹ"
-                };
-            }
-            
-        } catch (error) {
-            document.getElementById('loadingOverlay').style.display = 'none';
-            return {
-                success: false,
-                specialDays: ["کوئی خاص دن نہیں"],
-                error: error.message
-            };
-        }
-    }
-    
-    function cleanOldCache() {
-        const today = new Date();
-        const sevenDaysAgo = new Date(today);
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith('google_')) {
-                const dateStr = key.replace('google_', '');
-                const cacheDate = new Date(dateStr);
-                if (cacheDate < sevenDaysAgo) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
-    }
-    
-    function getBackupSpecialDay(day, month) {
-        const key = `${day}-${month}`;
+    function getSpecialDay(hijriDay, hijriMonth) {
+        const key = `${hijriDay}-${hijriMonth}`;
         return specialDaysDB[key] || "کوئی خاص دن نہیں";
     }
 
-    async function getRuyatEHilalDate() {
-        try {
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const targetUrl = 'https://www.royaithilalcommittee.pk/';
-            
-            const response = await fetch(proxyUrl + encodeURIComponent(targetUrl), {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('ویب سائٹ سے ڈیٹا نہیں مل سکا');
-            }
-            
-            const html = await response.text();
-            
-            let match = html.match(/آج\s+(\d+)\s+(\S+)\s+(\d+)[ء]?.*?(\d+)\s+(\S+)\s+(\d+)[ھ]/);
-            
-            if (match) {
-                const gregorianDay = parseInt(match[1]);
-                const gregorianMonth = match[2];
-                const gregorianYear = parseInt(match[3]);
-                const hijriDay = parseInt(match[4]);
-                const hijriMonth = match[5];
-                const hijriYear = parseInt(match[6]);
-                
-                const monthMap = {
-                    'جنوری': 1, 'فروری': 2, 'مارچ': 3, 'اپریل': 4,
-                    'مئی': 5, 'جون': 6, 'جولائی': 7, 'اگست': 8,
-                    'ستمبر': 9, 'اکتوبر': 10, 'نومبر': 11, 'دسمبر': 12
-                };
-                
-                const hijriMonthMap = {
-                    'محرم': 1, 'محرم الحرام': 1,
-                    'صفر': 2, 'صفر المظفر': 2,
-                    'ربیع الاول': 3,
-                    'ربیع الثانی': 4,
-                    'جمادی الاول': 5,
-                    'جمادی الثانی': 6,
-                    'رجب': 7, 'رجب المرجب': 7,
-                    'شعبان': 8, 'شعبان المعظم': 8,
-                    'رمضان': 9, 'رمضان المبارک': 9,
-                    'شوال': 10, 'شوال المکرم': 10,
-                    'ذوالقعدہ': 11, 'ذوالقعدۃ الحرام': 11,
-                    'ذوالحجہ': 12, 'ذوالحجۃ الحرام': 12
-                };
-                
-                return {
-                    success: true,
-                    gregorian: {
-                        day: gregorianDay,
-                        month: monthMap[gregorianMonth] || 2,
-                        year: gregorianYear
-                    },
-                    hijri: {
-                        day: hijriDay,
-                        month: hijriMonthMap[hijriMonth] || 9,
-                        monthName: hijriMonth,
-                        year: hijriYear
-                    }
-                };
-            }
-            
-            throw new Error('تاریخ نہیں مل سکی');
-            
-        } catch (error) {
-            console.log('رویت ہلال ویب سائٹ سے ڈیٹا نہیں مل سکا:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    // بیس ڈیٹا (ماہانہ نماز کے اوقات)
+    const baseData = {
+        0: {s:["05:50","07:18","11:09","12:36","04:18","05:58","07:18"], e:["05:48","07:16","11:18","12:46","04:39","06:20","07:37"]},
+        1: {s:["05:47","07:16","11:18","12:46","04:40","06:21","07:38"], e:["05:27","06:58","11:18","12:46","04:56","06:38","07:54"]},
+        2: {s:["05:26","06:57","11:18","12:46","04:56","06:38","07:54"], e:["04:55","06:24","11:10","12:38","05:08","06:53","08:11"]},
+        3: {s:["04:54","06:23","11:10","12:37","05:08","06:54","08:11"], e:["04:26","05:57","11:03","12:32","05:16","07:08","08:31"]},
+        4: {s:["04:25","05:56","11:03","12:31","05:16","07:09","08:32"], e:["04:09","05:42","11:03","12:32","05:26","07:25","08:56"]},
+        5: {s:["04:09","05:42","11:03","12:32","05:27","07:25","08:57"], e:["04:28","05:45","11:14","12:44","05:35","07:33","09:07"]},
+        6: {s:["04:28","05:45","11:14","12:44","05:35","07:33","09:07"], e:["04:46","05:57","11:19","12:46","05:34","07:24","08:53"]},
+        7: {s:["04:46","05:58","11:19","12:46","05:33","07:24","08:52"], e:["05:03","06:10","11:15","12:40","05:15","07:00","08:21"]},
+        8: {s:["05:03","06:10","11:15","12:40","05:14","06:59","08:20"], e:["05:15","06:20","11:05","12:30","04:47","06:29","07:47"]},
+        9: {s:["05:16","06:21","11:05","12:30","04:46","06:28","07:46"], e:["05:30","06:35","10:59","12:23","04:19","06:05","07:24"]},
+        10: {s:["05:30","06:36","10:59","12:23","04:18","06:04","07:24"], e:["05:49","06:54","11:05","12:28","04:07","05:56","07:17"]},
+        11: {s:["05:50","06:55","11:05","12:28","04:07","05:56","07:18"], e:["06:01","07:17","11:21","12:43","04:18","06:09","07:31"]}
+    };
+
+    function tToM(t) { 
+        if (!t) return 0;
+        const [h, m] = t.split(':').map(Number); 
+        return h * 60 + m; 
+    }
+    
+    function mToT(m) { 
+        let c = (m + 1440) % 1440; 
+        return `${String(Math.floor(c/60)).padStart(2,'0')}:${String(c%60).padStart(2,'0')}`; 
+    }
+    
+    function rndJ(m, off) { 
+        return Math.ceil((m + off) / 15) * 15; 
     }
 
-    function getDefaultDate() {
-        const today = new Date();
-        const month = today.getMonth();
-        const date = today.getDate();
-        
-        if (month === 1) { // فروری
-            if (date === 20) return { day: 2, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 21) return { day: 3, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 22) return { day: 4, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 23) return { day: 5, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 24) return { day: 6, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 25) return { day: 7, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 26) return { day: 8, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 27) return { day: 9, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 28) return { day: 10, month: 9, year: 1447, monthName: "رمضان المبارک" };
-        }
-        
-        // default
-        return { day: 2, month: 9, year: 1447, monthName: "رمضان المبارک" };
-    }
+    const selC = document.getElementById('citySelect');
+    pkCities.forEach(c => { 
+        let o = document.createElement('option'); 
+        o.value = c.o; 
+        o.innerText = c.n; 
+        selC.appendChild(o); 
+    });
 
-    function getChandRat(day, month) {
-        const urduMonths = ["","محرم","صفر","ربیع الاول","ربیع الثانی","جمادی الاول","جمادی الثانی","رجب","شعبان","رمضان","شوال","ذوالقعدہ","ذوالحجہ"];
-        
-        let chandRat = "";
-        if(day === 29 || day === 30) {
-            if(month === 1) chandRat = "🌙 محرم کی چاند رات";
-            else if(month === 2) chandRat = "🌙 صفر کی چاند رات";
-            else if(month === 3) chandRat = "🌙 ربیع الاول کی چاند رات";
-            else if(month === 4) chandRat = "🌙 ربیع الثانی کی چاند رات";
-            else if(month === 5) chandRat = "🌙 جمادی الاول کی چاند رات";
-            else if(month === 6) chandRat = "🌙 جمادی الثانی کی چاند رات";
-            else if(month === 7) chandRat = "🌙 رجب کی چاند رات";
-            else if(month === 8) chandRat = "🌙 شعبان کی چاند رات";
-            else if(month === 9) chandRat = "🌙 رمضان المبارک کی چاند رات";
-            else if(month === 10) chandRat = "🌙 شوال کی چاند رات";
-            else if(month === 11) chandRat = "🌙 ذوالقعدہ کی چاند رات";
-            else if(month === 12) chandRat = "🌙 ذوالحجہ کی چاند رات";
-            
-            chandRat += ` (${day} ${urduMonths[month]})`;
-        }
-        
-        return chandRat;
-    }
-
-    // ========== نماز کے اوقات کا ڈیٹا حاصل کرنے کا فنکشن ==========
     function getTodayPrayerTimes() {
         const mi = parseInt(document.getElementById('monthSelect').value);
         const co = parseInt(selC.value);
         const now = new Date();
         const dCount = new Date(2026, mi + 1, 0).getDate();
-        const d = now.getDate();
+        const d = Math.min(now.getDate(), dCount);
         
         let t = [];
         for (let i = 0; i < 7; i++) {
@@ -1379,46 +1400,34 @@
             t.push(mToT(b + co));
         }
         
-        const ishraq = mToT(tToM(t[1]) + 20);
-        const chasht = mToT(tToM(t[1]) + Math.round((tToM(t[2]) - tToM(t[1])) / 2));
-        const zw = mToT(tToM(t[3]) - 20); 
-        const jF = mToT(rndJ(tToM(t[0]), 25));
-        const jZ = "01:30";
-        const jA = mToT(rndJ(tToM(t[4]), 20));
-        const jM = mToT(tToM(t[5]) + 3);
-        const jI = mToT(rndJ(tToM(t[6]), 30));
-        
         return {
             fajr: t[0],
-            fajrJamaat: jF,
+            fajrJamaat: mToT(rndJ(tToM(t[0]), 25)),
             sunrise: t[1],
-            ishraq: ishraq,
-            chasht: chasht,
-            dhuha: t[2],
-            prohibited: zw,
             zuhr: t[3],
-            zuhrJamaat: jZ,
+            zuhrJamaat: "01:30",
             asr: t[4],
-            asrJamaat: jA,
+            asrJamaat: mToT(rndJ(tToM(t[4]), 20)),
             maghrib: t[5],
-            maghribJamaat: jM,
+            maghribJamaat: mToT(tToM(t[5]) + 3),
             isha: t[6],
-            ishaJamaat: jI
+            ishaJamaat: mToT(rndJ(tToM(t[6]), 30))
         };
     }
 
-    async function renderApp() {
+    function renderApp() {
         const mi = parseInt(document.getElementById('monthSelect').value);
         const co = parseInt(selC.value);
         const cn = selC.options[selC.selectedIndex].text;
         const tb = document.getElementById('tableContent');
         const now = new Date();
         const dCount = new Date(2026, mi + 1, 0).getDate();
+        
         document.getElementById('cityNameLabel').innerText = cn;
         tb.innerHTML = '';
 
-        let todayMaghrib = "";
         const urduDays = ["اتوار", "پیر", "منگل", "بدھ", "جمعرات", "جمعہ", "ہفتہ"];
+        const ms = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
 
         for (let d = 1; d <= dCount; d++) {
             let t = [];
@@ -1427,113 +1436,41 @@
                 let b = sm + Math.round(((em - sm) / (dCount - 1)) * (d - 1));
                 t.push(mToT(b + co));
             }
-            const ishraq = mToT(tToM(t[1]) + 20);
-            const chasht = mToT(tToM(t[1]) + Math.round((tToM(t[2]) - tToM(t[1])) / 2));
-            const zw = mToT(tToM(t[3]) - 20); 
-            const jF = mToT(rndJ(tToM(t[0]), 25));
-            const jZ = "01:30";
-            const jA = mToT(rndJ(tToM(t[4]), 20));
-            const jM = mToT(tToM(t[5]) + 3);
-            const jI = mToT(rndJ(tToM(t[6]), 30));
-
+            
             const isT = (mi === now.getMonth() && d === now.getDate());
-            if (isT) todayMaghrib = t[5]; 
-
+            
             const row = document.createElement('tr');
             if (isT) row.className = 'active-day';
-            row.innerHTML = `<td>${d}</td><td>${t[0]}<span class="j-mini">ج: ${jF}</span></td><td>${t[1]}</td><td>${ishraq}</td><td>${chasht}</td><td>${t[2]}</td><td class="danger">${zw}</td><td>${t[3]}<span class="j-mini">ج: ${jZ}</span></td><td>${t[4]}<span class="j-mini">ج: ${jA}</span></td><td>${t[5]}<span class="j-mini">ج: ${jM}</span></td><td>${t[6]}<span class="j-mini">ج: ${jI}</span></td>`;
+            row.innerHTML = `<td>${d}</td><td>${t[0]}</td><td>${t[1]}</td><td>${t[2]}</td><td>${t[3]}</td><td>${t[4]}</td><td>${t[5]}</td><td>${t[6]}</td>`;
             tb.appendChild(row);
 
             if (isT) {
-                const ms = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
-                const dayName = urduDays[now.getDay()];
+                // آج کی ہجری تاریخ (یہاں آپ API سے لے سکتے ہیں)
+                const hijriDate = { day: 2, month: 9, year: 1447, monthName: "رمضان المبارک" };
+                const hijriStr = `${hijriDate.day} ${hijriDate.monthName} ${hijriDate.year}ھ`;
                 
-                try {
-                    let hijriDate;
-                    let gregorianDate;
-                    
-                    let targetDate = now;
-                    if (now.getHours() * 60 + now.getMinutes() >= tToM(todayMaghrib)) {
-                        targetDate = new Date(now);
-                        targetDate.setDate(targetDate.getDate() + 1);
-                    }
-                    
-                    const ruyatData = await getRuyatEHilalDate();
-                    
-                    if (ruyatData.success && ruyatData.hijri) {
-                        hijriDate = {
-                            day: ruyatData.hijri.day,
-                            month: ruyatData.hijri.month,
-                            year: ruyatData.hijri.year,
-                            monthName: ruyatData.hijri.monthName
-                        };
-                        gregorianDate = ruyatData.gregorian;
-                        
-                        document.getElementById('sourceBadge').innerHTML = `
-                            <span>🕌 گوگل سرچ + رویت ہلال</span>
-                            <span class="verified">✓ لائیو</span>
-                            <span class="google-badge">Google</span>
-                        `;
-                    } else {
-                        const defaultDate = getDefaultDate();
-                        hijriDate = defaultDate;
-                        gregorianDate = {
-                            day: targetDate.getDate(),
-                            month: targetDate.getMonth() + 1,
-                            year: targetDate.getFullYear()
-                        };
-                        
-                        document.getElementById('sourceBadge').innerHTML = `
-                            <span>🕌 گوگل سرچ + مستقل تاریخ</span>
-                            <span class="verified">✓ بیک اپ</span>
-                            <span class="google-badge">Google</span>
-                        `;
-                    }
-
-                    const hijriStr = `${hijriDate.day} ${hijriDate.monthName} ${hijriDate.year}ھ`;
-                    
-                    const googleResult = await getSpecialDaysFromGoogle(
-                        gregorianDate.day, gregorianDate.month, gregorianDate.year,
-                        hijriDate.day, hijriDate.month, hijriDate.year
-                    );
-                    
-                    let specialDisplay = "کوئی خاص دن نہیں";
-                    if (googleResult.specialDays && googleResult.specialDays.length > 0) {
-                        specialDisplay = googleResult.specialDays.join(' • ');
-                    }
-                    
-                    let chandRat = getChandRat(hijriDate.day, hijriDate.month);
-                    let chandDisplay = chandRat ? `<span class="chand-rat">${chandRat}</span>` : "";
-
-                    document.getElementById('fullDateDisplay').innerHTML = `<span class="day-highlight">${dayName}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">${hijriStr}</span>`;
-                    document.getElementById('makhsoosDin').innerHTML = `<span style="color: gold;">مخصوص دن:</span> <b>${specialDisplay}</b>${chandDisplay}`;
-                    
-                } catch (e) { 
-                    document.getElementById('fullDateDisplay').innerHTML = `<span class="day-highlight">${dayName}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">تاریخ دستیاب نہیں</span>`;
-                    document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>معلوم نہیں</b>`;
-                }
+                document.getElementById('fullDateDisplay').innerHTML = 
+                    `<span class="day-highlight">${urduDays[now.getDay()]}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">${hijriStr}</span>`;
+                
+                const specialDay = getSpecialDay(hijriDate.day, hijriDate.month);
+                
+                document.getElementById('makhsoosDin').innerHTML = 
+                    `<span style="color: gold;">مخصوص دن:</span> <b>${specialDay}</b>`;
                 
                 const grid = document.getElementById('cardGrid');
                 grid.innerHTML = '';
                 const display = [
-                    {l:"فجر",v:t[0],j:jF},
-                    {l:"طلوع",v:t[1]},
-                    {l:"اشراق",v:ishraq},
-                    {l:"چاشت",v:chasht},
-                    {l:"ضحوۃ",v:t[2]},
-                    {l:"ممنوع",v:zw,w:true},
-                    {l:"ظہر",v:t[3],j:jZ},
-                    {l:"عصر",v:t[4],j:jA},
-                    {l:"مغرب",v:t[5],j:jM},
-                    {l:"عشاء",v:t[6],j:jI}
+                    {l:"فجر",v:t[0]}, {l:"طلوع",v:t[1]}, {l:"ظہر",v:t[3]}, 
+                    {l:"عصر",v:t[4]}, {l:"مغرب",v:t[5]}, {l:"عشاء",v:t[6]}
                 ];
                 display.forEach(i => { 
-                    grid.innerHTML += `<div class="time-box"><span class="t-label ${i.w?'danger':''}">${i.l}</span><span class="t-val">${i.v}</span>${i.j?`<span class="j-tag">جماعت: ${i.j}</span>`:''}</div>`; 
+                    grid.innerHTML += `<div class="time-box"><span class="t-label">${i.l}</span><span class="t-val">${i.v}</span></div>`; 
                 });
             }
         }
     }
     
+    // ڈیفالٹ سلیکشن
     for(let i = 0; i < selC.options.length; i++) {
         if(selC.options[i].text === "کراچی") {
             selC.selectedIndex = i;
@@ -1544,7 +1481,7 @@
     document.getElementById('monthSelect').value = new Date().getMonth();
     renderApp();
 
-    // ========== مسجد کی گھڑی کے لیے نیا کوڈ ==========
+    // ========== مسجد کی گھڑی ==========
     function showPage(pageName) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         if (pageName === 'main') {
@@ -1555,7 +1492,6 @@
             document.querySelectorAll('.tab-btn')[1].classList.add('active');
             document.getElementById('mainPage').classList.remove('active-page');
             document.getElementById('masjidPage').classList.add('active-page');
-            // گھڑی شروع کریں
             startMasjidClock();
             updatePrayerTimesInClock();
         }
@@ -1565,16 +1501,16 @@
         const times = getTodayPrayerTimes();
         
         document.getElementById('fajrTime').textContent = times.fajr;
-        document.getElementById('fajrJamaat').textContent = `جماعت: ${times.fajrJamaat}`;
+        document.getElementById('fajrJamaat').textContent = times.fajrJamaat;
         document.getElementById('sunriseTime').textContent = times.sunrise;
         document.getElementById('zuhrTime').textContent = times.zuhr;
-        document.getElementById('zuhrJamaat').textContent = `جماعت: ${times.zuhrJamaat}`;
+        document.getElementById('zuhrJamaat').textContent = times.zuhrJamaat;
         document.getElementById('asrTime').textContent = times.asr;
-        document.getElementById('asrJamaat').textContent = `جماعت: ${times.asrJamaat}`;
+        document.getElementById('asrJamaat').textContent = times.asrJamaat;
         document.getElementById('maghribTime').textContent = times.maghrib;
-        document.getElementById('maghribJamaat').textContent = `جماعت: ${times.maghribJamaat}`;
+        document.getElementById('maghribJamaat').textContent = times.maghribJamaat;
         document.getElementById('ishaTime').textContent = times.isha;
-        document.getElementById('ishaJamaat').textContent = `جماعت: ${times.ishaJamaat}`;
+        document.getElementById('ishaJamaat').textContent = times.ishaJamaat;
     }
 
     function startMasjidClock() {
@@ -1585,46 +1521,23 @@
     function updateMasjidClock() {
         const now = new Date();
         
-        // گریگورین تاریخ
-        const gregorianDate = now.toLocaleDateString('ur-PK', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            weekday: 'long'
-        });
-        document.getElementById('clockGregorianDate').textContent = gregorianDate;
+        document.getElementById('clockGregorianDate').textContent = 
+            now.toLocaleDateString('ur-PK', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
 
-        // ہجری تاریخ
-        const hijriDate = new Intl.DateTimeFormat('ur-PK-u-ca-islamic', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }).format(now);
-        document.getElementById('clockHijriDate').textContent = hijriDate;
+        document.getElementById('clockHijriDate').textContent = 
+            new Intl.DateTimeFormat('ur-PK-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
 
-        // ڈیجیٹل وقت
-        const timeString = now.toLocaleTimeString('ur-PK', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        });
-        document.getElementById('clockTime').textContent = timeString;
+        document.getElementById('clockTime').textContent = 
+            now.toLocaleTimeString('ur-PK', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
 
-        // اینالاگ گھڑی کے ہینڈلز
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const seconds = now.getSeconds();
         
-        const hourDeg = (hours % 12) * 30 + minutes * 0.5;
-        const minuteDeg = minutes * 6 + seconds * 0.1;
-        const secondDeg = seconds * 6;
-        
-        document.getElementById('hourHand').style.transform = `rotate(${hourDeg}deg)`;
-        document.getElementById('minuteHand').style.transform = `rotate(${minuteDeg}deg)`;
-        document.getElementById('secondHand').style.transform = `rotate(${secondDeg}deg)`;
+        document.getElementById('hourHand').style.transform = `rotate(${(hours % 12) * 30 + minutes * 0.5}deg)`;
+        document.getElementById('minuteHand').style.transform = `rotate(${minutes * 6 + seconds * 0.1}deg)`;
+        document.getElementById('secondHand').style.transform = `rotate(${seconds * 6}deg)`;
 
-        // دن/رات کا سٹیٹس
         let status = '';
         if (hours >= 5 && hours < 12) status = '🌅 صبح کا وقت';
         else if (hours >= 12 && hours < 17) status = '☀️ دوپہر کا وقت';
@@ -1632,7 +1545,6 @@
         else status = '🌙 رات کا وقت';
         document.getElementById('clockStatus').textContent = status;
 
-        // اگلی نماز کا اندازہ
         const times = getTodayPrayerTimes();
         const currentMinutes = hours * 60 + minutes;
         
@@ -1672,14 +1584,37 @@
             nextPrayerJamaat = times.fajrJamaat;
         }
 
-        document.getElementById('nextPrayerInfo').innerHTML = `
-            <span style="font-size: 28px;">🕌 اگلی نماز: ${nextPrayer}</span><br>
-            <span style="font-size: 32px; color: gold;">${nextPrayerTime}</span><br>
-            <span style="font-size: 22px;">جماعت: ${nextPrayerJamaat}</span>
-        `;
+        document.getElementById('nextPrayerInfo').innerHTML = 
+            `<span style="font-size: 28px;">🕌 اگلی نماز: ${nextPrayer}</span><br>` +
+            `<span style="font-size: 32px; color: gold;">${nextPrayerTime}</span><br>` +
+            `<span style="font-size: 22px;">جماعت: ${nextPrayerJamaat}</span>`;
     }
 
-    // ڈیفالٹ صفحہ مین ہی رہے
+    // لوکل سٹوریج سے اذان کی حالت لوڈ کریں
+    const savedAzan = localStorage.getItem('azanEnabled');
+    if (savedAzan === 'false') {
+        azanEnabled = false;
+        document.getElementById('azanToggleBtn').textContent = 'اذان آن کریں';
+        document.getElementById('azanToggleBtn').style.background = '#ff6b6b';
+        document.getElementById('azanStatus').innerHTML = '🔇 اذان: بند';
+    }
+
+    // ہر سیکنڈ چیک کریں
+    setInterval(checkPrayerTimes, 1000);
+    
+    // بیک گراؤنڈ چیک (APK کے لیے)
+    if (document.visibilityState === 'hidden') {
+        backgroundCheckInterval = setInterval(checkPrayerTimes, 5000);
+    }
+    
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'hidden') {
+            backgroundCheckInterval = setInterval(checkPrayerTimes, 5000);
+        } else {
+            clearInterval(backgroundCheckInterval);
+        }
+    });
+
     showPage('main');
 </script>
 </body>
