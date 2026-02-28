@@ -64,43 +64,7 @@
             padding: 25px;
             border-radius: 15px;
             margin-bottom: 20px;
-            position: relative;
-        }
-
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            backdrop-filter: blur(5px);
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255,215,0,0.3);
-            border-top-color: gold;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: gold;
-            font-size: 18px;
-            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .city-badge {
@@ -117,36 +81,26 @@
         .source-badge {
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid gold;
-            padding: 10px 25px;
+            padding: 8px 20px;
             border-radius: 40px;
-            font-size: 18px;
+            font-size: 16px;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255,215,0,0.3);
         }
         
         .verified {
             background: gold;
             color: black;
-            padding: 4px 15px;
-            border-radius: 25px;
-            font-size: 14px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: bold;
         }
         
-        .halal-badge {
-            background: #4caf50;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-        
-        .google-badge {
-            background: #4285f4;
+        .pakistan-badge {
+            background: #00695c;
             color: white;
             padding: 2px 10px;
             border-radius: 15px;
@@ -182,6 +136,15 @@
             font-weight: bold;
         }
         
+        .adjustment-note {
+            background: rgba(0,0,0,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
         .special-day-box {
             background: rgba(255,255,255,0.15);
             border: 2px dashed gold;
@@ -192,7 +155,6 @@
             max-width: 700px;
             font-weight: bold;
             line-height: 1.5;
-            text-align: right;
         }
         
         .chand-rat {
@@ -208,6 +170,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
             gap: 12px;
+            margin-top: 20px;
         }
 
         .time-box {
@@ -281,19 +244,15 @@
         </div>
     </div>
 
-    <div class="today-card" id="todayCard">
-        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">گوگل پر سرچ کیا جا رہا ہے...</div>
-            <div class="loading-text" style="font-size: 14px; margin-top: 10px;">براہ کرم انتظار کریں</div>
-        </div>
+    <div class="today-card">
         <div id="cityNameLabel" class="city-badge">کراچی</div>
-        <div class="source-badge" id="sourceBadge">
-            <span>🕌 گوگل سرچ + رویت ہلال</span>
-            <span class="verified">✓ لائیو</span>
-            <span class="google-badge">Google</span>
+        <div class="source-badge">
+            <span>🕌 Aladhan.com + پاکستان ایڈجسٹمنٹ</span>
+            <span class="verified">✓ -1 دن</span>
+            <span class="pakistan-badge">🇵🇰 پاکستان</span>
         </div>
         <div class="date-info" id="fullDateDisplay">لوڈنگ...</div>
+        <div class="adjustment-note" id="adjustmentNote">سعودی سے پاکستان: 1 دن کم</div>
         <div class="special-day-box" id="makhsoosDin">مخصوص دن: لوڈنگ...</div>
         <div class="times-grid" id="cardGrid"></div>
     </div>
@@ -311,9 +270,8 @@
 
     <footer>
         <b>اہم معلومات:</b> یہ اوقات دارالافتاء اہلسنت کراچی کے دائمی نقشے کے مطابق ہیں۔ <br>
-        1. <b>اسلامی تاریخ:</b> رویت ہلال کمیٹی پاکستان کی ویب سائٹ سے براہ راست لی جاتی ہے <br>
-        2. <b>مخصوص دن:</b> گوگل پر سرچ کر کے لیے جاتے ہیں (آج کس کی ولادت یا وصال ہے) <br>
-        3. <b>یہ نظام روزانہ خودکار اپڈیٹ ہوتا ہے</b>
+        1. <b>اسلامی تاریخ:</b> Aladhan.com سے لی جاتی ہے اور پاکستان کے لیے 1 دن کم کی جاتی ہے <br>
+        2. <b>تمام مخصوص دن شامل ہیں:</b> عاشورہ، عید میلاد النبی، شب معراج، شب برات، شب قدر (تمام طاق راتیں)، عید الفطر، یوم عرفہ، عید الاضحی
         <div class="footer-name">Developed By: M.FAREED MUSTAFAI</div>
     </footer>
 </div>
@@ -413,256 +371,43 @@
     const selC = document.getElementById('citySelect');
     pkCities.forEach(c => { let o = document.createElement('option'); o.value = c.o; o.innerText = c.n; selC.appendChild(o); });
 
-    // ========== گوگل سرچ سے مخصوص دن لینے والا فنکشن ==========
-    async function getSpecialDaysFromGoogle(day, month, year, hijriDay, hijriMonth, hijriYear) {
-        try {
-            // لوڈنگ اوورلے دکھائیں
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            
-            // پہلے localStorage میں چیک کریں کہ آج کا ڈیٹا پہلے سے موجود ہے یا نہیں
-            const today = `${year}-${month}-${day}`;
-            const cachedData = localStorage.getItem(`google_${today}`);
-            
-            if (cachedData) {
-                // اگر آج کا ڈیٹا پہلے سے موجود ہے تو وہی استعمال کریں
-                document.getElementById('loadingOverlay').style.display = 'none';
-                return JSON.parse(cachedData);
-            }
-            
-            // گوگل سرچ کے لیے query بنائیں
-            // مثال: "5 رمضان 1447ھ کو کس کی ولادت یا وصال ہے"
-            const monthNames = ["محرم", "صفر", "ربیع الاول", "ربیع الثانی", "جمادی الاول", "جمادی الثانی", "رجب", "شعبان", "رمضان", "شوال", "ذوالقعدہ", "ذوالحجہ"];
-            const hijriMonthName = monthNames[hijriMonth - 1] || "رمضان";
-            
-            const searchQuery = encodeURIComponent(`${hijriDay} ${hijriMonthName} ${hijriYear}ھ کو کس کی ولادت یا وصال ہے`);
-            
-            // گوگل سرچ API (یہ ایک فرضی API ہے - اصل میں گوگل کسٹم سرچ API استعمال ہوگا)
-            // نوٹ: اصل گوگل کسٹم سرچ API کے لیے API Key اور Search Engine ID درکار ہوگی
-            const apiKey = 'YOUR_GOOGLE_API_KEY'; // آپ کو اپنی API Key یہاں لگانی ہوگی
-            const searchEngineId = 'YOUR_SEARCH_ENGINE_ID'; // آپ کو اپنا Search Engine ID یہاں لگانی ہوگی
-            
-            // گوگل کسٹم سرچ API
-            const response = await fetch(
-                `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${searchEngineId}&q=${searchQuery}&lr=lang_ur&num=5`
-            );
-            
-            if (!response.ok) {
-                throw new Error('گوگل سرچ سے ڈیٹا نہیں مل سکا');
-            }
-            
-            const data = await response.json();
-            
-            // سرچ ریزلٹس سے مخصوص دن نکالیں
-            let specialDays = [];
-            
-            if (data.items && data.items.length > 0) {
-                data.items.forEach(item => {
-                    // ٹائٹل اور سنیپٹ سے مخصوص دن نکالیں
-                    const title = item.title || "";
-                    const snippet = item.snippet || "";
-                    
-                    // مختلف پیٹرن چیک کریں
-                    if (title.includes("ولادت") || snippet.includes("ولادت")) {
-                        const match = (title + " " + snippet).match(/[^\s]+ کی ولادت/);
-                        if (match) specialDays.push(match[0]);
-                    }
-                    if (title.includes("وفات") || snippet.includes("وفات") || 
-                        title.includes("وصال") || snippet.includes("وصال") ||
-                        title.includes("شہادت") || snippet.includes("شہادت")) {
-                        const match = (title + " " + snippet).match(/[^\s]+ کی (وفات|وصال|شہادت)/);
-                        if (match) specialDays.push(match[0]);
-                    }
-                    if (title.includes("تاریخ") || snippet.includes("تاریخ")) {
-                        const match = (title + " " + snippet).match(/[^\s]+ کا واقعہ/);
-                        if (match) specialDays.push(match[0]);
-                    }
-                });
-            }
-            
-            // اگر کچھ نہ ملا تو ڈیفالٹ پیغام
-            if (specialDays.length === 0) {
-                specialDays = ["آج کوئی خاص دن نہیں"];
-            }
-            
-            // ڈپلیکیٹس ہٹائیں
-            specialDays = [...new Set(specialDays)];
-            
-            // نتیجہ تیار کریں
-            const result = {
-                success: true,
-                date: today,
-                hijriDate: `${hijriDay} ${hijriMonthName} ${hijriYear}ھ`,
-                specialDays: specialDays,
-                searchQuery: decodeURIComponent(searchQuery),
-                searchResults: data.items ? data.items.length : 0
-            };
-            
-            // localStorage میں محفوظ کریں (تاکہ آج دوبارہ سرچ نہ کرنا پڑے)
-            localStorage.setItem(`google_${today}`, JSON.stringify(result));
-            
-            // پرانے ڈیٹا کو صاف کریں (صرف پچھلے 7 دن رکھیں)
-            cleanOldCache();
-            
-            document.getElementById('loadingOverlay').style.display = 'none';
-            return result;
-            
-        } catch (error) {
-            console.log('گوگل سرچ سے ڈیٹا نہیں مل سکا:', error);
-            document.getElementById('loadingOverlay').style.display = 'none';
-            
-            // اگر API کام نہ کرے تو بیک اپ ڈیٹا استعمال کریں
-            return {
-                success: false,
-                specialDays: [getBackupSpecialDay(hijriDay, hijriMonth)],
-                error: error.message
-            };
-        }
-    }
-    
-    // ========== پرانے کیشے کو صاف کرنے کا فنکشن ==========
-    function cleanOldCache() {
-        const today = new Date();
-        const sevenDaysAgo = new Date(today);
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith('google_')) {
-                const dateStr = key.replace('google_', '');
-                const cacheDate = new Date(dateStr);
-                if (cacheDate < sevenDaysAgo) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
-    }
-    
-    // ========== بیک اپ مخصوص دن (اگر گوگل سرچ کام نہ کرے) ==========
-    function getBackupSpecialDay(day, month) {
-        // یہاں آپ کا اندرونی ڈیٹا بیس ہوگا
-        const backupDB = {
-            "4-9": "حضرت امام حسن بن علی رضی اللہ عنہما کی ولادت • حضرت امام محمد تقی علیہ الرحمہ کی ولادت",
-            "5-9": "حضرت امام زین العابدین علیہ الرحمہ کی ولادت • حضرت امام محمد باقر علیہ الرحمہ کی ولادت • حضرت عبدالرحمن بن عوف رضی اللہ عنہ کی وفات",
-            "10-9": "حضرت خدیجہ الکبریٰ رضی اللہ عنہا کی وفات",
-            "15-9": "حضرت حمزہ رضی اللہ عنہ کی شہادت",
-            "17-9": "غزوہ بدر",
-            "21-9": "شبِ قدر کا احتمال • حضرت امام علی علیہ السلام کی شہادت",
-            "27-9": "شبِ قدر کا احتمال",
-            "29-9": "شبِ قدر کا احتمال",
-            "1-10": "عید الفطر",
-            "9-12": "یومِ عرفہ",
-            "10-12": "عید الاضحی"
-        };
-        
-        const key = `${day}-${month}`;
-        return backupDB[key] || "کوئی خاص دن نہیں";
-    }
-
-    // ========== صرف رویت ہلال کمیٹی کی ویب سائٹ سے ڈیٹا لینے والا فنکشن ==========
-    async function getRuyatEHilalDate() {
-        try {
-            // CORS proxy استعمال کریں
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const targetUrl = 'https://www.royaithilalcommittee.pk/';
-            
-            const response = await fetch(proxyUrl + encodeURIComponent(targetUrl), {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('ویب سائٹ سے ڈیٹا نہیں مل سکا');
-            }
-            
-            const html = await response.text();
-            
-            // HTML سے تاریخ نکالنے کی کوشش
-            let match = html.match(/آج\s+(\d+)\s+(\S+)\s+(\d+)[ء]?.*?(\d+)\s+(\S+)\s+(\d+)[ھ]/);
-            
-            if (match) {
-                const gregorianDay = parseInt(match[1]);
-                const gregorianMonth = match[2];
-                const gregorianYear = parseInt(match[3]);
-                const hijriDay = parseInt(match[4]);
-                const hijriMonth = match[5];
-                const hijriYear = parseInt(match[6]);
-                
-                const monthMap = {
-                    'جنوری': 1, 'فروری': 2, 'مارچ': 3, 'اپریل': 4,
-                    'مئی': 5, 'جون': 6, 'جولائی': 7, 'اگست': 8,
-                    'ستمبر': 9, 'اکتوبر': 10, 'نومبر': 11, 'دسمبر': 12
-                };
-                
-                const hijriMonthMap = {
-                    'محرم': 1, 'محرم الحرام': 1,
-                    'صفر': 2, 'صفر المظفر': 2,
-                    'ربیع الاول': 3,
-                    'ربیع الثانی': 4,
-                    'جمادی الاول': 5,
-                    'جمادی الثانی': 6,
-                    'رجب': 7, 'رجب المرجب': 7,
-                    'شعبان': 8, 'شعبان المعظم': 8,
-                    'رمضان': 9, 'رمضان المبارک': 9,
-                    'شوال': 10, 'شوال المکرم': 10,
-                    'ذوالقعدہ': 11, 'ذوالقعدۃ الحرام': 11,
-                    'ذوالحجہ': 12, 'ذوالحجۃ الحرام': 12
-                };
-                
-                return {
-                    success: true,
-                    gregorian: {
-                        day: gregorianDay,
-                        month: monthMap[gregorianMonth] || 2,
-                        year: gregorianYear
-                    },
-                    hijri: {
-                        day: hijriDay,
-                        month: hijriMonthMap[hijriMonth] || 9,
-                        monthName: hijriMonth,
-                        year: hijriYear
-                    }
-                };
-            }
-            
-            throw new Error('تاریخ نہیں مل سکی');
-            
-        } catch (error) {
-            console.log('رویت ہلال ویب سائٹ سے ڈیٹا نہیں مل سکا:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // ========== مستقل تاریخ (اگر ویب سائٹ کام نہ کرے) ==========
-    function getDefaultDate() {
-        const today = new Date();
-        const month = today.getMonth();
-        const date = today.getDate();
-        
-        // فروری 2026 کے لیے مستقل تاریخیں
-        if (month === 1) { // فروری
-            if (date === 20) return { day: 2, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 21) return { day: 3, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 22) return { day: 4, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 23) return { day: 5, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 24) return { day: 6, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 25) return { day: 7, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 26) return { day: 8, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 27) return { day: 9, month: 9, year: 1447, monthName: "رمضان المبارک" };
-            if (date === 28) return { day: 10, month: 9, year: 1447, monthName: "رمضان المبارک" };
-        }
-        
-        // default
-        return { day: 2, month: 9, year: 1447, monthName: "رمضان المبارک" };
-    }
-
-    // ========== چاند رات کا فنکشن ==========
-    function getChandRat(day, month) {
+    // ========== تمام مخصوص دنوں کے ساتھ اپڈیٹ شدہ فنکشن ==========
+    function getSpecialDayUrdu(day, month) {
         const urduMonths = ["","محرم","صفر","ربیع الاول","ربیع الثانی","جمادی الاول","جمادی الثانی","رجب","شعبان","رمضان","شوال","ذوالقعدہ","ذوالحجہ"];
         
+        let specialDay = "";
+        
+        // محرم
+        if(month === 1 && day === 10) specialDay = "عاشورہ (10 محرم)";
+        
+        // ربیع الاول
+        if(month === 3 && day === 12) specialDay = "عید میلاد النبی ﷺ (12 ربیع الاول)";
+        
+        // رجب
+        if(month === 7 && day === 27) specialDay = "شبِ معراج (27 رجب)";
+        
+        // شعبان
+        if(month === 8 && day === 15) specialDay = "شبِ برات (15 شعبان)";
+        
+        // رمضان - شب قدر (آخری 10 طاق راتیں)
+        if(month === 9) {
+            if(day === 21) specialDay = "شبِ قدر کا احتمال (21 رمضان)";
+            else if(day === 23) specialDay = "شبِ قدر کا احتمال (23 رمضان)";
+            else if(day === 25) specialDay = "شبِ قدر کا احتمال (25 رمضان)";
+            else if(day === 27) specialDay = "شبِ قدر کا احتمال (27 رمضان)";
+            else if(day === 29) specialDay = "شبِ قدر کا احتمال (29 رمضان)";
+        }
+        
+        // شوال
+        if(month === 10 && day === 1) specialDay = "عید الفطر";
+        
+        // ذوالحجہ
+        if(month === 12) {
+            if(day === 9) specialDay = "یومِ عرفہ (9 ذوالحجہ)";
+            else if(day === 10) specialDay = "عید الاضحی (10 ذوالحجہ)";
+        }
+        
+        // چاند راتیں - ہر مہینے کی 29 اور 30 تاریخ
         let chandRat = "";
         if(day === 29 || day === 30) {
             if(month === 1) chandRat = "🌙 محرم کی چاند رات";
@@ -681,7 +426,96 @@
             chandRat += ` (${day} ${urduMonths[month]})`;
         }
         
-        return chandRat;
+        return { specialDay, chandRat };
+    }
+
+    // ========== Aladhan.com API + پاکستان ایڈجسٹمنٹ (ہمیشہ 1 دن کم) ==========
+    async function getHijriDateFromAPI(date) {
+        try {
+            const response = await fetch(`https://api.aladhan.com/v1/gToH/${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`);
+            const data = await response.json();
+            
+            if (data && data.data && data.data.hijri) {
+                const h = data.data.hijri;
+                
+                const saudiDay = parseInt(h.day);
+                const saudiMonth = parseInt(h.month.number);
+                const saudiYear = h.year;
+                
+                let pakistaniDay = saudiDay - 1;
+                let pakistaniMonth = saudiMonth;
+                let pakistaniYear = saudiYear;
+                
+                if(pakistaniDay === 0) {
+                    pakistaniDay = 29;
+                    pakistaniMonth--;
+                    if(pakistaniMonth === 0) {
+                        pakistaniMonth = 12;
+                        pakistaniYear--;
+                    }
+                }
+                
+                const monthNames = [
+                    "","محرم الحرام","صفر المظفر","ربیع الاول","ربیع الثانی",
+                    "جمادی الاول","جمادی الثانی","رجب المرجب","شعبان المعظم",
+                    "رمضان المبارک","شوال المکرم","ذوالقعدۃ الحرام","ذوالحجۃ الحرام"
+                ];
+                
+                return {
+                    day: pakistaniDay,
+                    month: pakistaniMonth,
+                    year: pakistaniYear,
+                    monthName: monthNames[pakistaniMonth]
+                };
+            }
+            throw new Error('API ڈیٹا نہیں ملا');
+        } catch (error) {
+            console.log('API error:', error);
+            return getBackupDate(date);
+        }
+    }
+    
+    function getBackupDate(date) {
+        const baseDate = new Date("2026-02-18");
+        const baseHijri = { day: 1, month: 9, year: 1447 };
+        
+        const diffTime = date - baseDate;
+        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+        
+        let newDay = baseHijri.day + diffDays;
+        let newMonth = baseHijri.month;
+        let newYear = baseHijri.year;
+        
+        while (newDay > 30) {
+            newDay -= 30;
+            newMonth++;
+            if (newMonth > 12) {
+                newMonth = 1;
+                newYear++;
+            }
+        }
+        
+        while (newDay < 1) {
+            newDay += 30;
+            newMonth--;
+            if (newMonth < 1) {
+                newMonth = 12;
+                newYear--;
+            }
+        }
+        
+        const monthNames = [
+            "","محرم الحرام","صفر المظفر","ربیع الاول","ربیع الثانی",
+            "جمادی الاول","جمادی الثانی","رجب المرجب","شعبان المعظم",
+            "رمضان المبارک","شوال المکرم","ذوالقعدۃ الحرام","ذوالحجۃ الحرام"
+        ];
+        
+        return {
+            day: newDay,
+            month: newMonth,
+            year: newYear,
+            monthName: monthNames[newMonth]
+        };
     }
 
     async function renderApp() {
@@ -727,69 +561,24 @@
                 
                 try {
                     let hijriDate;
-                    let gregorianDate;
-                    
-                    // مغرب کا اصول
-                    let targetDate = now;
                     if (now.getHours() * 60 + now.getMinutes() >= tToM(todayMaghrib)) {
-                        targetDate = new Date(now);
-                        targetDate.setDate(targetDate.getDate() + 1);
-                    }
-                    
-                    // پہلے رویت ہلال ویب سائٹ سے ڈیٹا لینے کی کوشش
-                    const ruyatData = await getRuyatEHilalDate();
-                    
-                    if (ruyatData.success && ruyatData.hijri) {
-                        // ویب سائٹ سے ڈیٹا مل گیا
-                        hijriDate = {
-                            day: ruyatData.hijri.day,
-                            month: ruyatData.hijri.month,
-                            year: ruyatData.hijri.year,
-                            monthName: ruyatData.hijri.monthName
-                        };
-                        gregorianDate = ruyatData.gregorian;
-                        
-                        document.getElementById('sourceBadge').innerHTML = `
-                            <span>🕌 گوگل سرچ + رویت ہلال</span>
-                            <span class="verified">✓ لائیو</span>
-                            <span class="google-badge">Google</span>
-                        `;
+                        const tomorrow = new Date(now);
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        hijriDate = await getHijriDateFromAPI(tomorrow);
                     } else {
-                        // نہ ملے تو مستقل تاریخ استعمال کریں
-                        const defaultDate = getDefaultDate();
-                        hijriDate = defaultDate;
-                        gregorianDate = {
-                            day: targetDate.getDate(),
-                            month: targetDate.getMonth() + 1,
-                            year: targetDate.getFullYear()
-                        };
-                        
-                        document.getElementById('sourceBadge').innerHTML = `
-                            <span>🕌 گوگل سرچ + مستقل تاریخ</span>
-                            <span class="verified">✓ بیک اپ</span>
-                            <span class="google-badge">Google</span>
-                        `;
+                        hijriDate = await getHijriDateFromAPI(now);
                     }
 
                     const hijriStr = `${hijriDate.day} ${hijriDate.monthName} ${hijriDate.year}ھ`;
                     
-                    // گوگل سرچ سے مخصوص دن لیں
-                    const googleResult = await getSpecialDaysFromGoogle(
-                        gregorianDate.day, gregorianDate.month, gregorianDate.year,
-                        hijriDate.day, hijriDate.month, hijriDate.year
-                    );
-                    
-                    let specialDisplay = "کوئی خاص دن نہیں";
-                    if (googleResult.specialDays && googleResult.specialDays.length > 0) {
-                        specialDisplay = googleResult.specialDays.join(' • ');
-                    }
-                    
-                    let chandRat = getChandRat(hijriDate.day, hijriDate.month);
+                    // اپڈیٹ شدہ فنکشن سے مخصوص دن اور چاند رات لیں
+                    const { specialDay, chandRat } = getSpecialDayUrdu(hijriDate.day, hijriDate.month);
+
+                    let specialDisplay = specialDay || "کوئی خاص دن نہیں";
                     let chandDisplay = chandRat ? `<span class="chand-rat">${chandRat}</span>` : "";
 
                     document.getElementById('fullDateDisplay').innerHTML = `<span class="day-highlight">${dayName}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">${hijriStr}</span>`;
-                    document.getElementById('makhsoosDin').innerHTML = `<span style="color: gold;">مخصوص دن:</span> <b>${specialDisplay}</b>${chandDisplay}`;
-                    
+                    document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>${specialDisplay}</b>${chandDisplay}`;
                 } catch (e) { 
                     document.getElementById('fullDateDisplay').innerHTML = `<span class="day-highlight">${dayName}</span> | ${d} ${ms[mi]} ${now.getFullYear()}ء | <span class="hijri-date">تاریخ دستیاب نہیں</span>`;
                     document.getElementById('makhsoosDin').innerHTML = `مخصوص دن: <b>معلوم نہیں</b>`;
